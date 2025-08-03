@@ -1,0 +1,67 @@
+{
+  "project": {
+    "name": "Solar System Explorer",
+    "version": "1.0.0",
+    "description": "Interactive solar system exploration website with NASA API integration"
+  },
+  "deployment": {
+    "targets": {
+      "github-pages": {
+        "enabled": true,
+        "branch": "gh-pages",
+        "domain": "solar-system-explorer.pages.dev"
+      },
+      "netlify": {
+        "enabled": true,
+        "buildCommand": "npm run build",
+        "publishDirectory": "dist"
+      },
+      "vercel": {
+        "enabled": true,
+        "framework": "static"
+      }
+    },
+    "optimization": {
+      "minify": true,
+      "compress": true,
+      "cache": true,
+      "gzip": true
+    }
+  },
+  "build": {
+    "source": ".",
+    "output": "dist",
+    "exclude": [
+      "node_modules",
+      ".git",
+      "tests",
+      "*.log",
+      ".DS_Store"
+    ],
+    "include": [
+      "pages/**/*",
+      "css/**/*",
+      "js/**/*",
+      "images/**/*",
+      "assets/**/*",
+      "docs/**/*",
+      "*.html",
+      "*.xml",
+      "*.txt"
+    ]
+  },
+  "performance": {
+    "lighthouse": {
+      "performance": 90,
+      "accessibility": 95,
+      "best-practices": 90,
+      "seo": 95
+    },
+    "optimization": {
+      "images": true,
+      "css": true,
+      "js": true,
+      "html": true
+    }
+  }
+} 

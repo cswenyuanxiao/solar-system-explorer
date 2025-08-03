@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple NASA API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            background: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple NASA API Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Initialize NASA API</h2>
+        <button onclick="initAPI()">Initialize NASA API</button>
+        <div id="initResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test API Key</h2>
+        <button onclick="testAPIKey()">Test API Key</button>
+        <div id="keyResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Connection</h2>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="connectionResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test APOD</h2>
+        <button onclick="testAPOD()">Test APOD</button>
+        <div id="apodResult" class="result"></div>
+    </div>
+
+    <script src="../js/nasa-api.js"></script>
+    <script>
+        function showResult(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = message;
+            element.className = 'result ' + (isSuccess ? 'success' : 'error');
+        }
+
+        function initAPI() {
+            try {
+                console.log('Attempting to initialize NASA API...');
+                window.nasaAPI = new NASAAPI();
+                showResult('initResult', '✅ NASA API initialized successfully!');
+                console.log('NASA API object:', window.nasaAPI);
+            } catch (error) {
+                showResult('initResult', '❌ Failed to initialize NASA API: ' + error.message, false);
+                console.error('Initialization error:', error);
+            }
+        }
+
+        function testAPIKey() {
+            if (window.nasaAPI) {
+                const key = window.nasaAPI.apiKey;
+                const keyType = key === 'DEMO_KEY' ? 'Demo' : 'Custom';
+                showResult('keyResult', `✅ API Key: ${keyType} (${key.substring(0, 10)}...)`);
+            } else {
+                showResult('keyResult', '❌ NASA API not initialized', false);
+            }
+        }
+
+        function testConnection() {
+            if (window.nasaAPI) {
+                showResult('connectionResult', '🔄 Testing connection...');
+                window.nasaAPI.testConnection().then(result => {
+                    if (result.success) {
+                        showResult('connectionResult', '✅ Connection successful!');
+                    } else {
+                        showResult('connectionResult', '❌ Connection failed: ' + result.message, false);
+                    }
+                }).catch(error => {
+                    showResult('connectionResult', '❌ Connection error: ' + error.message, false);
+                });
+            } else {
+                showResult('connectionResult', '❌ NASA API not initialized', false);
+            }
+        }
+
+        function testAPOD() {
+            if (window.nasaAPI) {
+                showResult('apodResult', '🔄 Loading APOD...');
+                window.nasaAPI.getAPOD().then(data => {
+                    showResult('apodResult', `✅ APOD loaded: ${data.title}`);
+                }).catch(error => {
+                    showResult('apodResult', '❌ APOD error: ' + error.message, false);
+                });
+            } else {
+                showResult('apodResult', '❌ NASA API not initialized', false);
+            }
+        }
+
+        // Auto-initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, auto-initializing NASA API...');
+            setTimeout(() => {
+                initAPI();
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

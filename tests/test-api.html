@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Key Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        input {
+            width: 300px;
+            background: #333;
+            color: white;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success { background: #4CAF50; }
+        .error { background: #f44336; }
+        .info { background: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🔑 NASA API Key Test</h1>
+    
+    <div class="test-section">
+        <h2>API Key Management</h2>
+        <input type="text" id="apiKeyInput" placeholder="Enter your NASA API key">
+        <button onclick="saveKey()">Save Key</button>
+        <button onclick="testKey()">Test Key</button>
+        <button onclick="clearKey()">Clear Key</button>
+        <div id="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Current Status</h2>
+        <div id="currentStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <script src="../js/nasa-api.js"></script>
+    <script>
+        // Wait for NASA API to initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                updateStatus();
+                loadSavedKey();
+            }, 1000);
+        });
+
+        function saveKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) {
+                if (window.nasaAPI) {
+                    window.nasaAPI.setAPIKey(key);
+                    showStatus('✅ API key saved successfully!', 'success');
+                    updateStatus();
+                } else {
+                    showStatus('❌ NASA API not initialized', 'error');
+                }
+            } else {
+                showStatus('❌ Please enter a valid API key', 'error');
+            }
+        }
+
+        function testKey() {
+            if (window.nasaAPI) {
+                showStatus('🔄 Testing API connection...', 'info');
+                window.nasaAPI.testConnection().then(result => {
+                    if (result.success) {
+                        showStatus('✅ API connection successful!', 'success');
+                        document.getElementById('testResults').innerHTML = `
+                            <h3>Test Results:</h3>
+                            <p><strong>Status:</strong> ${result.message}</p>
+                            <p><strong>Data:</strong> ${JSON.stringify(result.data, null, 2)}</p>
+                        `;
+                    } else {
+                        showStatus('❌ API connection failed: ' + result.message, 'error');
+                    }
+                }).catch(error => {
+                    showStatus('❌ API test failed: ' + error.message, 'error');
+                });
+            } else {
+                showStatus('❌ NASA API not initialized', 'error');
+            }
+        }
+
+        function clearKey() {
+            if (window.nasaAPI) {
+                window.nasaAPI.setAPIKey('DEMO_KEY');
+                document.getElementById('apiKeyInput').value = '';
+                showStatus('🗑️ API key cleared, using demo key', 'info');
+                updateStatus();
+            }
+        }
+
+        function loadSavedKey() {
+            const savedKey = localStorage.getItem('nasa_api_key');
+            if (savedKey && savedKey !== 'DEMO_KEY') {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+        }
+
+        function updateStatus() {
+            if (window.nasaAPI) {
+                const stats = window.nasaAPI.getAPIStats();
+                document.getElementById('currentStatus').innerHTML = `
+                    <p><strong>API Key Type:</strong> ${stats.apiKeyType === 'demo' ? 'Demo' : 'Custom'}</p>
+                    <p><strong>Cache Size:</strong> ${stats.cacheSize}</p>
+                    <p><strong>Error Count:</strong> ${stats.errorCount}</p>
+                    <p><strong>Last Error:</strong> ${stats.lastError ? new Date(stats.lastError.timestamp).toLocaleString() : 'None'}</p>
+                `;
+            } else {
+                document.getElementById('currentStatus').innerHTML = '<p>❌ NASA API not initialized</p>';
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 

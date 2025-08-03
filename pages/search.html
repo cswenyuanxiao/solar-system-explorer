@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Solar System Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/search.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="back-button">← Back to Solar System</a>
+            <h1>Search Planets</h1>
+            <p class="subtitle">Find your favorite celestial body</p>
+        </div>
+    </header>
+    
+    <main>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search planets..." autocomplete="off">
+                <button id="searchButton">🔍</button>
+            </div>
+            
+            <div class="search-results" id="searchResults">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+    </footer>
+
+    <script src="../js/search.js"></script>
+</body>
+</html>

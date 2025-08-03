@@ -1,0 +1,417 @@
+// API Management for NASA API Integration
+
+class APIManagement {
+    constructor() {
+        console.log('APIManagement constructor called');
+        this.init();
+    }
+
+    init() {
+        console.log('APIManagement init called, nasaAPI available:', !!window.nasaAPI);
+        
+        // Setup everything immediately since NASA API should be ready
+        this.setupAPIKeyManagement();
+        this.loadSpaceWeather();
+        this.loadDailySpaceFact();
+        this.updateAPIStats();
+        this.bindEvents();
+    }
+
+    setupAPIKeyManagement() {
+        console.log('Setting up API key management');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const saveBtn = document.getElementById('saveApiKey');
+        const testBtn = document.getElementById('testApiKey');
+        
+        console.log('Found elements:', {
+            apiKeyInput: !!apiKeyInput,
+            saveBtn: !!saveBtn,
+            testBtn: !!testBtn
+        });
+
+        // Load saved API key
+        const savedKey = localStorage.getItem('nasa_api_key');
+        if (savedKey && savedKey !== 'DEMO_KEY') {
+            apiKeyInput.value = savedKey;
+        }
+
+        // Save API key
+        if (saveBtn) {
+            console.log('Adding click listener to save button');
+            saveBtn.addEventListener('click', () => {
+                console.log('Save button clicked!');
+                const key = apiKeyInput.value.trim();
+                console.log('Save button clicked, key:', key); // Debug log
+                
+                if (key) {
+                    if (window.nasaAPI) {
+                        window.nasaAPI.setAPIKey(key);
+                        this.showNotification('✅ API key saved successfully!');
+                        this.updateAPIStats();
+                        this.updateKeyStatus();
+                        
+                        // Update the input field to show the saved key
+                        apiKeyInput.value = key;
+                        
+                        // Update API key type display
+                        const apiKeyTypeElement = document.getElementById('apiKeyType');
+                        if (apiKeyTypeElement) {
+                            apiKeyTypeElement.textContent = 'Custom';
+                        }
+                    } else {
+                        this.showNotification('❌ NASA API not initialized');
+                    }
+                } else {
+                    this.showNotification('❌ Please enter a valid API key');
+                }
+            });
+        } else {
+            console.error('Save button not found!');
+        }
+
+        // Test API connection
+        if (testBtn) {
+            testBtn.addEventListener('click', async () => {
+                this.testAPIConnection();
+            });
+        }
+
+        // Clear API key
+        const clearBtn = document.getElementById('clearApiKey');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (window.nasaAPI) {
+                    window.nasaAPI.setAPIKey('DEMO_KEY');
+                    apiKeyInput.value = '';
+                    this.showNotification('🗑️ API key cleared, using demo key');
+                    this.updateAPIStats();
+                    this.updateKeyStatus();
+                }
+            });
+        }
+
+        // Update key status display
+        this.updateKeyStatus();
+    }
+
+    updateKeyStatus() {
+        const statusElement = document.getElementById('currentKeyStatus');
+        if (statusElement && window.nasaAPI) {
+            const currentKey = window.nasaAPI.apiKey;
+            const keyType = currentKey === 'DEMO_KEY' ? 'Demo' : 'Custom';
+            statusElement.textContent = `Current key: ${keyType}`;
+        }
+    }
+
+    async testAPIConnection() {
+        const testBtn = document.getElementById('testApiKey');
+        const originalText = testBtn.textContent;
+        
+        testBtn.textContent = 'Testing...';
+        testBtn.disabled = true;
+
+        try {
+            if (window.nasaAPI) {
+                const result = await window.nasaAPI.testConnection();
+                
+                if (result.success) {
+                    this.showNotification('✅ API connection successful!');
+                } else {
+                    this.showNotification('❌ API connection failed: ' + result.message);
+                }
+            }
+        } catch (error) {
+            this.showNotification('❌ API test failed: ' + error.message);
+        } finally {
+            testBtn.textContent = originalText;
+            testBtn.disabled = false;
+        }
+    }
+
+    async loadSpaceWeather() {
+        try {
+            if (window.nasaAPI) {
+                const weather = window.nasaAPI.getSpaceWeather();
+                
+                document.getElementById('solarActivity').textContent = weather.condition;
+                document.getElementById('solarFlares').textContent = weather.solarFlare ? 'Active' : 'Quiet';
+                document.getElementById('geomagneticStorms').textContent = weather.geomagneticStorm ? 'Active' : 'Quiet';
+                document.getElementById('sunspotCount').textContent = weather.sunspotCount;
+            } else {
+                // Fallback data
+                document.getElementById('solarActivity').textContent = 'Quiet';
+                document.getElementById('solarFlares').textContent = 'Quiet';
+                document.getElementById('geomagneticStorms').textContent = 'Quiet';
+                document.getElementById('sunspotCount').textContent = '15';
+            }
+        } catch (error) {
+            console.error('Error loading space weather:', error);
+            // Set fallback values
+            document.getElementById('solarActivity').textContent = 'Unknown';
+            document.getElementById('solarFlares').textContent = 'Unknown';
+            document.getElementById('geomagneticStorms').textContent = 'Unknown';
+            document.getElementById('sunspotCount').textContent = 'Unknown';
+        }
+    }
+
+    async loadDailySpaceFact() {
+        try {
+            if (window.nasaAPI) {
+                const fact = await window.nasaAPI.getDailySpaceFact();
+                document.getElementById('dailySpaceFact').textContent = fact;
+            } else {
+                document.getElementById('dailySpaceFact').textContent = 
+                    "The Sun contains 99.86% of the solar system's mass";
+            }
+        } catch (error) {
+            console.error('Error loading daily space fact:', error);
+            document.getElementById('dailySpaceFact').textContent = 
+                "The Sun contains 99.86% of the solar system's mass";
+        }
+    }
+
+    updateAPIStats() {
+        if (!window.nasaAPI) return;
+
+        const stats = window.nasaAPI.getAPIStats();
+        
+        document.getElementById('cacheSize').textContent = stats.cacheSize;
+        document.getElementById('errorCount').textContent = stats.errorCount;
+        document.getElementById('apiKeyType').textContent = stats.apiKeyType === 'demo' ? 'Demo' : 'Custom';
+        
+        if (stats.lastError) {
+            const errorDate = new Date(stats.lastError.timestamp);
+            const timeAgo = this.getTimeAgo(errorDate);
+            document.getElementById('lastError').textContent = timeAgo;
+        } else {
+            document.getElementById('lastError').textContent = 'None';
+        }
+    }
+
+    getTimeAgo(date) {
+        const now = new Date();
+        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+        
+        if (diffInMinutes < 1) return 'Just now';
+        if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+        if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+        return `${Math.floor(diffInMinutes / 1440)}d ago`;
+    }
+
+    showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'api-notification';
+        notification.textContent = message;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: #000;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            z-index: 1000;
+            font-weight: 600;
+            animation: slideInDown 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    bindEvents() {
+        // Auto-refresh space weather every 5 minutes
+        setInterval(() => {
+            this.loadSpaceWeather();
+        }, 5 * 60 * 1000);
+
+        // Auto-refresh API stats every minute
+        setInterval(() => {
+            this.updateAPIStats();
+        }, 60 * 1000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'r':
+                    case 'R':
+                        e.preventDefault();
+                        this.loadSpaceWeather();
+                        this.loadDailySpaceFact();
+                        this.updateAPIStats();
+                        this.showNotification('Data refreshed!');
+                        break;
+                    case 't':
+                    case 'T':
+                        e.preventDefault();
+                        this.testAPIConnection();
+                        break;
+                }
+            }
+        });
+
+        // Add help tooltips
+        this.addHelpTooltips();
+    }
+
+    addHelpTooltips() {
+        const helpElements = [
+            {
+                element: document.getElementById('saveApiKey'),
+                tooltip: 'Save your NASA API key for higher rate limits'
+            },
+            {
+                element: document.getElementById('testApiKey'),
+                tooltip: 'Test the API connection with your key'
+            },
+            {
+                element: document.querySelector('.api-key-info'),
+                tooltip: 'Get a free API key from NASA for unlimited requests'
+            }
+        ];
+
+        helpElements.forEach(({ element, tooltip }) => {
+            if (element) {
+                element.addEventListener('mouseenter', () => {
+                    this.showTooltip(element, tooltip);
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    this.hideTooltip();
+                });
+            }
+        });
+    }
+
+    showTooltip(element, text) {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'api-tooltip';
+        tooltip.textContent = text;
+        
+        tooltip.style.cssText = `
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            pointer-events: none;
+            white-space: nowrap;
+        `;
+        
+        document.body.appendChild(tooltip);
+        
+        const rect = element.getBoundingClientRect();
+        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+        
+        this.currentTooltip = tooltip;
+    }
+
+    hideTooltip() {
+        if (this.currentTooltip) {
+            this.currentTooltip.remove();
+            this.currentTooltip = null;
+        }
+    }
+
+    // Export API data for debugging
+    exportAPIData() {
+        if (!window.nasaAPI) return;
+
+        const data = {
+            stats: window.nasaAPI.getAPIStats(),
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'nasa-api-data.json';
+        link.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Clear all cached data
+    clearCache() {
+        if (window.nasaAPI) {
+            window.nasaAPI.clearCache();
+            this.updateAPIStats();
+            this.showNotification('Cache cleared!');
+        }
+    }
+
+    // Get API usage recommendations
+    getAPIRecommendations() {
+        if (!window.nasaAPI) return [];
+
+        const stats = window.nasaAPI.getAPIStats();
+        const recommendations = [];
+
+        if (stats.apiKeyType === 'demo') {
+            recommendations.push({
+                type: 'info',
+                message: 'Consider getting a free NASA API key for higher rate limits',
+                action: 'Get API Key',
+                url: 'https://api.nasa.gov/'
+            });
+        }
+
+        if (stats.errorCount > 5) {
+            recommendations.push({
+                type: 'warning',
+                message: 'High error rate detected. Check your internet connection.',
+                action: 'Test Connection',
+                method: () => this.testAPIConnection()
+            });
+        }
+
+        if (stats.cacheSize > 50) {
+            recommendations.push({
+                type: 'info',
+                message: 'Large cache size. Consider clearing cache.',
+                action: 'Clear Cache',
+                method: () => this.clearCache()
+            });
+        }
+
+        return recommendations;
+    }
+
+    // Test function for debugging
+    testSaveKey(key) {
+        console.log('Testing save key function with:', key);
+        if (window.nasaAPI) {
+            window.nasaAPI.setAPIKey(key);
+            this.showNotification('✅ Test: API key saved successfully!');
+            this.updateAPIStats();
+            this.updateKeyStatus();
+            return true;
+        } else {
+            console.error('NASA API not available');
+            return false;
+        }
+    }
+}
+
+// Global test function
+window.testAPISave = function(key) {
+    if (window.apiManagement) {
+        return window.apiManagement.testSaveKey(key);
+    } else {
+        console.error('API Management not available');
+        return false;
+    }
+};
+
+// Initialize API management immediately
+window.apiManagement = new APIManagement(); 

@@ -1,0 +1,178 @@
+/* Download Manager Styles */
+
+.download-notification {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+#downloadOverlay {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.download-modal {
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#downloadProgressBar {
+    transition: width 0.3s ease;
+}
+
+#cancelDownload {
+    transition: all 0.3s ease;
+}
+
+#cancelDownload:hover {
+    background: #d32f2f;
+    transform: scale(1.05);
+}
+
+/* Download button styles */
+.apod-action-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.apod-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.apod-action-btn:active {
+    transform: translateY(0);
+}
+
+/* Download all button special styling */
+#downloadAllAPOD {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+#downloadAllAPOD:hover {
+    background: linear-gradient(45deg, #45a049, #4CAF50);
+}
+
+/* Progress bar animation */
+.download-progress {
+    position: relative;
+    overflow: hidden;
+}
+
+.download-progress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Download status text */
+#downloadStatus {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .download-modal {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .download-icon {
+        font-size: 2rem;
+    }
+    
+    #downloadTitle {
+        font-size: 1.2rem;
+    }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .download-modal {
+        background: rgba(30, 30, 30, 0.95);
+        color: #fff;
+    }
+    
+    #downloadTitle {
+        color: #fff;
+    }
+    
+    #downloadStatus {
+        color: #ccc;
+    }
+    
+    .download-progress {
+        background: #444;
+    }
+}
+
+/* Loading animation for download button */
+.apod-action-btn.downloading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.apod-action-btn.downloading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} 

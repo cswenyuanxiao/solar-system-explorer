@@ -1,0 +1,51 @@
+{
+  "name": "solar-system-explorer",
+  "version": "1.0.0",
+  "description": "Interactive solar system exploration website with NASA API integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "build": "node scripts/build.js",
+    "deploy": "npm run build && npm run deploy:gh-pages",
+    "deploy:gh-pages": "gh-pages -d dist",
+    "deploy:netlify": "netlify deploy --prod --dir=dist",
+    "deploy:vercel": "vercel --prod",
+    "optimize": "node scripts/optimize.js",
+    "test": "node scripts/test.js",
+    "lighthouse": "lighthouse pages/index.html --output=json --output-path=./lighthouse-report.json",
+    "analyze": "npm run lighthouse && node scripts/analyze.js",
+    "clean": "rm -rf dist node_modules package-lock.json",
+    "serve": "serve dist"
+  },
+  "keywords": [
+    "solar-system",
+    "astronomy",
+    "nasa-api",
+    "education",
+    "interactive",
+    "space",
+    "planets"
+  ],
+  "author": "Solar System Explorer Team",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.1.0",
+    "serve": "^14.2.1",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/solar-system-explorer.git"
+  },
+  "homepage": "https://your-username.github.io/solar-system-explorer",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+} 

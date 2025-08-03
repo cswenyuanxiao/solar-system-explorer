@@ -1,0 +1,107 @@
+/* Scroll Performance Optimizations */
+
+/* Optimize scrolling container */
+html, body {
+  overscroll-behavior: contain; /* Prevent bounce/pull effects */
+  overflow-anchor: auto; /* Optimize scroll anchoring */
+}
+
+/* Force GPU acceleration for smoother scrolling */
+.planets-container {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  contain: content; /* Isolate layout/paint for better performance */
+}
+
+/* Optimize fixed background */
+body {
+  background-attachment: fixed;
+}
+
+/* Prevent layout shifts during scroll */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px; /* Approximate placeholder size */
+}
+
+/* Optimize animations during scroll */
+@media screen and (min-width: 769px) {
+  .planet-card {
+    transition: transform 0.2s ease-out;
+  }
+  
+  /* Disable hover effects during scroll for better performance */
+  body.is-scrolling .planet-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  body.is-scrolling * {
+    transition: none !important;
+  }
+}
+
+/* Minimize repaints for scrollable content */
+.search-results {
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+/* For smoother scrolling on iOS devices */
+@supports (-webkit-touch-callout: none) {
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Optimize scroll performance by reducing animations on mobile */
+@media (max-width: 768px) {
+  .planet-card {
+    transition: none;
+  }
+  
+  .planet-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-color);
+  }
+  
+  /* Use simpler animations */
+  .planet-card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Provide performance-optimized animations */
+.fade-in {
+  opacity: 0;
+  animation: simpleFadeIn 0.3s ease forwards;
+}
+
+@keyframes simpleFadeIn {
+  to { opacity: 1; }
+}
+
+/* Add scroll progress feedback with minimal performance impact */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  z-index: 1000;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: var(--primary-color);
+  transform-origin: 0 0;
+  transform: scaleX(0);
+}
+
+/* Prevent content jumps when scrollbar appears/disappears */
+html {
+  scrollbar-gutter: stable;
+}

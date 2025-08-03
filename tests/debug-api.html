@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .debug-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            width: 300px;
+            background: #333;
+            color: white;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .log {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 API Debug Test</h1>
+    
+    <div class="debug-section">
+        <h2>1. NASA API Initialization</h2>
+        <button onclick="testNASAAPI()">Test NASA API</button>
+        <button onclick="initNASAAPI()">Initialize NASA API</button>
+        <div id="nasaStatus" class="log"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>2. API Key Management</h2>
+        <input type="text" id="testKey" placeholder="Enter API key">
+        <button onclick="testSaveKey()">Test Save Key</button>
+        <button onclick="testLoadKey()">Test Load Key</button>
+        <button onclick="testClearKey()">Test Clear Key</button>
+        <div id="keyStatus" class="log"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>3. API Connection Test</h2>
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="testAPOD()">Test APOD</button>
+        <div id="connectionStatus" class="log"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>4. Console Log</h2>
+        <div id="consoleLog" class="log"></div>
+    </div>
+
+    <script src="../js/nasa-api.js"></script>
+    <script>
+        // Override console.log to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        function addLog(message, type = 'log') {
+            const logDiv = document.getElementById('consoleLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${timestamp}] ${type.toUpperCase()}: ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+
+        function testNASAAPI() {
+            addLog('Testing NASA API availability...');
+            const status = document.getElementById('nasaStatus');
+            
+            if (window.nasaAPI) {
+                status.innerHTML = `
+                    <div>✅ NASA API is available</div>
+                    <div>API Key: ${window.nasaAPI.apiKey}</div>
+                    <div>Base URL: ${window.nasaAPI.baseURL}</div>
+                    <div>Cache Size: ${window.nasaAPI.cache.size}</div>
+                `;
+            } else {
+                status.innerHTML = '<div>❌ NASA API is not available</div>';
+            }
+        }
+
+        function initNASAAPI() {
+            addLog('Initializing NASA API...');
+            try {
+                window.nasaAPI = new NASAAPI();
+                addLog('✅ NASA API initialized successfully');
+                testNASAAPI();
+            } catch (error) {
+                addLog('❌ Failed to initialize NASA API: ' + error.message);
+            }
+        }
+
+        function testSaveKey() {
+            const key = document.getElementById('testKey').value.trim();
+            const status = document.getElementById('keyStatus');
+            
+            if (key) {
+                if (window.nasaAPI) {
+                    window.nasaAPI.setAPIKey(key);
+                    status.innerHTML = `
+                        <div>✅ API key saved successfully</div>
+                        <div>Key: ${key}</div>
+                        <div>LocalStorage: ${localStorage.getItem('nasa_api_key')}</div>
+                    `;
+                } else {
+                    status.innerHTML = '<div>❌ NASA API not available</div>';
+                }
+            } else {
+                status.innerHTML = '<div>❌ Please enter a valid API key</div>';
+            }
+        }
+
+        function testLoadKey() {
+            const savedKey = localStorage.getItem('nasa_api_key');
+            const status = document.getElementById('keyStatus');
+            
+            if (savedKey) {
+                document.getElementById('testKey').value = savedKey;
+                status.innerHTML = `
+                    <div>✅ Loaded saved key</div>
+                    <div>Key: ${savedKey}</div>
+                `;
+            } else {
+                status.innerHTML = '<div>ℹ️ No saved key found</div>';
+            }
+        }
+
+        function testClearKey() {
+            localStorage.removeItem('nasa_api_key');
+            document.getElementById('testKey').value = '';
+            const status = document.getElementById('keyStatus');
+            status.innerHTML = '<div>🗑️ API key cleared</div>';
+        }
+
+        function testConnection() {
+            const status = document.getElementById('connectionStatus');
+            status.innerHTML = '<div>🔄 Testing connection...</div>';
+            
+            if (window.nasaAPI) {
+                window.nasaAPI.testConnection().then(result => {
+                    if (result.success) {
+                        status.innerHTML = `
+                            <div>✅ Connection successful</div>
+                            <div>Message: ${result.message}</div>
+                            <div>Data: ${JSON.stringify(result.data, null, 2)}</div>
+                        `;
+                    } else {
+                        status.innerHTML = `
+                            <div>❌ Connection failed</div>
+                            <div>Message: ${result.message}</div>
+                        `;
+                    }
+                }).catch(error => {
+                    status.innerHTML = `
+                        <div>❌ Connection error</div>
+                        <div>Error: ${error.message}</div>
+                    `;
+                });
+            } else {
+                status.innerHTML = '<div>❌ NASA API not available</div>';
+            }
+        }
+
+        function testAPOD() {
+            const status = document.getElementById('connectionStatus');
+            status.innerHTML = '<div>🔄 Testing APOD...</div>';
+            
+            if (window.nasaAPI) {
+                window.nasaAPI.getAPOD().then(data => {
+                    status.innerHTML = `
+                        <div>✅ APOD loaded successfully</div>
+                        <div>Title: ${data.title}</div>
+                        <div>Date: ${data.date}</div>
+                        <div>URL: ${data.url}</div>
+                    `;
+                }).catch(error => {
+                    status.innerHTML = `
+                        <div>❌ APOD error</div>
+                        <div>Error: ${error.message}</div>
+                    `;
+                });
+            } else {
+                status.innerHTML = '<div>❌ NASA API not available</div>';
+            }
+        }
+
+        // Auto-initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            addLog('Page loaded, checking NASA API...');
+            testNASAAPI();
+            testLoadKey();
+        });
+    </script>
+</body>
+</html> 
