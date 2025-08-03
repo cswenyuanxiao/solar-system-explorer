@@ -133,113 +133,52 @@
     <script src="../js/nasa-api.js"></script>
     <script src="../js/daily-astronomy.js"></script>
     <script>
-        // Simple and direct API key management with better error handling
+        // Simplified API key management now that loading is more robust
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, setting up API management...');
-            
-            // Force hide loader after a timeout to prevent infinite loading
-            setTimeout(() => {
-                const pageLoader = document.getElementById('pageLoader');
-                if (pageLoader && !pageLoader.classList.contains('hidden')) {
-                    console.log('Force hiding loader due to timeout');
-                    pageLoader.classList.add('hidden');
-                    pageLoader.style.display = 'none';
-                }
-            }, 3000); // Hide after 3 seconds if not already hidden
-            
-            // Initialize NASA API if not already done
             if (!window.nasaAPI) {
-                console.log('Initializing NASA API...');
                 try {
                     window.nasaAPI = new NASAAPI();
-                    console.log('NASA API initialized successfully');
                 } catch (error) {
                     console.error('Failed to initialize NASA API:', error);
-                    // Still continue with the page setup
                 }
             }
             
-            // Setup direct event listeners
-            setTimeout(() => {
-                setupDirectEventListeners();
-                loadSavedKey();
-                updateStatus();
-                loadSpaceWeather();
-                loadDailySpaceFact();
-            }, 500);
-        });
-        
-        // Also hide loader when window loads
-        window.addEventListener('load', () => {
-            console.log('Window loaded, ensuring loader is hidden');
-            const pageLoader = document.getElementById('pageLoader');
-            if (pageLoader) {
-                pageLoader.classList.add('hidden');
-                setTimeout(() => {
-                    pageLoader.style.display = 'none';
-                }, 300);
-            }
+            setupDirectEventListeners();
+            loadSavedKey();
+            updateStatus();
+            loadSpaceWeather();
+            loadDailySpaceFact();
         });
         
         function setupDirectEventListeners() {
-            console.log('Setting up direct event listeners...');
-            
-            const saveBtn = document.getElementById('saveApiKey');
-            const testBtn = document.getElementById('testApiKey');
-            const clearBtn = document.getElementById('clearApiKey');
-            
-            if (saveBtn) {
-                console.log('Adding save button listener');
-                saveBtn.addEventListener('click', handleSaveKey);
-            }
-            
-            if (testBtn) {
-                console.log('Adding test button listener');
-                testBtn.addEventListener('click', handleTestConnection);
-            }
-            
-            if (clearBtn) {
-                console.log('Adding clear button listener');
-                clearBtn.addEventListener('click', handleClearKey);
-            }
+            document.getElementById('saveApiKey')?.addEventListener('click', handleSaveKey);
+            document.getElementById('testApiKey')?.addEventListener('click', handleTestConnection);
+            document.getElementById('clearApiKey')?.addEventListener('click', handleClearKey);
         }
         
         function handleSaveKey() {
-            console.log('Save button clicked!');
             const key = document.getElementById('apiKeyInput').value.trim();
-            if (key) {
-                if (window.nasaAPI) {
-                    window.nasaAPI.setAPIKey(key);
-                    showNotification('✅ API key saved successfully!');
-                    updateStatus();
-                } else {
-                    showNotification('❌ NASA API not initialized');
-                }
+            if (key && window.nasaAPI) {
+                window.nasaAPI.setAPIKey(key);
+                showNotification('✅ API key saved successfully!');
+                updateStatus();
             } else {
                 showNotification('❌ Please enter a valid API key');
             }
         }
         
         function handleTestConnection() {
-            console.log('Test button clicked!');
             if (window.nasaAPI) {
                 showNotification('🔄 Testing API connection...');
                 window.nasaAPI.testConnection().then(result => {
-                    if (result.success) {
-                        showNotification('✅ API connection successful!');
-                    } else {
-                        showNotification('❌ API connection failed: ' + result.message);
-                    }
+                    showNotification(result.success ? '✅ API connection successful!' : `❌ API connection failed: ${result.message}`);
                 }).catch(error => {
-                    showNotification('❌ API test failed: ' + error.message);
+                    showNotification(`❌ API test failed: ${error.message}`);
                 });
-            } else {
-                showNotification('❌ NASA API not initialized');
             }
         }
         
         function handleClearKey() {
-            console.log('Clear button clicked!');
             if (window.nasaAPI) {
                 window.nasaAPI.setAPIKey('DEMO_KEY');
                 document.getElementById('apiKeyInput').value = '';
@@ -256,83 +195,39 @@
         }
         
         function updateStatus() {
-            const statusElement = document.getElementById('currentKeyStatus');
-            if (statusElement && window.nasaAPI) {
-                const currentKey = window.nasaAPI.apiKey;
-                const keyType = currentKey === 'DEMO_KEY' ? 'Demo' : 'Custom';
-                statusElement.textContent = `Current key: ${keyType}`;
+            if (window.nasaAPI) {
+                const keyType = window.nasaAPI.apiKey === 'DEMO_KEY' ? 'Demo' : 'Custom';
+                document.getElementById('currentKeyStatus').textContent = `Current key: ${keyType}`;
             }
         }
         
         function showNotification(message) {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #4CAF50;
-                color: white;
-                padding: 1rem 2rem;
-                border-radius: 25px;
-                z-index: 1000;
-                font-weight: 600;
-            `;
+            notification.className = 'toast-notification';
             notification.textContent = message;
             document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            setTimeout(() => notification.remove(), 3000);
         }
         
         function loadSpaceWeather() {
-            console.log('Loading space weather...');
-            try {
-                if (window.nasaAPI) {
-                    const weather = window.nasaAPI.getSpaceWeather();
-                    
-                    document.getElementById('solarActivity').textContent = weather.condition;
-                    document.getElementById('solarFlares').textContent = weather.solarFlare ? 'Active' : 'Quiet';
-                    document.getElementById('geomagneticStorms').textContent = weather.geomagneticStorm ? 'Active' : 'Quiet';
-                    document.getElementById('sunspotCount').textContent = weather.sunspotCount;
-                } else {
-                    // Fallback data
-                    document.getElementById('solarActivity').textContent = 'Quiet';
-                    document.getElementById('solarFlares').textContent = 'Quiet';
-                    document.getElementById('geomagneticStorms').textContent = 'Quiet';
-                    document.getElementById('sunspotCount').textContent = '15';
-                }
-            } catch (error) {
-                console.error('Error loading space weather:', error);
-                // Set fallback values
-                document.getElementById('solarActivity').textContent = 'Unknown';
-                document.getElementById('solarFlares').textContent = 'Unknown';
-                document.getElementById('geomagneticStorms').textContent = 'Unknown';
-                document.getElementById('sunspotCount').textContent = 'Unknown';
+            if (window.nasaAPI) {
+                const weather = window.nasaAPI.getSpaceWeather();
+                document.getElementById('solarActivity').textContent = weather.condition;
+                document.getElementById('solarFlares').textContent = weather.solarFlare ? 'Active' : 'Quiet';
+                document.getElementById('geomagneticStorms').textContent = weather.geomagneticStorm ? 'Active' : 'Quiet';
+                document.getElementById('sunspotCount').textContent = weather.sunspotCount;
             }
         }
         
         function loadDailySpaceFact() {
-            console.log('Loading daily space fact...');
-            try {
-                if (window.nasaAPI) {
-                    window.nasaAPI.getDailySpaceFact().then(fact => {
-                        document.getElementById('dailySpaceFact').textContent = fact;
-                    }).catch(() => {
-                        document.getElementById('dailySpaceFact').textContent = 
-                            "The Sun contains 99.86% of the solar system's mass";
-                    });
-                } else {
-                    document.getElementById('dailySpaceFact').textContent = 
-                        "The Sun contains 99.86% of the solar system's mass";
-                }
-            } catch (error) {
-                console.error('Error loading daily space fact:', error);
-                document.getElementById('dailySpaceFact').textContent = 
-                    "The Sun contains 99.86% of the solar system's mass";
+            if (window.nasaAPI) {
+                window.nasaAPI.getDailySpaceFact().then(fact => {
+                    document.getElementById('dailySpaceFact').textContent = fact;
+                }).catch(() => {
+                    document.getElementById('dailySpaceFact').textContent = "The Sun contains 99.86% of the solar system's mass.";
+                });
             }
         }
     </script>
 </body>
-</html> 
+</html>
