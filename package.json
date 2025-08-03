@@ -40,9 +40,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/solar-system-explorer.git"
+    "url": "https://github.com/cswenyuanxiao/solar-system-explorer.git"
   },
-  "homepage": "https://your-username.github.io/solar-system-explorer",
+  "homepage": "https://cswenyuanxiao.github.io/solar-system-explorer",
   "browserslist": [
     "> 1%",
     "last 2 versions",
