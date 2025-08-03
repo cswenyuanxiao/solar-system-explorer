@@ -133,29 +133,52 @@
     <script src="../js/nasa-api.js"></script>
     <script src="../js/daily-astronomy.js"></script>
     <script>
-        // Simple and direct API key management
+        // Simple and direct API key management with better error handling
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, setting up API management...');
             
-                    // Initialize NASA API if not already done
-        if (!window.nasaAPI) {
-            console.log('Initializing NASA API...');
-            try {
-                window.nasaAPI = new NASAAPI();
-                console.log('NASA API initialized successfully');
-            } catch (error) {
-                console.error('Failed to initialize NASA API:', error);
-            }
-        }
+            // Force hide loader after a timeout to prevent infinite loading
+            setTimeout(() => {
+                const pageLoader = document.getElementById('pageLoader');
+                if (pageLoader && !pageLoader.classList.contains('hidden')) {
+                    console.log('Force hiding loader due to timeout');
+                    pageLoader.classList.add('hidden');
+                    pageLoader.style.display = 'none';
+                }
+            }, 3000); // Hide after 3 seconds if not already hidden
             
-                    // Setup direct event listeners
-        setTimeout(() => {
-            setupDirectEventListeners();
-            loadSavedKey();
-            updateStatus();
-            loadSpaceWeather();
-            loadDailySpaceFact();
-        }, 500);
+            // Initialize NASA API if not already done
+            if (!window.nasaAPI) {
+                console.log('Initializing NASA API...');
+                try {
+                    window.nasaAPI = new NASAAPI();
+                    console.log('NASA API initialized successfully');
+                } catch (error) {
+                    console.error('Failed to initialize NASA API:', error);
+                    // Still continue with the page setup
+                }
+            }
+            
+            // Setup direct event listeners
+            setTimeout(() => {
+                setupDirectEventListeners();
+                loadSavedKey();
+                updateStatus();
+                loadSpaceWeather();
+                loadDailySpaceFact();
+            }, 500);
+        });
+        
+        // Also hide loader when window loads
+        window.addEventListener('load', () => {
+            console.log('Window loaded, ensuring loader is hidden');
+            const pageLoader = document.getElementById('pageLoader');
+            if (pageLoader) {
+                pageLoader.classList.add('hidden');
+                setTimeout(() => {
+                    pageLoader.style.display = 'none';
+                }, 300);
+            }
         });
         
         function setupDirectEventListeners() {
