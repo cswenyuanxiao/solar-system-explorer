@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://cswenyuanxiao.github.io/solar-system-explorer/sitemap.xml
