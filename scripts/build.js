@@ -65,7 +65,6 @@ async function copyFiles() {
   
   // Copy main files
   const filesToCopy = [
-    'index.html',
     'robots.txt',
     'sitemap.xml'
   ];
@@ -75,6 +74,12 @@ async function copyFiles() {
       await fs.copy(file, path.join(config.output, file));
       console.log(`  ✅ Copied ${file}`);
     }
+  }
+  
+  // Copy pages/index.html as the main index.html
+  if (await fs.pathExists('pages/index.html')) {
+    await fs.copy('pages/index.html', path.join(config.output, 'index.html'));
+    console.log(`  ✅ Copied pages/index.html as index.html`);
   }
   
   // Copy directories
