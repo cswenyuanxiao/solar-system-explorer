@@ -17,20 +17,8 @@
     box-sizing: border-box;
 }
 
-/* Optimized body styles */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url("../images/background.jpg");
-    background-size: cover;
-    background-attachment: fixed; /* Changed from scroll to fixed for better performance */
-    background-position: center;
-    color: var(--text-color);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+/* NASA样式由style.css控制，这里不覆盖 */
+/* body样式已移到style.css中 */
 
 /* Optimized header */
 header {
