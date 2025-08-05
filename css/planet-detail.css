@@ -230,4 +230,48 @@
 .planet-detail[data-planet="jupiter"] .hero-info h2 { color: #ffb347; }
 .planet-detail[data-planet="saturn"] .hero-info h2 { color: #f4a460; }
 .planet-detail[data-planet="uranus"] .hero-info h2 { color: #40e0d0; }
-.planet-detail[data-planet="neptune"] .hero-info h2 { color: #4169e1; } 
+.planet-detail[data-planet="neptune"] .hero-info h2 { color: #4169e1; }
+
+/* Header layout fixes for favorites button */
+header .header-content {
+    position: relative;
+    padding-right: 150px; /* Make space for favorites button */
+}
+
+.favorite-button {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    background: rgba(255, 215, 0, 0.2) !important;
+    color: #ffd700 !important;
+    border: 2px solid #ffd700 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s ease !important;
+    z-index: 10 !important;
+    font-weight: bold !important;
+}
+
+.favorite-button:hover {
+    background: rgba(255, 215, 0, 0.3) !important;
+    transform: scale(1.05) !important;
+}
+
+.favorite-button.favorited {
+    background: #ffd700 !important;
+    color: #000 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header .header-content {
+        padding-right: 120px;
+    }
+    
+    .favorite-button {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.8rem !important;
+    }
+} 
