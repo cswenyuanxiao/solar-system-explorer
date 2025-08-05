@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/solar-system-explorer/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User System - Solar System Explorer</title>
+    <link rel="stylesheet" href="css/style.css?v=20240803">
+    <link rel="stylesheet" href="css/shared-header.css?v=20240803">
+    <link rel="stylesheet" href="css/user-system.css?v=20240803">
+</head>
+<body>
+    <header>
+        <!-- Shared header will be dynamically injected here by shared-header.js -->
+    </header>
+
+    <main>
+        <!-- User System Hero Section -->
+        <section class="user-hero">
+            <div class="hero-content">
+                <h1>User Account</h1>
+                <p>Manage your account, track your learning progress, and personalize your solar system exploration experience.</p>
+            </div>
+        </section>
+
+        <!-- User System Container -->
+        <section class="user-container">
+            <!-- Login Form -->
+            <div id="login-section" class="user-section active">
+                <div class="form-container">
+                    <h2>Sign In</h2>
+                    <form id="login-form" class="user-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="remember-me" name="remember">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                        </div>
+                        <button type="submit" class="submit-btn">Sign In</button>
+                    </form>
+                    <div class="form-footer">
+                        <p>Don't have an account? <a href="#" id="show-register">Sign up</a></p>
+                        <p><a href="#" id="forgot-password">Forgot password?</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-section" class="user-section">
+                <div class="form-container">
+                    <h2>Create Account</h2>
+                    <form id="register-form" class="user-form">
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <input type="text" id="register-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirm Password</label>
+                            <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="agree-terms" name="agreeTerms" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#" id="terms-link">Terms of Service</a> and <a href="#" id="privacy-link">Privacy Policy</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="submit-btn">Create Account</button>
+                    </form>
+                    <div class="form-footer">
+                        <p>Already have an account? <a href="#" id="show-login">Sign in</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Dashboard -->
+            <div id="dashboard-section" class="user-section">
+                <div class="dashboard-container">
+                    <div class="dashboard-header">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <img id="user-avatar" src="images/earth.jpg" alt="User Avatar">
+                            </div>
+                            <div class="user-details">
+                                <h2 id="user-name">User Name</h2>
+                                <p id="user-email">user@example.com</p>
+                                <p class="member-since">Member since <span id="member-since">January 2024</span></p>
+                            </div>
+                        </div>
+                        <button id="logout-btn" class="logout-btn">Sign Out</button>
+                    </div>
+
+                    <div class="dashboard-content">
+                        <!-- Learning Progress -->
+                        <div class="progress-section">
+                            <h3>Learning Progress</h3>
+                            <div class="progress-grid">
+                                <div class="progress-card">
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                            <path id="progress-path" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        </svg>
+                                        <span id="progress-percentage">75%</span>
+                                    </div>
+                                    <div class="progress-info">
+                                        <h4>Overall Progress</h4>
+                                        <p>You've completed 75% of the available content</p>
+                                    </div>
+                                </div>
+                                <div class="progress-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="lessons-completed">12</span>
+                                        <span class="stat-label">Lessons Completed</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="quiz-score">85%</span>
+                                        <span class="stat-label">Average Quiz Score</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-number" id="achievements-earned">8</span>
+                                        <span class="stat-label">Achievements Earned</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="activity-section">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list" id="activity-list">
+                                <!-- Activity items will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Favorites -->
+                        <div class="favorites-section">
+                            <h3>Favorite Planets</h3>
+                            <div class="favorites-grid" id="favorites-grid">
+                                <!-- Favorite planets will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Settings -->
+                        <div class="settings-section">
+                            <h3>Account Settings</h3>
+                            <div class="settings-grid">
+                                <div class="setting-item">
+                                    <h4>Profile Information</h4>
+                                    <form id="profile-form" class="settings-form">
+                                        <div class="form-group">
+                                            <label for="profile-name">Full Name</label>
+                                            <input type="text" id="profile-name" name="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profile-email">Email</label>
+                                            <input type="email" id="profile-email" name="email">
+                                        </div>
+                                        <button type="submit" class="save-btn">Save Changes</button>
+                                    </form>
+                                </div>
+                                <div class="setting-item">
+                                    <h4>Preferences</h4>
+                                    <div class="preferences">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="email-notifications">
+                                            <span class="checkmark"></span>
+                                            Email notifications
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="dark-mode">
+                                            <span class="checkmark"></span>
+                                            Dark mode
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="auto-save">
+                                            <span class="checkmark"></span>
+                                            Auto-save progress
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Scripts -->
+    <script src="js/shared-header.js"></script>
+    <script src="js/user-system.js"></script>
+</body>
+</html> 
