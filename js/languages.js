@@ -228,9 +228,11 @@ class LanguageManager {
     
     // 初始化
     init() {
-        this.updateLanguageUI();
         this.translatePage();
         this.setupLanguageSwitcher();
+        if (typeof onLanguageChange === 'function') {
+            onLanguageChange();
+        }
     }
     
     // 获取存储的语言设置
@@ -243,8 +245,11 @@ class LanguageManager {
         if (LANGUAGES[lang]) {
             this.currentLanguage = lang;
             localStorage.setItem('preferred_language', lang);
-            this.updateLanguageUI();
             this.translatePage();
+            // Call the global UI update function
+            if (typeof onLanguageChange === 'function') {
+                onLanguageChange();
+            }
         }
     }
     
@@ -267,13 +272,14 @@ class LanguageManager {
     
     // 设置语言切换器
     setupLanguageSwitcher() {
-        const switcher = document.getElementById('language-switcher');
-        if (switcher) {
-            switcher.addEventListener('click', () => {
+        // Use event delegation on the body in case the header is not yet loaded
+        document.body.addEventListener('click', (event) => {
+            const switcher = event.target.closest('#language-switcher');
+            if (switcher) {
                 const newLang = this.currentLanguage === 'zh' ? 'en' : 'zh';
                 this.setLanguage(newLang);
-            });
-        }
+            }
+        });
     }
     
     // 翻译页面

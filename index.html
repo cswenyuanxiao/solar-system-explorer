@@ -5,52 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar System Explorer - NASA</title>
-    <!-- ✅ 修复：CSS路径改为 ../css/ -->
     <link rel="stylesheet" href="css/style.css?v=20240803">
-    <link rel="stylesheet" href="css/optimized.css?v=20240803">
+    <link rel="stylesheet" href="css/shared-header.css?v=20240803">
     <link rel="stylesheet" href="css/scroll-optimized.css?v=20240803">
 </head>
-<body class="optimized-scrolling">
+<body>
     <header>
-        <div class="header-content">
-            <div class="logo-section">
-                <h1 data-i18n="main_title">SOLAR SYSTEM EXPLORER</h1>
-                <p class="subtitle" data-i18n="subtitle">Exploring the cosmos through NASA's lens</p>
-            </div>
-            
-            <!-- NASA风格的搜索框 -->
-            <div class="main-search-container">
-                <div class="search-box">
-                    <input type="text" id="mainSearchInput" data-i18n-placeholder="search_placeholder" placeholder="Search planets and missions..." autocomplete="off">
-                    <button id="mainSearchButton" data-i18n="search_button">SEARCH</button>
-                </div>
-                <div class="search-results" id="mainSearchResults" style="display: none;"></div>
-            </div>
-            
-            <!-- NASA风格的导航按钮 -->
-            <div class="header-actions">
-                <button id="favoritesButton" class="action-button" data-i18n="favorites">
-                    FAVORITES (<span id="favoritesCount">0</span>)
-                </button>
-                <!-- ✅ 修复：移除pages/前缀，因为已经在pages目录内 -->
-                <a href="pages/charts.html" class="action-button" data-i18n="charts">
-                    DATA VISUALIZATION
-                </a>
-                <a href="pages/education.html" class="action-button" data-i18n="education">
-                    LEARNING RESOURCES
-                </a>
-                <a href="pages/api.html" class="action-button" data-i18n="api">
-                    NASA API
-                </a>
-                <!-- 语言切换器 -->
-                <button id="language-switcher" class="action-button">
-                    🇨🇳 中文
-                </button>
-                <button id="themeToggle" class="action-button">
-                    🌙
-                </button>
-            </div>
-        </div>
+        <!-- Shared header will be dynamically injected here by shared-header.js -->
     </header>
 
     <main>
@@ -208,6 +169,7 @@
     <!-- ✅ 添加：必要的JavaScript文件 -->
     <script src="js/languages.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/shared-header.js"></script>
     <script src="js/lazy-loading.js"></script>
     <script src="js/loading-manager.js"></script>
 </body>
