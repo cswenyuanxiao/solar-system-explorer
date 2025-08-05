@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar System Explorer - NASA</title>
+    <!-- ✅ 修复：CSS路径改为 ../css/ -->
     <link rel="stylesheet" href="css/style.css?v=20240803">
     <link rel="stylesheet" href="css/optimized.css?v=20240803">
     <link rel="stylesheet" href="css/scroll-optimized.css?v=20240803">
-    <link rel="stylesheet" href="css/loading-animations.css?v=20240803">
 </head>
 <body class="optimized-scrolling">
     <header>
@@ -32,6 +32,7 @@
                 <button id="favoritesButton" class="action-button">
                     FAVORITES (<span id="favoritesCount">0</span>)
                 </button>
+                <!-- ✅ 修复：移除pages/前缀，因为已经在pages目录内 -->
                 <a href="pages/charts.html" class="action-button">
                     DATA VISUALIZATION
                 </a>
@@ -64,16 +65,19 @@
                 <div class="featured-card">
                     <h4>THE SUN</h4>
                     <p>Our star - the heart of the solar system</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
                     <a href="pages/sun.html" class="featured-link">EXPLORE SUN</a>
                 </div>
                 <div class="featured-card">
                     <h4>EARTH</h4>
                     <p>Our home planet - the blue marble</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
                     <a href="pages/earth.html" class="featured-link">EXPLORE EARTH</a>
                 </div>
                 <div class="featured-card">
                     <h4>MARS</h4>
                     <p>The red planet - future human destination</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
                     <a href="pages/mars.html" class="featured-link">EXPLORE MARS</a>
                 </div>
             </div>
@@ -81,6 +85,7 @@
 
         <!-- 所有星球网格 -->
         <section id="planets" class="planets-container">
+            <!-- ✅ 修复：移除pages/前缀，图片路径改为../images/ -->
             <a href="pages/sun.html" class="planet-card">
                 <img data-src="images/sun.jpg" alt="The Sun" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFD700'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
@@ -88,57 +93,65 @@
                     <p>Our star - the heart of the solar system</p>
                 </div>
             </a>
+
             <a href="pages/mercury.html" class="planet-card">
-                <img data-src="images/mercury.jpg" alt="Mercury" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%238C8C8C'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/mercury.jpg" alt="Mercury" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%238C7853'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>MERCURY</h2>
                     <p>The smallest planet, closest to the Sun</p>
                 </div>
             </a>
+
             <a href="pages/venus.html" class="planet-card">
-                <img data-src="images/venus.jpg" alt="Venus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFA500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/venus.jpg" alt="Venus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFC649'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>VENUS</h2>
                     <p>The hottest planet, Earth's twin</p>
                 </div>
             </a>
+
             <a href="pages/earth.html" class="planet-card">
-                <img data-src="images/earth.jpg" alt="Earth" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234CAF50'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/earth.jpg" alt="Earth" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%236B93D6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>EARTH</h2>
                     <p>Our home planet, the blue marble</p>
                 </div>
             </a>
+
             <a href="pages/mars.html" class="planet-card">
-                <img data-src="images/mars.jpg" alt="Mars" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FF4444'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/mars.jpg" alt="Mars" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23C1440E'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>MARS</h2>
                     <p>The red planet, future human destination</p>
                 </div>
             </a>
+
             <a href="pages/jupiter.html" class="planet-card">
-                <img data-src="images/jupiter.jpg" alt="Jupiter" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFB347'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/jupiter.jpg" alt="Jupiter" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23D8CA9D'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>JUPITER</h2>
                     <p>The largest planet, gas giant</p>
                 </div>
             </a>
+
             <a href="pages/saturn.html" class="planet-card">
-                <img data-src="images/saturn.jpg" alt="Saturn" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23F4A460'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/saturn.jpg" alt="Saturn" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FAD5A5'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>SATURN</h2>
                     <p>The ringed planet, most beautiful</p>
                 </div>
             </a>
+
             <a href="pages/uranus.html" class="planet-card">
-                <img data-src="images/uranus.jpg" alt="Uranus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%2340E0D0'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/uranus.jpg" alt="Uranus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234FD0E7'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>URANUS</h2>
                     <p>The ice giant, tilted on its side</p>
                 </div>
             </a>
+
             <a href="pages/neptune.html" class="planet-card">
-                <img data-src="images/neptune.jpg" alt="Neptune" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234169E1'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <img data-src="images/neptune.jpg" alt="Neptune" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234B70DD'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
                 <div class="planet-info">
                     <h2>NEPTUNE</h2>
                     <p>The windiest planet, deep blue</p>
@@ -146,22 +159,45 @@
             </a>
         </section>
 
-        <!-- NASA风格的任务信息 -->
-        <section class="mission-info">
-            <h3>ABOUT THIS MISSION</h3>
-            <p>This Solar System Explorer provides an interactive journey through our cosmic neighborhood, featuring real-time data from NASA's missions and the latest discoveries in planetary science.</p>
+        <!-- Quick Stats Section -->
+        <section class="quick-stats">
+            <h3>QUICK STATISTICS</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>9</h4>
+                    <p>Celestial Bodies</p>
+                </div>
+                <div class="stat-card">
+                    <h4>8</h4>
+                    <p>Planets</p>
+                </div>
+                <div class="stat-card">
+                    <h4>200+</h4>
+                    <p>Known Moons</p>
+                </div>
+                <div class="stat-card">
+                    <h4>4.6B</h4>
+                    <p>Years Old</p>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Solar System Explorer. All images and data from NASA. Exploring the universe through science and discovery.</p>
+        <div class="footer-content">
+            <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+            <div class="footer-links">
+                <!-- ✅ 修复：返回根目录的链接 -->
+                <a href="index.html">Project Structure</a>
+                <a href="pages/search.html">Search</a>
+                <a href="pages/api.html">NASA API</a>
+            </div>
+        </div>
     </footer>
 
-    <script src="js/lazy-loading.js?v=20240803" defer></script>
-    <script src="js/scroll-optimizer.js?v=20240803" defer></script>
-    <script src="js/app.js?v=20240803" defer></script>
-    <script src="js/search.js?v=20240803" defer></script>
-    <script src="js/favorites.js?v=20240803" defer></script>
-    <script src="js/main-integration.js?v=20240803" defer></script>
+    <!-- ✅ 添加：必要的JavaScript文件 -->
+    <script src="js/app.js"></script>
+    <script src="js/lazy-loading.js"></script>
+    <script src="js/loading-manager.js"></script>
 </body>
 </html>
