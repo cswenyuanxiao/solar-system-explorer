@@ -5,7 +5,7 @@ class LazyLoader {
         this.loadedImages = 0;
         this.options = {
             root: null,
-            rootMargin: '150px', // Increased margin for earlier loading
+            rootMargin: '50px', // Reduced margin for faster loading
             threshold: 0.01
         };
         
@@ -16,19 +16,11 @@ class LazyLoader {
     }
 
     init() {
+        console.log(`LazyLoader: Found ${this.images.length} images to load`);
+        
         if ('IntersectionObserver' in window) {
             this.observer = new IntersectionObserver(this.handleIntersection, this.options);
-            
-            // Use a more robust initialization strategy
-            if ('requestIdleCallback' in window) {
-                const timeout = setTimeout(() => this.observeImages(), 100);
-                requestIdleCallback(() => {
-                    clearTimeout(timeout);
-                    this.observeImages();
-                }, { timeout: 500 });
-            } else {
-                requestAnimationFrame(() => this.observeImages());
-            }
+            this.observeImages();
         } else {
             // Fallback for older browsers
             this.loadImagesImmediately();
@@ -36,13 +28,17 @@ class LazyLoader {
     }
 
     observeImages() {
-        this.images.forEach(img => this.observer.observe(img));
+        this.images.forEach(img => {
+            console.log(`Observing image: ${img.getAttribute('data-src')}`);
+            this.observer.observe(img);
+        });
     }
 
     handleIntersection(entries, observer) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                requestAnimationFrame(() => this.loadImage(entry.target));
+                console.log(`Loading image: ${entry.target.getAttribute('data-src')}`);
+                this.loadImage(entry.target);
                 observer.unobserve(entry.target);
             }
         });
@@ -50,30 +46,39 @@ class LazyLoader {
 
     loadImage(img) {
         const src = img.getAttribute('data-src');
-        if (!src) return;
+        if (!src) {
+            console.warn('No data-src attribute found');
+            return;
+        }
+
+        console.log(`Attempting to load: ${src}`);
 
         // Use a temporary image to handle loading
         const tempImage = new Image();
-        tempImage.src = src;
         
         tempImage.onload = () => {
+            console.log(`Successfully loaded: ${src}`);
             requestAnimationFrame(() => {
                 img.src = src;
                 img.classList.remove('lazy');
                 img.classList.add('loaded');
                 img.removeAttribute('data-src');
                 this.loadedImages++;
+                console.log(`Image loaded successfully: ${src}`);
             });
         };
 
         tempImage.onerror = () => {
-            console.warn('Failed to load image:', src);
+            console.error(`Failed to load image: ${src}`);
             img.classList.add('error');
             this.observer.unobserve(img);
         };
+
+        tempImage.src = src;
     }
 
     loadImagesImmediately() {
+        console.log('Using fallback loading method');
         const imageArray = Array.from(this.images);
         const processBatch = (startIndex) => {
             if (startIndex >= imageArray.length) return;
@@ -94,15 +99,24 @@ class LazyLoader {
     }
 }
 
-// Initialize lazy loading
+// Initialize lazy loading immediately when script loads
 if (typeof window !== 'undefined') {
-    if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-            new LazyLoader();
-        }, { timeout: 1000 });
-    } else {
-        window.addEventListener('load', () => {
+    // Try to initialize immediately
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded - Initializing LazyLoader');
             new LazyLoader();
         });
+    } else {
+        console.log('DOM already loaded - Initializing LazyLoader immediately');
+        new LazyLoader();
     }
+    
+    // Also try on window load as backup
+    window.addEventListener('load', () => {
+        console.log('Window loaded - Checking if LazyLoader needs re-initialization');
+        if (document.querySelectorAll('img[data-src]').length > 0) {
+            new LazyLoader();
+        }
+    });
 }

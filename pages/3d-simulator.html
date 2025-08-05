@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System Simulator - Solar System Explorer</title>
+    <link rel="stylesheet" href="../css/style.css?v=20240803">
+    <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
+    <link rel="stylesheet" href="../css/3d-simulator.css?v=20240803">
+</head>
+<body>
+    <header>
+        <!-- Shared header will be dynamically injected here by shared-header.js -->
+    </header>
+
+    <main>
+        <!-- 3D Simulator Hero Section -->
+        <section class="simulator-hero">
+            <div class="hero-content">
+                <h1>3D Solar System Simulator</h1>
+                <p>Explore the solar system in immersive 3D. Navigate through planets, observe their orbits, and learn about our cosmic neighborhood.</p>
+                <div class="simulator-controls">
+                    <button id="play-pause" class="control-btn">
+                        <span class="btn-icon">▶</span>
+                        <span class="btn-text">Play</span>
+                    </button>
+                    <button id="reset-view" class="control-btn">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Reset View</span>
+                    </button>
+                    <button id="toggle-orbits" class="control-btn active">
+                        <span class="btn-icon">🌌</span>
+                        <span class="btn-text">Show Orbits</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Canvas Container -->
+        <section class="simulator-container">
+            <div id="simulator-canvas"></div>
+            
+            <!-- Information Panel -->
+            <div id="info-panel" class="info-panel">
+                <div class="info-header">
+                    <h3 id="selected-object">Solar System</h3>
+                    <button id="close-info" class="close-btn">×</button>
+                </div>
+                <div class="info-content">
+                    <div id="object-description">
+                        Click on any planet or celestial body to learn more about it.
+                    </div>
+                    <div class="object-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Distance from Sun:</span>
+                            <span id="distance-stat">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Diameter:</span>
+                            <span id="diameter-stat">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Orbital Period:</span>
+                            <span id="orbital-period-stat">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="speed-control">Simulation Speed:</label>
+                    <input type="range" id="speed-control" min="0" max="10" value="1" step="0.1">
+                    <span id="speed-value">1x</span>
+                </div>
+                <div class="control-group">
+                    <label for="camera-distance">Camera Distance:</label>
+                    <input type="range" id="camera-distance" min="50" max="200" value="100" step="5">
+                    <span id="distance-value">100 AU</span>
+                </div>
+            </div>
+
+            <!-- Navigation Hints -->
+            <div class="navigation-hints">
+                <div class="hint-item">
+                    <span class="hint-icon">🖱️</span>
+                    <span>Click planets to learn more</span>
+                </div>
+                <div class="hint-item">
+                    <span class="hint-icon">⌨️</span>
+                    <span>WASD keys to move camera</span>
+                </div>
+                <div class="hint-item">
+                    <span class="hint-icon">🎮</span>
+                    <span>Use controls to adjust view</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Content -->
+        <section class="educational-content">
+            <h2>Learn About the Solar System</h2>
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>Planetary Orbits</h3>
+                    <p>All planets orbit the Sun in elliptical paths. The inner planets (Mercury, Venus, Earth, Mars) are rocky, while the outer planets (Jupiter, Saturn, Uranus, Neptune) are gas giants.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Scale and Distance</h3>
+                    <p>The distances between planets are vast. If Earth were the size of a marble, Jupiter would be the size of a basketball, and the Sun would be 109 times larger than Earth.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Time and Motion</h3>
+                    <p>Planets move at different speeds. Mercury completes an orbit in 88 Earth days, while Neptune takes 165 Earth years to orbit the Sun once.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Three.js Library -->
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="../js/shared-header.js"></script>
+    <script src="../js/planet-textures.js"></script>
+    <script src="../js/navigation-fix.js"></script>
+    <script src="../js/navigation-monitor.js"></script>
+    <script src="../js/3d-simulator-advanced.js"></script>
+    
+    <!-- Navigation Reset Script -->
+    <script>
+        // 导航重置脚本 - 解决路由问题
+        (function() {
+            console.log('🔧 3D模拟器导航重置脚本启动...');
+            
+            // 页面加载完成后重置导航
+            function resetNavigation() {
+                console.log('🔄 重置导航状态...');
+                
+                // 确保所有链接正常工作
+                document.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'A' && e.target.href) {
+                        const href = e.target.href;
+                        
+                        // 检查是否是内部链接且不是3D模拟器页面
+                        if (href.includes(window.location.origin) && !href.includes('3d-simulator')) {
+                            console.log('🔗 导航到:', href);
+                            
+                            // 使用window.location进行导航，确保页面完全重新加载
+                            window.location.href = href;
+                            e.preventDefault();
+                        }
+                    }
+                }, true);
+                
+                // 修复历史记录
+                if (window.history && window.history.replaceState) {
+                    const currentPath = window.location.pathname;
+                    window.history.replaceState(null, null, currentPath);
+                }
+            }
+            
+            // 页面卸载时清理
+            window.addEventListener('beforeunload', function() {
+                console.log('📤 页面卸载，清理导航状态...');
+                resetNavigation();
+            });
+            
+            // 页面隐藏时重置
+            window.addEventListener('pagehide', function() {
+                console.log('👁️ 页面隐藏，重置路由状态...');
+                if (window.history) {
+                    window.history.scrollRestoration = 'auto';
+                }
+            });
+            
+            // 立即执行一次重置
+            resetNavigation();
+            
+            // 页面加载完成后再次重置
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', resetNavigation);
+            } else {
+                resetNavigation();
+            }
+            
+            console.log('✅ 3D模拟器导航重置完成');
+        })();
+    </script>
+</body>
+</html> 

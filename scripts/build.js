@@ -2,286 +2,103 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const { execSync } = require('child_process');
-
-// Build configuration
-const config = {
-  source: '.',
-  output: 'dist',
-  exclude: [
-    'node_modules',
-    '.git',
-    'tests',
-    '*.log',
-    '.DS_Store',
-    'scripts',
-    'deploy-config.json',
-    'package.json',
-    'package-lock.json'
-  ],
-  include: [
-    'pages/**/*',
-    'css/**/*',
-    'js/**/*',
-    'images/**/*',
-    'assets/**/*',
-    'docs/**/*',
-    '*.html',
-    '*.xml',
-    '*.txt'
-  ]
-};
 
 async function build() {
-  console.log('🚀 Starting build process...');
-  
-  try {
-    // Clean output directory
-    await fs.remove(config.output);
-    await fs.ensureDir(config.output);
+    console.log('🚀 Starting a fresh build process (v5)...');
     
-    console.log('📁 Creating build directory...');
+    const outputDir = 'dist';
+
+    // 1. Clean and create output directory
+    console.log(`🧹 Cleaning directory: ${outputDir}`);
+    await fs.remove(outputDir);
+    await fs.ensureDir(outputDir);
+    await fs.ensureDir(path.join(outputDir, 'pages'));
+    console.log(`📦 Created directory structure: ${outputDir}`);
+
+    // 2. Copy asset directories
+    const assetDirs = ['css', 'js', 'images', 'docs'];
+    for (const dir of assetDirs) {
+        const sourcePath = path.join(__dirname, '..', dir);
+        const destPath = path.join(outputDir, dir);
+        if (await fs.pathExists(sourcePath)) {
+            await fs.copy(sourcePath, destPath);
+            console.log(`📂 Copied ${dir}/ to ${outputDir}/${dir}/`);
+        }
+    }
+
+    // 3. Process and copy HTML files
+    console.log('📄 Processing and copying HTML files...');
+    const pagesDir = path.join(__dirname, '..', 'pages');
+    const sourceHtmlFiles = await fs.readdir(pagesDir);
     
-    // Copy files to dist
-    await copyFiles();
+    for (const file of sourceHtmlFiles) {
+        if (!file.endsWith('.html')) continue;
+
+        const sourcePath = path.join(pagesDir, file);
+        let content = await fs.readFile(sourcePath, 'utf8');
+        
+        // Remove base tag completely
+        content = content.replace(/<base href="[^"]*">/g, '');
+        
+        // Fix relative paths for pages in subdirectory
+        content = content.replace(/(href|src|data-src)="\.\.\//g, '$1="../');
+        
+        // Fix navigation links to work correctly
+        content = content.replace(/href="((?!http|#)[^"]+\.html)"/g, (match, p1) => {
+            if (p1 === 'index.html') {
+                return `href="../index.html"`;
+            }
+            if (p1.startsWith('pages/')) {
+                return `href="${p1}"`;
+            }
+            return `href="${p1}"`;
+        });
+        
+        const destPath = path.join(outputDir, 'pages', file);
+        await fs.writeFile(destPath, content);
+        console.log(`   ✨ Processed and copied ${file} to ${path.relative(process.cwd(), destPath)}`);
+    }
     
-    // Optimize files
-    await optimizeFiles();
+    // 4. Process main index.html
+    const mainIndexPath = path.join(__dirname, '..', 'index.html');
+    if (await fs.pathExists(mainIndexPath)) {
+        let content = await fs.readFile(mainIndexPath, 'utf8');
+        
+        // Remove base tag completely
+        content = content.replace(/<base href="[^"]*">/g, '');
+        
+        // Fix relative paths for root directory
+        content = content.replace(/(href|src|data-src)="\.\.\//g, '$1="');
+        
+        // Fix navigation links
+        content = content.replace(/href="((?!http|#)[^"]+\.html)"/g, (match, p1) => {
+            if (p1 === 'index.html') {
+                return `href="index.html"`;
+            }
+            if (p1.startsWith('pages/')) {
+                return match;
+            }
+            return `href="pages/${p1}"`;
+        });
+        
+        await fs.writeFile(path.join(outputDir, 'index.html'), content);
+        console.log(`   ✨ Processed and copied index.html to ${outputDir}/index.html`);
+    }
     
-    // Create deployment files
-    await createDeploymentFiles();
-    
+    const rootFiles = ['robots.txt', 'sitemap.xml'];
+    for (const file of rootFiles) {
+        const sourcePath = path.join(__dirname, '..', file);
+        if (await fs.pathExists(sourcePath)) {
+            await fs.copy(sourcePath, path.join(outputDir, file));
+            console.log(`📄 Copied ${file} to root`);
+        }
+    }
+
     console.log('✅ Build completed successfully!');
-    console.log(`📦 Build output: ${config.output}/`);
-    
-  } catch (error) {
+    console.log('🔧 Removed base tags and fixed navigation paths');
+}
+
+build().catch(error => {
     console.error('❌ Build failed:', error);
     process.exit(1);
-  }
-}
-
-async function copyFiles() {
-  console.log('📋 Copying files...');
-  
-  // Copy main files
-  const filesToCopy = [
-    'robots.txt',
-    'sitemap.xml'
-  ];
-  
-  for (const file of filesToCopy) {
-    if (await fs.pathExists(file)) {
-      await fs.copy(file, path.join(config.output, file));
-      console.log(`  ✅ Copied ${file}`);
-    }
-  }
-  
-  // Copy pages/index.html as the main index.html
-  if (await fs.pathExists('pages/index.html')) {
-    await fs.copy('pages/index.html', path.join(config.output, 'index.html'));
-    console.log(`  ✅ Copied pages/index.html as index.html`);
-  }
-  
-  // Copy directories
-  const dirsToCopy = ['pages', 'css', 'js', 'images', 'assets', 'docs'];
-  
-  for (const dir of dirsToCopy) {
-    if (await fs.pathExists(dir)) {
-      await fs.copy(dir, path.join(config.output, dir));
-      console.log(`  ✅ Copied ${dir}/`);
-    }
-  }
-}
-
-async function optimizeFiles() {
-  console.log('⚡ Optimizing files...');
-  
-  // Optimize HTML files
-  await optimizeHTML();
-  
-  // Optimize CSS files
-  await optimizeCSS();
-  
-  // Optimize JS files
-  await optimizeJS();
-  
-  // Optimize images
-  await optimizeImages();
-}
-
-async function optimizeHTML() {
-  console.log('  📄 Optimizing HTML files...');
-  
-  const htmlFiles = await findFiles(config.output, '**/*.html');
-  
-  for (const file of htmlFiles) {
-    try {
-      let content = await fs.readFile(file, 'utf8');
-      
-      // Remove comments
-      content = content.replace(/<!--[\s\S]*?-->/g, '');
-      
-      // Remove extra whitespace
-      content = content.replace(/\s+/g, ' ').trim();
-      
-      await fs.writeFile(file, content);
-      console.log(`    ✅ Optimized ${path.relative(config.output, file)}`);
-    } catch (error) {
-      console.warn(`    ⚠️  Could not optimize ${file}:`, error.message);
-    }
-  }
-}
-
-async function optimizeCSS() {
-  console.log('  🎨 Optimizing CSS files...');
-  
-  const cssFiles = await findFiles(config.output, '**/*.css');
-  
-  for (const file of cssFiles) {
-    try {
-      let content = await fs.readFile(file, 'utf8');
-      
-      // Remove comments
-      content = content.replace(/\/\*[\s\S]*?\*\//g, '');
-      
-      // Remove extra whitespace
-      content = content.replace(/\s+/g, ' ').trim();
-      
-      await fs.writeFile(file, content);
-      console.log(`    ✅ Optimized ${path.relative(config.output, file)}`);
-    } catch (error) {
-      console.warn(`    ⚠️  Could not optimize ${file}:`, error.message);
-    }
-  }
-}
-
-async function optimizeJS() {
-  console.log('  📜 Optimizing JavaScript files...');
-  
-  const jsFiles = await findFiles(config.output, '**/*.js');
-  
-  for (const file of jsFiles) {
-    try {
-      let content = await fs.readFile(file, 'utf8');
-      
-      // Remove console.log statements in production
-      content = content.replace(/console\.log\([^)]*\);?/g, '');
-      
-      // Remove extra whitespace
-      content = content.replace(/\s+/g, ' ').trim();
-      
-      await fs.writeFile(file, content);
-      console.log(`    ✅ Optimized ${path.relative(config.output, file)}`);
-    } catch (error) {
-      console.warn(`    ⚠️  Could not optimize ${file}:`, error.message);
-    }
-  }
-}
-
-async function optimizeImages() {
-  console.log('  🖼️  Optimizing images...');
-  
-  const imageFiles = await findFiles(config.output, '**/*.{jpg,jpeg,png,gif}');
-  
-  console.log(`    📊 Found ${imageFiles.length} images to optimize`);
-  console.log('    ℹ️  Image optimization requires additional tools (imagemin)');
-  console.log('    ℹ️  Consider running: npm install -g imagemin-cli');
-}
-
-async function createDeploymentFiles() {
-  console.log('🌐 Creating deployment files...');
-  
-  // Create _redirects for SPA support
-  const redirects = `
-/*    /pages/index.html   200
-`;
-  
-  await fs.writeFile(path.join(config.output, '_redirects'), redirects.trim());
-  console.log('  ✅ Created _redirects');
-  
-  // Create netlify.toml
-  const netlifyConfig = `
-[build]
-  publish = "."
-  command = "npm run build"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[headers]]
-  for = "*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.{jpg,jpeg,png,gif,webp}"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-`;
-  
-  await fs.writeFile(path.join(config.output, 'netlify.toml'), netlifyConfig.trim());
-  console.log('  ✅ Created netlify.toml');
-  
-  // Create vercel.json
-  const vercelConfig = {
-    "version": 2,
-    "builds": [
-      {
-        "src": "**/*",
-        "use": "@vercel/static"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/pages/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "X-Frame-Options",
-            "value": "DENY"
-          },
-          {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          },
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          }
-        ]
-      }
-    ]
-  };
-  
-  await fs.writeFile(path.join(config.output, 'vercel.json'), JSON.stringify(vercelConfig, null, 2));
-  console.log('  ✅ Created vercel.json');
-}
-
-async function findFiles(dir, pattern) {
-  const { glob } = require('glob');
-  try {
-    const files = await glob(pattern, { cwd: dir });
-    return files.map(file => path.join(dir, file));
-  } catch (error) {
-    console.error('Error finding files:', error);
-    return [];
-  }
-}
-
-// Run build
-build().catch(console.error); 
+});

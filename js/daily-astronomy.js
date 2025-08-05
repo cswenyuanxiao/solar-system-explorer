@@ -46,7 +46,6 @@ class DailyAstronomy {
                         
                         <div class="apod-actions">
                             <button id="downloadAPOD" class="apod-action-btn">📥 Download</button>
-                            <button id="downloadAllAPOD" class="apod-action-btn">📦 Download All</button>
                             <button id="shareAPOD" class="apod-action-btn">📤 Share</button>
                             <button id="fullscreenAPOD" class="apod-action-btn">🔍 Fullscreen</button>
                         </div>
@@ -202,8 +201,6 @@ class DailyAstronomy {
                 this.loadTodayAPOD();
             } else if (e.target.id === 'downloadAPOD') {
                 this.downloadAPOD();
-            } else if (e.target.id === 'downloadAllAPOD') {
-                this.downloadAllAPOD();
             } else if (e.target.id === 'shareAPOD') {
                 this.shareAPOD();
             } else if (e.target.id === 'fullscreenAPOD') {
@@ -267,32 +264,32 @@ class DailyAstronomy {
 
     async downloadAPOD() {
         if (!this.currentAPOD) return;
-
         const downloadBtn = document.getElementById('downloadAPOD');
         if (downloadBtn) {
             downloadBtn.classList.add('downloading');
             downloadBtn.disabled = true;
         }
-
         try {
-            // Use the new download manager if available
-            if (window.downloadManager) {
-                const fileName = window.downloadManager.generateFileName(
-                    this.currentAPOD.title, 
-                    this.currentAPOD.date
-                );
-                
-                await window.downloadManager.downloadImage(
-                    this.currentAPOD.hdurl || this.currentAPOD.url,
-                    fileName,
-                    this.currentAPOD.title
-                );
-            } else {
-                // Fallback to original method
+            const imageUrl = this.currentAPOD.hdurl || this.currentAPOD.url;
+            const fileName = `apod-${this.currentAPOD.date}.jpg`;
+            
+            // 方法1: 尝试直接下载（适用于同域或CORS允许的图片）
+            try {
                 const link = document.createElement('a');
-                link.href = this.currentAPOD.hdurl || this.currentAPOD.url;
-                link.download = `apod-${this.currentAPOD.date}.jpg`;
+                link.href = imageUrl;
+                link.download = fileName;
+                link.target = '_blank';
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
+                
+                // 如果直接下载失败，使用fetch方法
+                setTimeout(() => {
+                    this.downloadWithFetch(imageUrl, fileName);
+                }, 100);
+            } catch (error) {
+                console.log('Direct download failed, trying fetch method...');
+                this.downloadWithFetch(imageUrl, fileName);
             }
         } finally {
             if (downloadBtn) {
@@ -301,47 +298,28 @@ class DailyAstronomy {
             }
         }
     }
-
-    async downloadAllAPOD() {
-        if (!this.apodHistory || this.apodHistory.length === 0) {
-            // Load more images if we don't have enough
-            await this.loadAPODRange(7);
-        }
-
-        if (this.apodHistory.length === 0) {
-            this.showNotification('No images available for download', 'warning');
-            return;
-        }
-
-        const downloadAllBtn = document.getElementById('downloadAllAPOD');
-        if (downloadAllBtn) {
-            downloadAllBtn.classList.add('downloading');
-            downloadAllBtn.disabled = true;
-        }
-
+    
+    async downloadWithFetch(imageUrl, fileName) {
         try {
-            // Use the download manager for batch download
-            if (window.downloadManager) {
-                await window.downloadManager.downloadMultipleImages(this.apodHistory);
-            } else {
-                // Fallback: download one by one
-                for (const apod of this.apodHistory) {
-                    const link = document.createElement('a');
-                    link.href = apod.hdurl || apod.url;
-                    link.download = `apod-${apod.date}.jpg`;
-                    link.click();
-                    
-                    // Add delay between downloads
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
-                
-                this.showNotification('All downloads started!', 'success');
-            }
-        } finally {
-            if (downloadAllBtn) {
-                downloadAllBtn.classList.remove('downloading');
-                downloadAllBtn.disabled = false;
-            }
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 清理URL对象
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        } catch (error) {
+            console.error('Download failed:', error);
+            // 最后的备选方案：打开新窗口
+            window.open(imageUrl, '_blank');
         }
     }
 

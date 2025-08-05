@@ -2,76 +2,91 @@
 
 class MainPageIntegration {
     constructor() {
-        this.planets = [
-            {
-                name: 'Sun',
-                description: 'Our star - the heart of the solar system',
-                image: 'images/sun.jpg',
-                url: 'sun.html',
-                keywords: ['star', 'solar', 'fusion', 'energy', 'light', 'heat']
-            },
-            {
-                name: 'Mercury',
-                description: 'The smallest planet, closest to the Sun',
-                image: 'images/mercury.jpg',
-                url: 'mercury.html',
-                keywords: ['smallest', 'closest', 'hot', 'cold', 'extreme', 'temperature']
-            },
-            {
-                name: 'Venus',
-                description: 'The hottest planet, Earth\'s twin',
-                image: 'images/venus.jpg',
-                url: 'venus.html',
-                keywords: ['hottest', 'twin', 'greenhouse', 'thick', 'atmosphere', 'backwards']
-            },
-            {
-                name: 'Earth',
-                description: 'Our home planet, the blue marble',
-                image: 'images/earth.jpg',
-                url: 'earth.html',
-                keywords: ['home', 'blue', 'life', 'water', 'atmosphere', 'habitable']
-            },
-            {
-                name: 'Mars',
-                description: 'The red planet, future human destination',
-                image: 'images/mars.jpg',
-                url: 'mars.html',
-                keywords: ['red', 'rust', 'future', 'human', 'colonization', 'rovers']
-            },
-            {
-                name: 'Jupiter',
-                description: 'The largest planet, gas giant',
-                image: 'images/jupiter.jpg',
-                url: 'jupiter.html',
-                keywords: ['largest', 'gas', 'giant', 'great', 'red', 'spot', 'moons']
-            },
-            {
-                name: 'Saturn',
-                description: 'The ringed planet, most beautiful',
-                image: 'images/saturn.jpg',
-                url: 'saturn.html',
-                keywords: ['rings', 'beautiful', 'gas', 'giant', 'float', 'water']
-            },
-            {
-                name: 'Uranus',
-                description: 'The ice giant, tilted on its side',
-                image: 'images/uranus.jpg',
-                url: 'uranus.html',
-                keywords: ['ice', 'giant', 'tilted', 'sideways', 'cold', 'methane']
-            },
-            {
-                name: 'Neptune',
-                description: 'The windiest planet, deep blue',
-                image: 'images/neptune.jpg',
-                url: 'neptune.html',
-                keywords: ['windy', 'blue', 'ice', 'giant', 'storms', 'farthest']
-            }
-        ];
+        // Use unified planet data if available, otherwise fall back to local data
+        this.planets = window.planetData ? window.planetData.getAllPlanets() : this.getLocalPlanets();
 
         this.favoritesManager = null;
         this.currentTheme = localStorage.getItem('theme') || 'dark';
         
         this.initialize();
+    }
+
+    // Fallback local planet data (for backward compatibility)
+    getLocalPlanets() {
+        return [
+            {
+                name: 'Sun',
+                displayName: 'THE SUN',
+                description: 'Our star - the heart of the solar system',
+                image: '../images/sun.jpg',
+                url: 'sun.html',
+                keywords: ['star', 'solar', 'fusion', 'energy', 'light', 'heat']
+            },
+            {
+                name: 'Mercury',
+                displayName: 'MERCURY',
+                description: 'The smallest planet, closest to the Sun',
+                image: '../images/mercury.jpg',
+                url: 'mercury.html',
+                keywords: ['smallest', 'closest', 'hot', 'cold', 'extreme', 'temperature']
+            },
+            {
+                name: 'Venus',
+                displayName: 'VENUS',
+                description: 'The hottest planet, Earth\'s twin',
+                image: '../images/venus.jpg',
+                url: 'venus.html',
+                keywords: ['hottest', 'twin', 'greenhouse', 'thick', 'atmosphere', 'backwards']
+            },
+            {
+                name: 'Earth',
+                displayName: 'EARTH',
+                description: 'Our home planet, the blue marble',
+                image: '../images/earth.jpg',
+                url: 'earth.html',
+                keywords: ['home', 'blue', 'life', 'water', 'atmosphere', 'habitable']
+            },
+            {
+                name: 'Mars',
+                displayName: 'MARS',
+                description: 'The red planet, future human destination',
+                image: '../images/mars.jpg',
+                url: 'mars.html',
+                keywords: ['red', 'rust', 'future', 'human', 'colonization', 'rovers']
+            },
+            {
+                name: 'Jupiter',
+                displayName: 'JUPITER',
+                description: 'The largest planet, gas giant',
+                image: '../images/jupiter.jpg',
+                url: 'jupiter.html',
+                keywords: ['largest', 'gas', 'giant', 'great', 'red', 'spot', 'moons']
+            },
+            {
+                name: 'Saturn',
+                displayName: 'SATURN',
+                description: 'The ringed planet, most beautiful',
+                image: '../images/saturn.jpg',
+                url: 'saturn.html',
+                keywords: ['rings', 'beautiful', 'gas', 'giant', 'float', 'water']
+            },
+            {
+                name: 'Uranus',
+                displayName: 'URANUS',
+                description: 'The ice giant, tilted on its side',
+                image: '../images/uranus.jpg',
+                url: 'uranus.html',
+                keywords: ['ice', 'giant', 'tilted', 'sideways', 'cold', 'methane']
+            },
+            {
+                name: 'Neptune',
+                displayName: 'NEPTUNE',
+                description: 'The windiest planet, deep blue',
+                image: '../images/neptune.jpg',
+                url: 'neptune.html',
+                keywords: ['windy', 'blue', 'ice', 'giant', 'storms', 'farthest']
+            }
+        ];
     }
 
     initialize() {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面标题 - Solar System Explorer</title>
+    
+    <!-- 样式文件 - 遵循路径规则 -->
+    <link rel="stylesheet" href="../css/style.css?v=20240803">
+    <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
+    <link rel="stylesheet" href="../css/[page-specific].css?v=20240803">
+    
+    <!-- 页面特定样式 -->
+    <style>
+        /* 页面特定样式 */
+        .page-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .page-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Shared header will be dynamically injected here by shared-header.js -->
+    </header>
+
+    <main>
+        <!-- 页面英雄区域 -->
+        <section class="page-hero">
+            <div class="hero-content">
+                <h1>页面标题</h1>
+                <p>页面描述 - 简要介绍页面功能</p>
+            </div>
+        </section>
+
+        <!-- 页面主要内容 -->
+        <section class="page-content">
+            <h2>主要内容标题</h2>
+            <p>这里是页面的主要内容...</p>
+            
+            <!-- 示例内容 -->
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>功能1</h3>
+                    <p>功能描述...</p>
+                </div>
+                <div class="content-card">
+                    <h3>功能2</h3>
+                    <p>功能描述...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript文件 - 遵循路径规则 -->
+    <script src="../js/shared-header.js"></script>
+    <script src="../js/[page-specific].js"></script>
+    
+    <!-- 页面特定脚本 -->
+    <script>
+        // 页面特定JavaScript代码
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成');
+            
+            // 在这里添加页面特定的功能
+        });
+    </script>
+</body>
+</html> 

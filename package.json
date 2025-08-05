@@ -15,7 +15,9 @@
     "lighthouse": "lighthouse pages/index.html --output=json --output-path=./lighthouse-report.json",
     "analyze": "npm run lighthouse && node scripts/analyze.js",
     "clean": "rm -rf dist node_modules package-lock.json",
-    "serve": "serve dist"
+    "serve": "serve dist",
+    "create-page": "node scripts/create-page.js",
+    "check-paths": "node scripts/check-paths.js"
   },
   "keywords": [
     "solar-system",

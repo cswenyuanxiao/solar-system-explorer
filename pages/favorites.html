@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - Solar System Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/favorites.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="back-button">← Back to Solar System</a>
+            <h1>My Favorites</h1>
+            <p class="subtitle">Your favorite celestial bodies</p>
+        </div>
+    </header>
+    
+    <main>
+        <div class="favorites-container">
+            <div class="favorites-header">
+                <h2>Your Favorite Planets</h2>
+                <button id="clearFavorites" class="clear-btn">Clear All Favorites</button>
+            </div>
+            
+            <div class="favorites-grid" id="favoritesGrid">
+                <!-- Favorites will be populated here -->
+            </div>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">⭐</div>
+                <h3>No favorites yet</h3>
+                <p>Start exploring the solar system and add your favorite planets!</p>
+                <a href="index.html" class="explore-btn">Explore Planets</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+    </footer>
+
+    <script src="../js/favorites.js"></script>
+    <script>
+        // Favorites page specific functionality
+        class FavoritesPage {
+            constructor() {
+                this.favoritesManager = new FavoritesManager();
+                this.favoritesGrid = document.getElementById('favoritesGrid');
+                this.emptyState = document.getElementById('emptyState');
+                this.clearBtn = document.getElementById('clearFavorites');
+                
+                this.initializePage();
+            }
+
+            initializePage() {
+                this.displayFavorites();
+                this.setupEventListeners();
+            }
+
+            displayFavorites() {
+                const favorites = this.favoritesManager.getFavorites();
+                
+                if (favorites.length === 0) {
+                    this.showEmptyState();
+                    return;
+                }
+
+                this.hideEmptyState();
+                
+                const favoritesHTML = favorites.map(favorite => {
+                    const planetData = this.getPlanetData(favorite.name);
+                    return `
+                        <div class="favorite-card" data-planet="${favorite.name}">
+                            <div class="favorite-header">
+                                <img src="../images/${planetData.image}" alt="${favorite.name}" 
+                                     class="favorite-image" onerror="this.src='../images/placeholder.jpg'">
+                                <button class="remove-favorite" data-planet="${favorite.name}">×</button>
+                            </div>
+                            <div class="favorite-content">
+                                <h3>${favorite.name}</h3>
+                                <p>${planetData.description}</p>
+                                <div class="favorite-meta">
+                                    <span class="added-date">Added: ${this.formatDate(favorite.addedAt)}</span>
+                                </div>
+                                <a href="${planetData.url}" class="visit-btn">Visit ${favorite.name}</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                this.favoritesGrid.innerHTML = favoritesHTML;
+            }
+
+            getPlanetData(planetName) {
+                const planetData = {
+                    'Sun': {
+                        image: 'sun.jpg',
+                        description: 'Our star - the heart of the solar system',
+                        url: 'sun.html'
+                    },
+                    'Mercury': {
+                        image: 'mercury.jpg',
+                        description: 'The smallest planet, closest to the Sun',
+                        url: 'mercury.html'
+                    },
+                    'Venus': {
+                        image: 'venus.jpg',
+                        description: 'The hottest planet, Earth\'s twin',
+                        url: 'venus.html'
+                    },
+                    'Earth': {
+                        image: 'earth.jpg',
+                        description: 'Our home planet, the blue marble',
+                        url: 'earth.html'
+                    },
+                    'Mars': {
+                        image: 'mars.jpg',
+                        description: 'The red planet, future human destination',
+                        url: 'mars.html'
+                    },
+                    'Jupiter': {
+                        image: 'jupiter.jpg',
+                        description: 'The largest planet, gas giant',
+                        url: 'jupiter.html'
+                    },
+                    'Saturn': {
+                        image: 'saturn.jpg',
+                        description: 'The ringed planet, most beautiful',
+                        url: 'saturn.html'
+                    },
+                    'Uranus': {
+                        image: 'uranus.jpg',
+                        description: 'The ice giant, tilted on its side',
+                        url: 'uranus.html'
+                    },
+                    'Neptune': {
+                        image: 'neptune.jpg',
+                        description: 'The windiest planet, deep blue',
+                        url: 'neptune.html'
+                    }
+                };
+
+                return planetData[planetName] || {
+                    image: 'placeholder.jpg',
+                    description: 'A celestial body in our solar system',
+                    url: 'index.html'
+                };
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            showEmptyState() {
+                this.emptyState.style.display = 'block';
+                this.favoritesGrid.style.display = 'none';
+                this.clearBtn.style.display = 'none';
+            }
+
+            hideEmptyState() {
+                this.emptyState.style.display = 'none';
+                this.favoritesGrid.style.display = 'grid';
+                this.clearBtn.style.display = 'block';
+            }
+
+            setupEventListeners() {
+                // Remove favorite buttons
+                this.favoritesGrid.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-favorite')) {
+                        const planetName = e.target.dataset.planet;
+                        this.removeFavorite(planetName);
+                    }
+                });
+
+                // Clear all favorites
+                this.clearBtn.addEventListener('click', () => {
+                    this.clearAllFavorites();
+                });
+            }
+
+            removeFavorite(planetName) {
+                this.favoritesManager.removeFavorite(planetName);
+                this.displayFavorites();
+                this.showNotification(`${planetName} removed from favorites`);
+            }
+
+            clearAllFavorites() {
+                if (confirm('Are you sure you want to clear all favorites?')) {
+                    this.favoritesManager.favorites = [];
+                    this.favoritesManager.saveFavorites();
+                    this.displayFavorites();
+                    this.showNotification('All favorites cleared');
+                }
+            }
+
+            showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #2196F3;
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 5px;
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+        }
+
+        // Initialize favorites page
+        document.addEventListener('DOMContentLoaded', () => {
+            new FavoritesPage();
+        });
+    </script>
+</body>
+</html> 

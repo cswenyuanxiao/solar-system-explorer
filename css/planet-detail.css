@@ -46,7 +46,7 @@
 .hero-info h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #ffd700;
+    color: #ffffff;
 }
 
 .hero-description {
@@ -77,10 +77,10 @@
 }
 
 .info-card h3 {
-    color: #ffd700;
+    color: #ffffff;
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
-    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
     padding-bottom: 0.5rem;
 }
 
@@ -114,7 +114,7 @@
 }
 
 .fun-facts h3 {
-    color: #ffd700;
+    color: #ffffff;
     font-size: 2rem;
     text-align: center;
     margin-bottom: 2rem;
@@ -130,7 +130,7 @@
     background: rgba(255, 255, 255, 0.05);
     padding: 1.5rem;
     border-radius: 10px;
-    border-left: 4px solid #ffd700;
+    border-left: 4px solid #ffffff;
     transition: transform 0.3s ease;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .fact h4 {
-    color: #ffd700;
+    color: #ffffff;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
 }
@@ -230,4 +230,89 @@
 .planet-detail[data-planet="jupiter"] .hero-info h2 { color: #ffb347; }
 .planet-detail[data-planet="saturn"] .hero-info h2 { color: #f4a460; }
 .planet-detail[data-planet="uranus"] .hero-info h2 { color: #40e0d0; }
-.planet-detail[data-planet="neptune"] .hero-info h2 { color: #4169e1; } 
+.planet-detail[data-planet="neptune"] .hero-info h2 { color: #4169e1; }
+
+/* Header layout fixes for favorites button */
+header .header-content {
+    position: relative;
+    padding-right: 200px !important; /* Increased space for favorites button */
+    min-height: 80px; /* Ensure minimum height for layout */
+}
+
+header .header-content h1 {
+    margin-right: 180px !important; /* Ensure title doesn't overlap with button */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+header .header-content .subtitle {
+    margin-right: 180px !important; /* Ensure subtitle doesn't overlap with button */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: calc(100% - 200px) !important; /* Limit width to prevent overlap */
+}
+
+.favorite-button {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s ease !important;
+    z-index: 100 !important; /* Higher z-index to ensure it's on top */
+    font-weight: bold !important;
+    min-width: 140px !important; /* Ensure minimum button width */
+    white-space: nowrap !important; /* Prevent button text from wrapping */
+}
+
+.favorite-button:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.05) !important;
+}
+
+.favorite-button.favorited {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header .header-content {
+        padding-right: 160px !important;
+    }
+    
+    header .header-content h1,
+    header .header-content .subtitle {
+        margin-right: 140px !important;
+        max-width: calc(100% - 160px) !important;
+    }
+    
+    .favorite-button {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.8rem !important;
+        min-width: 120px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    header .header-content {
+        padding-right: 140px !important;
+    }
+    
+    header .header-content h1,
+    header .header-content .subtitle {
+        margin-right: 120px !important;
+        max-width: calc(100% - 140px) !important;
+    }
+    
+    .favorite-button {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.6rem !important;
+        min-width: 100px !important;
+    }
+} 

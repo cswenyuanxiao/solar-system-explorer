@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>延迟导航问题修复测试 - Solar System Explorer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            padding: 10px 15px;
+            background: #4facfe;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-links a:hover {
+            background: #2196F3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #4CAF50; color: white; }
+        .error { background: #f44336; color: white; }
+        .info { background: #2196F3; color: white; }
+        .warning { background: #FF9800; color: white; }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .log {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>⏰ 延迟导航问题修复测试</h1>
+    
+    <div class="test-section">
+        <h2>📋 测试说明</h2>
+        <p>这个页面用于测试延迟出现的导航问题是否已被修复。</p>
+        <div class="status info">
+            <strong>测试步骤：</strong>
+            <ol>
+                <li>访问 <a href="pages/3d-simulator.html" style="color: #fff;">3D模拟器页面</a></li>
+                <li>在3D模拟器中等待30秒</li>
+                <li>尝试点击导航链接到其他页面</li>
+                <li>检查是否出现404错误</li>
+                <li>如果正常，说明延迟问题已修复</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⏱️ 测试计时器</h2>
+        <div class="timer" id="timer">00:00</div>
+        <div class="status info">
+            <strong>说明：</strong> 在3D模拟器中等待30秒后测试导航功能
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 测试链接</h2>
+        <div class="nav-links">
+            <a href="pages/3d-simulator.html">3D Simulator</a>
+            <a href="pages/index.html">Home</a>
+            <a href="pages/charts.html">Charts</a>
+            <a href="pages/education.html">Education</a>
+            <a href="pages/api.html">API</a>
+            <a href="pages/search.html">Search</a>
+            <a href="pages/user-system.html">User System</a>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 修复措施</h2>
+        <div class="status success">
+            <strong>✅ 已实施的修复：</strong>
+            <ul>
+                <li><strong>定期导航检查</strong> - 3D模拟器每5秒检查一次导航状态</li>
+                <li><strong>导航监控脚本</strong> - 每3秒监控和修复导航问题</li>
+                <li><strong>自动重置机制</strong> - 检测到问题时自动重置导航状态</li>
+                <li><strong>事件监听器管理</strong> - 确保点击事件正常工作</li>
+                <li><strong>浏览器状态重置</strong> - 定期清理浏览器历史记录状态</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 监控日志</h2>
+        <div class="log" id="log">
+            <div>🚀 延迟导航问题修复测试已启动...</div>
+            <div>⏰ 开始计时，等待30秒后测试导航...</div>
+        </div>
+    </div>
+    
+    <script>
+        // 测试脚本
+        let startTime = Date.now();
+        let timerInterval;
+        let logElement = document.getElementById('log');
+        let timerElement = document.getElementById('timer');
+        
+        function addLog(message) {
+            const time = new Date().toLocaleTimeString();
+            logElement.innerHTML += `<div>[${time}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // 每10秒记录一次状态
+            if (elapsed % 10 === 0 && elapsed > 0) {
+                addLog(`⏱️ 已运行 ${elapsed} 秒`);
+            }
+            
+            // 30秒后提醒测试
+            if (elapsed === 30) {
+                addLog('🎯 30秒已到！请现在测试导航功能');
+                addLog('🔗 点击上面的链接测试导航是否正常');
+            }
+        }
+        
+        // 启动计时器
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // 页面加载完成
+        addLog('✅ 页面加载完成');
+        addLog('📋 测试说明：');
+        addLog('  1. 访问3D模拟器页面');
+        addLog('  2. 等待30秒');
+        addLog('  3. 尝试导航到其他页面');
+        addLog('  4. 检查是否出现404错误');
+        
+        // 监听页面可见性变化
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                addLog('👁️ 页面隐藏');
+            } else {
+                addLog('👁️ 页面显示');
+            }
+        });
+        
+        // 监听焦点变化
+        window.addEventListener('focus', () => {
+            addLog('🎯 窗口获得焦点');
+        });
+        
+        // 监听导航事件
+        window.addEventListener('beforeunload', () => {
+            addLog('📤 页面即将卸载');
+        });
+        
+        // 检查导航监控器
+        setTimeout(() => {
+            if (window.navigationMonitor) {
+                addLog('✅ 导航监控器已启动');
+                addLog(`📊 重置次数: ${window.navigationMonitor.resetCount}`);
+            } else {
+                addLog('⚠️ 导航监控器未找到');
+            }
+        }, 2000);
+        
+        console.log('🧪 延迟导航问题修复测试已启动');
+    </script>
+</body>
+</html> 
