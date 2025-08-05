@@ -14,12 +14,16 @@
 
     <header>
         <div class="header-content">
-            <h1>Solar System Data Visualization</h1>
-            <p class="subtitle">Interactive charts and comparisons</p>
+            <h1 data-i18n="charts_title">Solar System Data Visualization</h1>
+            <p class="subtitle" data-i18n="charts_subtitle">Interactive charts and comparisons</p>
             
             <!-- Navigation -->
             <div class="header-actions">
-                <a href="index.html" class="action-button">🏠 Home</a>
+                <a href="index.html" class="action-button" data-i18n="home">🏠 Home</a>
+                <!-- 语言切换器 -->
+                <button id="language-switcher" class="action-button">
+                    🇨🇳 中文
+                </button>
                 <button id="themeToggle" class="action-button">🌙</button>
             </div>
         </div>
@@ -28,10 +32,10 @@
     <main>
         <!-- Chart Navigation -->
         <div class="chart-nav">
-            <button class="chart-nav-btn active" data-chart="size">Size Comparison</button>
-            <button class="chart-nav-btn" data-chart="distance">Distance from Sun</button>
-            <button class="chart-nav-btn" data-chart="temperature">Temperature</button>
-            <button class="chart-nav-btn" data-chart="moons">Number of Moons</button>
+            <button class="chart-nav-btn active" data-chart="size" data-i18n="size_comparison">Size Comparison</button>
+            <button class="chart-nav-btn" data-chart="distance" data-i18n="distance_comparison">Distance from Sun</button>
+            <button class="chart-nav-btn" data-chart="temperature" data-i18n="temperature_comparison">Temperature</button>
+            <button class="chart-nav-btn" data-chart="moons" data-i18n="moons_comparison">Number of Moons</button>
         </div>
         
         <!-- Charts Container -->
@@ -138,6 +142,7 @@
         <p>&copy; 2024 Solar System Explorer. All data from NASA.</p>
     </footer>
     
+    <script src="js/languages.js"></script>
     <script src="js/app.js"></script>
     <script src="js/lazy-loading.js"></script>
 
