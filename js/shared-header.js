@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get current page to set 'active' class on the correct link
     const currentPage = window.location.pathname.split('/').pop();
 
-    // Determine the correct base path for links and scripts
-    // For local dev, path is relative from 'pages'. For deployed, it's from root.
+    // 简化的路径处理逻辑
     const isPagesDirectory = window.location.pathname.includes('/pages/');
     const basePath = isPagesDirectory ? '' : 'pages/';
     const rootPath = isPagesDirectory ? '../' : './';
@@ -49,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     headerElement.innerHTML = headerHTML;
     
+    // 添加导航链接点击事件处理
+    addNavigationHandlers();
+    
     // After creating the header, re-initialize components that depend on it
     if (typeof initializeTheme === 'function') {
         initializeTheme();
@@ -61,6 +63,28 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLanguageSwitcherUI(); // A new function to update our new switcher
     }
 });
+
+// 添加导航处理函数
+function addNavigationHandlers() {
+    const navLinks = document.querySelectorAll('.main-nav a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // 确保导航正常工作
+            if (href && !href.startsWith('http')) {
+                console.log('🔗 导航到:', href);
+                
+                // 使用window.location进行导航，确保页面完全重新加载
+                window.location.href = href;
+                
+                // 阻止默认行为，使用我们的导航逻辑
+                e.preventDefault();
+            }
+        });
+    });
+}
 
 function updateLanguageSwitcherUI() {
     const langFlag = document.getElementById('lang-flag');

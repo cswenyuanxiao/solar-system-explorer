@@ -124,6 +124,68 @@
     <!-- Custom Scripts -->
     <script src="../js/shared-header.js"></script>
     <script src="../js/planet-textures.js"></script>
+    <script src="../js/navigation-fix.js"></script>
     <script src="../js/3d-simulator-advanced.js"></script>
+    
+    <!-- Navigation Reset Script -->
+    <script>
+        // 导航重置脚本 - 解决路由问题
+        (function() {
+            console.log('🔧 3D模拟器导航重置脚本启动...');
+            
+            // 页面加载完成后重置导航
+            function resetNavigation() {
+                console.log('🔄 重置导航状态...');
+                
+                // 确保所有链接正常工作
+                document.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'A' && e.target.href) {
+                        const href = e.target.href;
+                        
+                        // 检查是否是内部链接且不是3D模拟器页面
+                        if (href.includes(window.location.origin) && !href.includes('3d-simulator')) {
+                            console.log('🔗 导航到:', href);
+                            
+                            // 使用window.location进行导航，确保页面完全重新加载
+                            window.location.href = href;
+                            e.preventDefault();
+                        }
+                    }
+                }, true);
+                
+                // 修复历史记录
+                if (window.history && window.history.replaceState) {
+                    const currentPath = window.location.pathname;
+                    window.history.replaceState(null, null, currentPath);
+                }
+            }
+            
+            // 页面卸载时清理
+            window.addEventListener('beforeunload', function() {
+                console.log('📤 页面卸载，清理导航状态...');
+                resetNavigation();
+            });
+            
+            // 页面隐藏时重置
+            window.addEventListener('pagehide', function() {
+                console.log('👁️ 页面隐藏，重置路由状态...');
+                if (window.history) {
+                    window.history.scrollRestoration = 'auto';
+                }
+            });
+            
+            // 立即执行一次重置
+            resetNavigation();
+            
+            // 页面加载完成后再次重置
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', resetNavigation);
+            } else {
+                resetNavigation();
+            }
+            
+            console.log('✅ 3D模拟器导航重置完成');
+        })();
+    </script>
 </body>
 </html> 
