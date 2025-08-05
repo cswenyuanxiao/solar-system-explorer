@@ -79,18 +79,20 @@ header {
 #mainSearchButton {
     padding: 0.6rem 1rem;
     border: none;
-    background: #ffffff;
+    background: #ff4444;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    color: #000000;
+    color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 #mainSearchButton:hover {
-    background: #e0e0e0;
+    background: #cc3333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3);
 }
 
 /* NASA风格的按钮 */
@@ -121,6 +123,20 @@ header {
     color: #000000;
 }
 
+/* NASA风格的强调按钮 */
+.action-button.primary {
+    background: #ff4444;
+    border: 1px solid #ff4444;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.action-button.primary:hover {
+    background: #cc3333;
+    border-color: #cc3333;
+    color: #ffffff;
+}
+
 /* 主要内容区域 */
 main {
     max-width: 1200px;
@@ -131,12 +147,16 @@ main {
 /* NASA风格的英雄区域 */
 .hero-section {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
-    padding: 4rem 2rem;
+    padding: 6rem 2rem;
     text-align: center;
     margin-bottom: 3rem;
     border-radius: 0;
     position: relative;
     overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-section::before {
@@ -152,12 +172,13 @@ main {
 }
 
 .hero-content h2 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content p {
@@ -171,6 +192,23 @@ main {
 /* NASA风格的特色内容 */
 .featured-section {
     margin-bottom: 3rem;
+}
+
+/* NASA风格的强调点 */
+.accent-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #ff4444;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+/* NASA风格的分隔线 */
+.section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff4444, transparent);
+    margin: 2rem 0;
 }
 
 .featured-section h3 {
@@ -221,8 +259,8 @@ main {
 
 .featured-link {
     display: inline-block;
-    background: #ffffff;
-    color: #000000;
+    background: #ff4444;
+    color: #ffffff;
     padding: 0.8rem 1.5rem;
     border-radius: 0;
     text-decoration: none;
@@ -233,7 +271,7 @@ main {
 }
 
 .featured-link:hover {
-    background: #e0e0e0;
+    background: #cc3333;
 }
 
 /* NASA风格的星球卡片 */
@@ -252,12 +290,30 @@ main {
     text-decoration: none;
     color: inherit;
     border: 1px solid #333333;
+    position: relative;
 }
 
 .planet-card:hover {
-    border-color: #ffffff;
+    border-color: #ff4444;
     background: #1a1a1a;
     transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 68, 68, 0.2);
+}
+
+.planet-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ff4444;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.planet-card:hover::before {
+    transform: scaleX(1);
 }
 
 .planet-img {
