@@ -142,6 +142,9 @@ main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    background: #ffffff;
+    color: #000000;
+    min-height: calc(100vh - 70px); /* Subtract header height */
 }
 
 /* NASA风格的英雄区域 */
@@ -157,6 +160,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #ffffff;
 }
 
 .hero-section::before {
@@ -214,7 +218,7 @@ main {
 .featured-section h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #000000;
     text-align: center;
     margin-bottom: 2rem;
     text-transform: uppercase;
@@ -229,30 +233,31 @@ main {
 }
 
 .featured-card {
-    background: #111111;
+    background: #f8f9fa;
     border-radius: 0;
     padding: 2rem;
     text-align: center;
-    border: 1px solid #333333;
+    border: 1px solid #dee2e6;
     transition: all 0.3s ease;
 }
 
 .featured-card:hover {
-    border-color: #ffffff;
-    background: #1a1a1a;
+    border-color: #ff4444;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .featured-card h4 {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #000000;
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .featured-card p {
-    color: #cccccc;
+    color: #666666;
     margin-bottom: 1.5rem;
     line-height: 1.5;
 }
@@ -283,19 +288,19 @@ main {
 }
 
 .planet-card {
-    background: #111111;
+    background: #ffffff;
     border-radius: 0;
     overflow: hidden;
     transition: all 0.3s ease;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #333333;
+    border: 1px solid #dee2e6;
     position: relative;
 }
 
 .planet-card:hover {
     border-color: #ff4444;
-    background: #1a1a1a;
+    background: #ffffff;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 68, 68, 0.2);
 }
@@ -335,14 +340,14 @@ main {
     margin: 0 0 0.5rem 0;
     font-size: 1.3rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #000000;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .planet-info p {
     margin: 0;
-    color: #cccccc;
+    color: #666666;
     font-size: 0.9rem;
     line-height: 1.5;
 }

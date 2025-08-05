@@ -25,15 +25,15 @@
 }
 
 .chart-nav-btn:hover {
-    background: var(--primary-color);
-    color: #000;
+    background: #ff4444;
+    color: #ffffff;
     transform: translateY(-2px);
 }
 
 .chart-nav-btn.active {
-    background: var(--primary-color);
-    color: #000;
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    background: #ff4444;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
 }
 
 /* Charts Container */
