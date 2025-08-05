@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Explorer - NASA</title>
+    <link rel="stylesheet" href="../css/style.css?v=20240803">
+    <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
+    <link rel="stylesheet" href="../css/scroll-optimized.css?v=20240803">
+</head>
+<body>
+    <header>
+        <!-- Shared header will be dynamically injected here by shared-header.js -->
+    </header>
+
+    <main>
+        <!-- NASA风格的英雄区域 -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 data-i18n="hero_title">EXPLORE OUR SOLAR SYSTEM</h2>
+                <p data-i18n="hero_subtitle">Journey through the planets, moons, and celestial bodies that make up our cosmic neighborhood. Discover the latest NASA missions and scientific discoveries.</p>
+            </div>
+        </section>
+
+        <!-- NASA风格的特色内容 -->
+        <section class="featured-section">
+            <h3 data-i18n="featured_title">FEATURED MISSIONS</h3>
+            <div class="featured-grid">
+                <div class="featured-card">
+                    <h4 data-i18n="sun">THE SUN</h4>
+                    <p data-i18n="sun_desc">Our star - the heart of the solar system</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
+                    <a href="sun.html" class="featured-link" data-i18n="explore_button">EXPLORE SUN</a>
+                </div>
+                <div class="featured-card">
+                    <h4 data-i18n="earth">EARTH</h4>
+                    <p data-i18n="earth_desc">Our home planet - the blue marble</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
+                    <a href="earth.html" class="featured-link" data-i18n="explore_button">EXPLORE EARTH</a>
+                </div>
+                <div class="featured-card">
+                    <h4 data-i18n="mars">MARS</h4>
+                    <p data-i18n="mars_desc">The red planet - future human destination</p>
+                    <!-- ✅ 修复：移除pages/前缀 -->
+                    <a href="mars.html" class="featured-link" data-i18n="explore_button">EXPLORE MARS</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- NASA风格的分隔线 -->
+        <div class="section-divider"></div>
+
+        <!-- 所有星球网格 -->
+        <section id="planets" class="planets-container">
+            <h3 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;">
+                <span class="accent-dot"></span>EXPLORE ALL PLANETS
+            </h3>
+            <!-- ✅ 修复：移除pages/前缀，图片路径改为../images/ -->
+            <a href="sun.html" class="planet-card">
+                <img data-src="../images/sun.jpg" alt="The Sun" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFD700'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="sun">THE SUN</h2>
+                    <p data-i18n="sun_desc">Our star - the heart of the solar system</p>
+                </div>
+            </a>
+
+            <a href="mercury.html" class="planet-card">
+                <img data-src="../images/mercury.jpg" alt="Mercury" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%238C7853'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="mercury">MERCURY</h2>
+                    <p data-i18n="mercury_desc">The smallest planet, closest to the Sun</p>
+                </div>
+            </a>
+
+            <a href="venus.html" class="planet-card">
+                <img data-src="../images/venus.jpg" alt="Venus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFC649'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="venus">VENUS</h2>
+                    <p data-i18n="venus_desc">The hottest planet, Earth's twin</p>
+                </div>
+            </a>
+
+            <a href="earth.html" class="planet-card">
+                <img data-src="../images/earth.jpg" alt="Earth" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%236B93D6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="earth">EARTH</h2>
+                    <p data-i18n="earth_desc">Our home planet, the blue marble</p>
+                </div>
+            </a>
+
+            <a href="mars.html" class="planet-card">
+                <img data-src="../images/mars.jpg" alt="Mars" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23C1440E'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="mars">MARS</h2>
+                    <p data-i18n="mars_desc">The red planet, future human destination</p>
+                </div>
+            </a>
+
+            <a href="jupiter.html" class="planet-card">
+                <img data-src="../images/jupiter.jpg" alt="Jupiter" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23D8CA9D'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="jupiter">JUPITER</h2>
+                    <p data-i18n="jupiter_desc">The largest planet, gas giant</p>
+                </div>
+            </a>
+
+            <a href="saturn.html" class="planet-card">
+                <img data-src="../images/saturn.jpg" alt="Saturn" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FAD5A5'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="saturn">SATURN</h2>
+                    <p data-i18n="saturn_desc">The ringed planet, most beautiful</p>
+                </div>
+            </a>
+
+            <a href="uranus.html" class="planet-card">
+                <img data-src="../images/uranus.jpg" alt="Uranus" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234FD0E7'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="uranus">URANUS</h2>
+                    <p data-i18n="uranus_desc">The ice giant, tilted on its side</p>
+                </div>
+            </a>
+
+            <a href="neptune.html" class="planet-card">
+                <img data-src="../images/neptune.jpg" alt="Neptune" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%234B70DD'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
+                <div class="planet-info">
+                    <h2 data-i18n="neptune">NEPTUNE</h2>
+                    <p data-i18n="neptune_desc">The windiest planet, deep blue</p>
+                </div>
+            </a>
+        </section>
+
+        <!-- Quick Stats Section -->
+        <section class="quick-stats">
+            <h3>QUICK STATISTICS</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>9</h4>
+                    <p>Celestial Bodies</p>
+                </div>
+                <div class="stat-card">
+                    <h4>8</h4>
+                    <p>Planets</p>
+                </div>
+                <div class="stat-card">
+                    <h4>200+</h4>
+                    <p>Known Moons</p>
+                </div>
+                <div class="stat-card">
+                    <h4>4.6B</h4>
+                    <p>Years Old</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+            <div class="footer-links">
+                <!-- ✅ 修复：返回根目录的链接 -->
+                <a href="../index.html">Project Structure</a>
+                <a href="search.html">Search</a>
+                <a href="api.html">NASA API</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ✅ 添加：必要的JavaScript文件 -->
+    <script src="../js/languages.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/shared-header.js"></script>
+    <script src="../js/lazy-loading.js"></script>
+    <script src="../js/loading-manager.js"></script>
+</body>
+</html>
