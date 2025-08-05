@@ -1,1 +1,452 @@
-// Astronomy Knowledge Module for Solar System Education class AstronomyModule { constructor() { this.lessons = this.loadLessons(); this.userProgress = this.loadUserProgress(); this.currentLesson = 0; this.init(); } init() { this.setupModuleUI(); this.bindEvents(); this.updateProgressDisplay(); } loadLessons() { return [ { id: 1, title: 'Introduction to the Solar System', category: 'basics', difficulty: 'beginner', duration: '10 minutes', content: ` <div class="lesson-content"> <h3>What is the Solar System?</h3> <p>The solar system is our cosmic neighborhood, consisting of the Sun and everything that orbits around it. This includes planets, moons, asteroids, comets, and other celestial objects.</p> <h4>Key Components:</h4> <ul> <li><strong>The Sun:</strong> Our star, providing light and energy</li> <li><strong>Planets:</strong> Eight major planets orbiting the Sun</li> <li><strong>Moons:</strong> Natural satellites orbiting planets</li> <li><strong>Asteroids:</strong> Rocky objects in the asteroid belt</li> <li><strong>Comets:</strong> Icy objects with spectacular tails</li> </ul> <div class="fact-box"> <h4>🌟 Did You Know?</h4> <p>The solar system formed about 4.6 billion years ago from a giant cloud of gas and dust!</p> </div> </div> `, quiz: [ { question: 'How many planets are in our solar system?', options: ['7', '8', '9', '10'], correct: 1 }, { question: 'What is at the center of our solar system?', options: ['Earth', 'The Sun', 'Jupiter', 'The Moon'], correct: 1 } ] }, { id: 2, title: 'The Terrestrial Planets', category: 'planets', difficulty: 'beginner', duration: '15 minutes', content: ` <div class="lesson-content"> <h3>The Rocky Planets</h3> <p>Terrestrial planets are the four inner planets: Mercury, Venus, Earth, and Mars. They are called "terrestrial" because they have solid, rocky surfaces like Earth.</p> <h4>Characteristics:</h4> <ul> <li><strong>Mercury:</strong> Smallest planet, closest to Sun</li> <li><strong>Venus:</strong> Hottest planet, thick atmosphere</li> <li><strong>Earth:</strong> Only planet with known life</li> <li><strong>Mars:</strong> Red planet, future human destination</li> </ul> <div class="comparison-table"> <h4>Planet Comparison:</h4> <table> <tr><th>Planet</th><th>Size</th><th>Distance from Sun</th><th>Moons</th></tr> <tr><td>Mercury</td><td>Smallest</td><td>57.9M km</td><td>0</td></tr> <tr><td>Venus</td><td>Similar to Earth</td><td>108.2M km</td><td>0</td></tr> <tr><td>Earth</td><td>Largest terrestrial</td><td>149.6M km</td><td>1</td></tr> <tr><td>Mars</td><td>Smaller than Earth</td><td>227.9M km</td><td>2</td></tr> </table> </div> </div> `, quiz: [ { question: 'Which terrestrial planet has the most moons?', options: ['Mercury', 'Venus', 'Earth', 'Mars'], correct: 3 }, { question: 'Which planet is closest to the Sun?', options: ['Venus', 'Mercury', 'Earth', 'Mars'], correct: 1 } ] }, { id: 3, title: 'The Gas Giants', category: 'planets', difficulty: 'intermediate', duration: '20 minutes', content: ` <div class="lesson-content"> <h3>The Outer Giants</h3> <p>Gas giants are the four outer planets: Jupiter, Saturn, Uranus, and Neptune. They are much larger than terrestrial planets and composed mainly of hydrogen and helium.</p> <h4>Gas Giant Features:</h4> <ul> <li><strong>Jupiter:</strong> Largest planet, Great Red Spot</li> <li><strong>Saturn:</strong> Famous rings, many moons</li> <li><strong>Uranus:</strong> Tilted on its side</li> <li><strong>Neptune:</strong> Windiest planet</li> </ul> <div class="fact-box"> <h4>🌪️ Amazing Fact!</h4> <p>Jupiter's Great Red Spot is a storm that has been raging for over 400 years and is larger than Earth!</p> </div> <h4>Ring Systems:</h4> <p>While Saturn is famous for its rings, all gas giants have ring systems, though Saturn's are the most spectacular and visible from Earth.</p> </div> `, quiz: [ { question: 'Which planet has the most beautiful ring system?', options: ['Jupiter', 'Saturn', 'Uranus', 'Neptune'], correct: 1 }, { question: 'Which planet is the largest in our solar system?', options: ['Saturn', 'Jupiter', 'Uranus', 'Neptune'], correct: 1 } ] }, { id: 4, title: 'Space Exploration', category: 'exploration', difficulty: 'intermediate', duration: '25 minutes', content: ` <div class="lesson-content"> <h3>Human Space Exploration</h3> <p>Space exploration has been one of humanity's greatest achievements, allowing us to study our solar system up close.</p> <h4>Major Missions:</h4> <ul> <li><strong>Apollo Program:</strong> First humans on the Moon</li> <li><strong>Voyager Missions:</strong> Exploring the outer planets</li> <li><strong>Mars Rovers:</strong> Studying the Red Planet</li> <li><strong>Cassini:</strong> Studying Saturn and its moons</li> </ul> <div class="timeline"> <h4>Exploration Timeline:</h4> <div class="timeline-item"> <span class="year">1969</span> <span class="event">First human steps on the Moon</span> </div> <div class="timeline-item"> <span class="year">1977</span> <span class="event">Voyager missions launched</span> </div> <div class="timeline-item"> <span class="year">1997</span> <span class="event">First Mars rover lands</span> </div> <div class="timeline-item"> <span class="year">2015</span> <span class="event">New Horizons reaches Pluto</span> </div> </div> </div> `, quiz: [ { question: 'In which year did humans first walk on the Moon?', options: ['1965', '1969', '1973', '1977'], correct: 1 }, { question: 'Which spacecraft explored Saturn and its rings?', options: ['Voyager', 'Cassini', 'Galileo', 'New Horizons'], correct: 1 } ] }, { id: 5, title: 'The Future of Space', category: 'future', difficulty: 'advanced', duration: '30 minutes', content: ` <div class="lesson-content"> <h3>What's Next in Space?</h3> <p>The future of space exploration is incredibly exciting, with plans for Mars colonization, asteroid mining, and interstellar travel.</p> <h4>Upcoming Missions:</h4> <ul> <li><strong>Artemis Program:</strong> Returning to the Moon</li> <li><strong>Mars Missions:</strong> Human exploration of Mars</li> <li><strong>Europa Clipper:</strong> Studying Jupiter's moon</li> <li><strong>James Webb Telescope:</strong> Studying distant galaxies</li> </ul> <div class="future-vision"> <h4>🚀 Future Vision:</h4> <p>By 2050, we might have:</p> <ul> <li>Permanent Moon bases</li> <li>First human mission to Mars</li> <li>Space tourism for civilians</li> <li>Mining operations on asteroids</li> </ul> </div> <h4>Challenges and Opportunities:</h4> <p>Space exploration faces many challenges, from technical difficulties to the harsh environment of space. However, the potential rewards are enormous, from scientific discoveries to ensuring humanity's future.</p> </div> `, quiz: [ { question: 'Which program aims to return humans to the Moon?', options: ['Apollo', 'Artemis', 'Orion', 'Constellation'], correct: 1 }, { question: 'What is the main goal of the Europa Clipper mission?', options: ['Study Mars', 'Study Jupiter\'s moon', 'Study Saturn', 'Study Venus'], correct: 1 } ] } ]; } setupModuleUI() { const moduleContainer = document.getElementById('astronomyModule'); if (!moduleContainer) return; moduleContainer.innerHTML = ` <div class="module-header"> <h2>Astronomy Learning Module</h2> <div class="progress-overview"> <div class="progress-circle"> <span id="progressPercentage">0%</span> <span class="progress-label">Complete</span> </div> <div class="progress-stats"> <div class="stat"> <span class="stat-number" id="lessonsCompleted">0</span> <span class="stat-label">Lessons</span> </div> <div class="stat"> <span class="stat-number" id="totalPoints">0</span> <span class="stat-label">Points</span> </div> </div> </div> </div> <div class="module-content"> <div class="lesson-navigation"> <h3>Course Content</h3> <div id="lessonList"></div> </div> <div class="lesson-viewer"> <div id="lessonContent"></div> <div class="lesson-controls"> <button id="prevLesson" class="lesson-btn" disabled>Previous</button> <button id="nextLesson" class="lesson-btn">Next</button> <button id="completeLesson" class="lesson-btn">Complete Lesson</button> </div> </div> </div> `; this.renderLessonList(); this.displayLesson(0); } renderLessonList() { const lessonList = document.getElementById('lessonList'); lessonList.innerHTML = ''; this.lessons.forEach((lesson, index) => { const lessonItem = document.createElement('div'); lessonItem.className = `lesson-item ${index === this.currentLesson ? 'active' : ''} ${this.userProgress.completedLessons.includes(lesson.id) ? 'completed' : ''}`; lessonItem.innerHTML = ` <div class="lesson-info"> <h4>${lesson.title}</h4> <div class="lesson-meta"> <span class="difficulty ${lesson.difficulty}">${lesson.difficulty}</span> <span class="duration">${lesson.duration}</span> </div> </div> <div class="lesson-status"> ${this.userProgress.completedLessons.includes(lesson.id) ? '✅' : '⏳'} </div> `; lessonItem.addEventListener('click', () => { this.currentLesson = index; this.displayLesson(index); this.updateLessonList(); }); lessonList.appendChild(lessonItem); }); } displayLesson(index) { const lesson = this.lessons[index]; const lessonContent = document.getElementById('lessonContent'); const prevBtn = document.getElementById('prevLesson'); const nextBtn = document.getElementById('nextLesson'); lessonContent.innerHTML = ` <div class="lesson-header"> <h2>${lesson.title}</h2> <div class="lesson-meta"> <span class="category">${lesson.category}</span> <span class="difficulty ${lesson.difficulty}">${lesson.difficulty}</span> <span class="duration">${lesson.duration}</span> </div> </div> <div class="lesson-body"> ${lesson.content} </div> `; // Update navigation buttons prevBtn.disabled = index === 0; nextBtn.disabled = index === this.lessons.length - 1; this.updateLessonList(); } updateLessonList() { document.querySelectorAll('.lesson-item').forEach((item, index) => { item.classList.toggle('active', index === this.currentLesson); }); } bindEvents() { document.addEventListener('click', (e) => { if (e.target.id === 'prevLesson') { this.previousLesson(); } else if (e.target.id === 'nextLesson') { this.nextLesson(); } else if (e.target.id === 'completeLesson') { this.completeLesson(); } }); } previousLesson() { if (this.currentLesson > 0) { this.currentLesson--; this.displayLesson(this.currentLesson); } } nextLesson() { if (this.currentLesson < this.lessons.length - 1) { this.currentLesson++; this.displayLesson(this.currentLesson); } } completeLesson() { const lesson = this.lessons[this.currentLesson]; if (!this.userProgress.completedLessons.includes(lesson.id)) { this.userProgress.completedLessons.push(lesson.id); this.userProgress.points += 50; // Base points for completing lesson this.saveUserProgress(); this.updateProgressDisplay(); // Show completion message this.showCompletionMessage(lesson); } } showCompletionMessage(lesson) { const message = document.createElement('div'); message.className = 'completion-message'; message.innerHTML = ` <div class="message-content"> <h3>🎉 Lesson Completed!</h3> <p>You've successfully completed "${lesson.title}"</p> <p>+50 points earned!</p> <button onclick="this.parentElement.parentElement.remove()">Continue</button> </div> `; document.body.appendChild(message); setTimeout(() => { if (message.parentElement) { message.remove(); } }, 5000); } updateProgressDisplay() { const progressPercentage = document.getElementById('progressPercentage'); const lessonsCompleted = document.getElementById('lessonsCompleted'); const totalPoints = document.getElementById('totalPoints'); const percentage = Math.round((this.userProgress.completedLessons.length / this.lessons.length) * 100); progressPercentage.textContent = `${percentage}%`; lessonsCompleted.textContent = this.userProgress.completedLessons.length; totalPoints.textContent = this.userProgress.points; } loadUserProgress() { const saved = localStorage.getItem('astronomyProgress'); if (saved) { return JSON.parse(saved); } return { completedLessons: [], points: 0, lastAccessed: new Date().toISOString() }; } saveUserProgress() { this.userProgress.lastAccessed = new Date().toISOString(); localStorage.setItem('astronomyProgress', JSON.stringify(this.userProgress)); } } // Initialize astronomy module when DOM is ready document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('astronomyModule')) { window.astronomyModule = new AstronomyModule(); } });
+// Astronomy Knowledge Module for Solar System Education
+
+class AstronomyModule {
+    constructor() {
+        this.lessons = this.loadLessons();
+        this.userProgress = this.loadUserProgress();
+        this.currentLesson = 0;
+        this.init();
+    }
+
+    init() {
+        this.setupModuleUI();
+        this.bindEvents();
+        this.updateProgressDisplay();
+    }
+
+    loadLessons() {
+        return [
+            {
+                id: 1,
+                title: 'Introduction to the Solar System',
+                category: 'basics',
+                difficulty: 'beginner',
+                duration: '10 minutes',
+                content: `
+                    <div class="lesson-content">
+                        <h3>What is the Solar System?</h3>
+                        <p>The solar system is our cosmic neighborhood, consisting of the Sun and everything that orbits around it. This includes planets, moons, asteroids, comets, and other celestial objects.</p>
+                        
+                        <h4>Key Components:</h4>
+                        <ul>
+                            <li><strong>The Sun:</strong> Our star, providing light and energy</li>
+                            <li><strong>Planets:</strong> Eight major planets orbiting the Sun</li>
+                            <li><strong>Moons:</strong> Natural satellites orbiting planets</li>
+                            <li><strong>Asteroids:</strong> Rocky objects in the asteroid belt</li>
+                            <li><strong>Comets:</strong> Icy objects with spectacular tails</li>
+                        </ul>
+                        
+                        <div class="fact-box">
+                            <h4>🌟 Did You Know?</h4>
+                            <p>The solar system formed about 4.6 billion years ago from a giant cloud of gas and dust!</p>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: 'How many planets are in our solar system?',
+                        options: ['7', '8', '9', '10'],
+                        correct: 1
+                    },
+                    {
+                        question: 'What is at the center of our solar system?',
+                        options: ['Earth', 'The Sun', 'Jupiter', 'The Moon'],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: 'The Terrestrial Planets',
+                category: 'planets',
+                difficulty: 'beginner',
+                duration: '15 minutes',
+                content: `
+                    <div class="lesson-content">
+                        <h3>The Rocky Planets</h3>
+                        <p>Terrestrial planets are the four inner planets: Mercury, Venus, Earth, and Mars. They are called "terrestrial" because they have solid, rocky surfaces like Earth.</p>
+                        
+                        <h4>Characteristics:</h4>
+                        <ul>
+                            <li><strong>Mercury:</strong> Smallest planet, closest to Sun</li>
+                            <li><strong>Venus:</strong> Hottest planet, thick atmosphere</li>
+                            <li><strong>Earth:</strong> Only planet with known life</li>
+                            <li><strong>Mars:</strong> Red planet, future human destination</li>
+                        </ul>
+                        
+                        <div class="comparison-table">
+                            <h4>Planet Comparison:</h4>
+                            <table>
+                                <tr><th>Planet</th><th>Size</th><th>Distance from Sun</th><th>Moons</th></tr>
+                                <tr><td>Mercury</td><td>Smallest</td><td>57.9M km</td><td>0</td></tr>
+                                <tr><td>Venus</td><td>Similar to Earth</td><td>108.2M km</td><td>0</td></tr>
+                                <tr><td>Earth</td><td>Largest terrestrial</td><td>149.6M km</td><td>1</td></tr>
+                                <tr><td>Mars</td><td>Smaller than Earth</td><td>227.9M km</td><td>2</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: 'Which terrestrial planet has the most moons?',
+                        options: ['Mercury', 'Venus', 'Earth', 'Mars'],
+                        correct: 3
+                    },
+                    {
+                        question: 'Which planet is closest to the Sun?',
+                        options: ['Venus', 'Mercury', 'Earth', 'Mars'],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: 'The Gas Giants',
+                category: 'planets',
+                difficulty: 'intermediate',
+                duration: '20 minutes',
+                content: `
+                    <div class="lesson-content">
+                        <h3>The Outer Giants</h3>
+                        <p>Gas giants are the four outer planets: Jupiter, Saturn, Uranus, and Neptune. They are much larger than terrestrial planets and composed mainly of hydrogen and helium.</p>
+                        
+                        <h4>Gas Giant Features:</h4>
+                        <ul>
+                            <li><strong>Jupiter:</strong> Largest planet, Great Red Spot</li>
+                            <li><strong>Saturn:</strong> Famous rings, many moons</li>
+                            <li><strong>Uranus:</strong> Tilted on its side</li>
+                            <li><strong>Neptune:</strong> Windiest planet</li>
+                        </ul>
+                        
+                        <div class="fact-box">
+                            <h4>🌪️ Amazing Fact!</h4>
+                            <p>Jupiter's Great Red Spot is a storm that has been raging for over 400 years and is larger than Earth!</p>
+                        </div>
+                        
+                        <h4>Ring Systems:</h4>
+                        <p>While Saturn is famous for its rings, all gas giants have ring systems, though Saturn's are the most spectacular and visible from Earth.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: 'Which planet has the most beautiful ring system?',
+                        options: ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+                        correct: 1
+                    },
+                    {
+                        question: 'Which planet is the largest in our solar system?',
+                        options: ['Saturn', 'Jupiter', 'Uranus', 'Neptune'],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: 'Space Exploration',
+                category: 'exploration',
+                difficulty: 'intermediate',
+                duration: '25 minutes',
+                content: `
+                    <div class="lesson-content">
+                        <h3>Human Space Exploration</h3>
+                        <p>Space exploration has been one of humanity's greatest achievements, allowing us to study our solar system up close.</p>
+                        
+                        <h4>Major Missions:</h4>
+                        <ul>
+                            <li><strong>Apollo Program:</strong> First humans on the Moon</li>
+                            <li><strong>Voyager Missions:</strong> Exploring the outer planets</li>
+                            <li><strong>Mars Rovers:</strong> Studying the Red Planet</li>
+                            <li><strong>Cassini:</strong> Studying Saturn and its moons</li>
+                        </ul>
+                        
+                        <div class="timeline">
+                            <h4>Exploration Timeline:</h4>
+                            <div class="timeline-item">
+                                <span class="year">1969</span>
+                                <span class="event">First human steps on the Moon</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="year">1977</span>
+                                <span class="event">Voyager missions launched</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="year">1997</span>
+                                <span class="event">First Mars rover lands</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="year">2015</span>
+                                <span class="event">New Horizons reaches Pluto</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: 'In which year did humans first walk on the Moon?',
+                        options: ['1965', '1969', '1973', '1977'],
+                        correct: 1
+                    },
+                    {
+                        question: 'Which spacecraft explored Saturn and its rings?',
+                        options: ['Voyager', 'Cassini', 'Galileo', 'New Horizons'],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: 'The Future of Space',
+                category: 'future',
+                difficulty: 'advanced',
+                duration: '30 minutes',
+                content: `
+                    <div class="lesson-content">
+                        <h3>What's Next in Space?</h3>
+                        <p>The future of space exploration is incredibly exciting, with plans for Mars colonization, asteroid mining, and interstellar travel.</p>
+                        
+                        <h4>Upcoming Missions:</h4>
+                        <ul>
+                            <li><strong>Artemis Program:</strong> Returning to the Moon</li>
+                            <li><strong>Mars Missions:</strong> Human exploration of Mars</li>
+                            <li><strong>Europa Clipper:</strong> Studying Jupiter's moon</li>
+                            <li><strong>James Webb Telescope:</strong> Studying distant galaxies</li>
+                        </ul>
+                        
+                        <div class="future-vision">
+                            <h4>🚀 Future Vision:</h4>
+                            <p>By 2050, we might have:</p>
+                            <ul>
+                                <li>Permanent Moon bases</li>
+                                <li>First human mission to Mars</li>
+                                <li>Space tourism for civilians</li>
+                                <li>Mining operations on asteroids</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>Challenges and Opportunities:</h4>
+                        <p>Space exploration faces many challenges, from technical difficulties to the harsh environment of space. However, the potential rewards are enormous, from scientific discoveries to ensuring humanity's future.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: 'Which program aims to return humans to the Moon?',
+                        options: ['Apollo', 'Artemis', 'Orion', 'Constellation'],
+                        correct: 1
+                    },
+                    {
+                        question: 'What is the main goal of the Europa Clipper mission?',
+                        options: ['Study Mars', 'Study Jupiter\'s moon', 'Study Saturn', 'Study Venus'],
+                        correct: 1
+                    }
+                ]
+            }
+        ];
+    }
+
+    setupModuleUI() {
+        const moduleContainer = document.getElementById('astronomyModule');
+        if (!moduleContainer) return;
+
+        moduleContainer.innerHTML = `
+            <div class="module-header">
+                <h2>Astronomy Learning Module</h2>
+                <div class="progress-overview">
+                    <div class="progress-circle">
+                        <span id="progressPercentage">0%</span>
+                        <span class="progress-label">Complete</span>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="lessonsCompleted">0</span>
+                            <span class="stat-label">Lessons</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="totalPoints">0</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-content">
+                <div class="lesson-navigation">
+                    <h3>Course Content</h3>
+                    <div id="lessonList"></div>
+                </div>
+                
+                <div class="lesson-viewer">
+                    <div id="lessonContent"></div>
+                    <div class="lesson-controls">
+                        <button id="prevLesson" class="lesson-btn" disabled>Previous</button>
+                        <button id="nextLesson" class="lesson-btn">Next</button>
+                        <button id="completeLesson" class="lesson-btn">Complete Lesson</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        this.renderLessonList();
+        this.displayLesson(0);
+    }
+
+    renderLessonList() {
+        const lessonList = document.getElementById('lessonList');
+        lessonList.innerHTML = '';
+
+        this.lessons.forEach((lesson, index) => {
+            const lessonItem = document.createElement('div');
+            lessonItem.className = `lesson-item ${index === this.currentLesson ? 'active' : ''} ${this.userProgress.completedLessons.includes(lesson.id) ? 'completed' : ''}`;
+            
+            lessonItem.innerHTML = `
+                <div class="lesson-info">
+                    <h4>${lesson.title}</h4>
+                    <div class="lesson-meta">
+                        <span class="difficulty ${lesson.difficulty}">${lesson.difficulty}</span>
+                        <span class="duration">${lesson.duration}</span>
+                    </div>
+                </div>
+                <div class="lesson-status">
+                    ${this.userProgress.completedLessons.includes(lesson.id) ? '✅' : '⏳'}
+                </div>
+            `;
+
+            lessonItem.addEventListener('click', () => {
+                this.currentLesson = index;
+                this.displayLesson(index);
+                this.updateLessonList();
+            });
+
+            lessonList.appendChild(lessonItem);
+        });
+    }
+
+    displayLesson(index) {
+        const lesson = this.lessons[index];
+        const lessonContent = document.getElementById('lessonContent');
+        const prevBtn = document.getElementById('prevLesson');
+        const nextBtn = document.getElementById('nextLesson');
+
+        lessonContent.innerHTML = `
+            <div class="lesson-header">
+                <h2>${lesson.title}</h2>
+                <div class="lesson-meta">
+                    <span class="category">${lesson.category}</span>
+                    <span class="difficulty ${lesson.difficulty}">${lesson.difficulty}</span>
+                    <span class="duration">${lesson.duration}</span>
+                </div>
+            </div>
+            <div class="lesson-body">
+                ${lesson.content}
+            </div>
+        `;
+
+        // Update navigation buttons
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === this.lessons.length - 1;
+
+        this.updateLessonList();
+    }
+
+    updateLessonList() {
+        document.querySelectorAll('.lesson-item').forEach((item, index) => {
+            item.classList.toggle('active', index === this.currentLesson);
+        });
+    }
+
+    bindEvents() {
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'prevLesson') {
+                this.previousLesson();
+            } else if (e.target.id === 'nextLesson') {
+                this.nextLesson();
+            } else if (e.target.id === 'completeLesson') {
+                this.completeLesson();
+            }
+        });
+    }
+
+    previousLesson() {
+        if (this.currentLesson > 0) {
+            this.currentLesson--;
+            this.displayLesson(this.currentLesson);
+        }
+    }
+
+    nextLesson() {
+        if (this.currentLesson < this.lessons.length - 1) {
+            this.currentLesson++;
+            this.displayLesson(this.currentLesson);
+        }
+    }
+
+    completeLesson() {
+        const lesson = this.lessons[this.currentLesson];
+        
+        if (!this.userProgress.completedLessons.includes(lesson.id)) {
+            this.userProgress.completedLessons.push(lesson.id);
+            this.userProgress.points += 50; // Base points for completing lesson
+            this.saveUserProgress();
+            this.updateProgressDisplay();
+            
+            // Show completion message
+            this.showCompletionMessage(lesson);
+        }
+    }
+
+    showCompletionMessage(lesson) {
+        const message = document.createElement('div');
+        message.className = 'completion-message';
+        message.innerHTML = `
+            <div class="message-content">
+                <h3>🎉 Lesson Completed!</h3>
+                <p>You've successfully completed "${lesson.title}"</p>
+                <p>+50 points earned!</p>
+                <button onclick="this.parentElement.parentElement.remove()">Continue</button>
+            </div>
+        `;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            if (message.parentElement) {
+                message.remove();
+            }
+        }, 5000);
+    }
+
+    updateProgressDisplay() {
+        const progressPercentage = document.getElementById('progressPercentage');
+        const lessonsCompleted = document.getElementById('lessonsCompleted');
+        const totalPoints = document.getElementById('totalPoints');
+
+        const percentage = Math.round((this.userProgress.completedLessons.length / this.lessons.length) * 100);
+        
+        progressPercentage.textContent = `${percentage}%`;
+        lessonsCompleted.textContent = this.userProgress.completedLessons.length;
+        totalPoints.textContent = this.userProgress.points;
+    }
+
+    loadUserProgress() {
+        const saved = localStorage.getItem('astronomyProgress');
+        if (saved) {
+            return JSON.parse(saved);
+        }
+        return {
+            completedLessons: [],
+            points: 0,
+            lastAccessed: new Date().toISOString()
+        };
+    }
+
+    saveUserProgress() {
+        this.userProgress.lastAccessed = new Date().toISOString();
+        localStorage.setItem('astronomyProgress', JSON.stringify(this.userProgress));
+    }
+}
+
+// Initialize astronomy module when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('astronomyModule')) {
+        window.astronomyModule = new AstronomyModule();
+    }
+}); 

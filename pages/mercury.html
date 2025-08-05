@@ -1,1 +1,133 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Mercury - Solar System Explorer</title> <link rel="stylesheet" href="../css/style.css"> <link rel="stylesheet" href="../css/planet-detail.css"> </head> <body> <header> <div class="header-content"> <a href="index.html" class="back-button">← Back to Solar System</a> <h1>Mercury</h1> <p class="subtitle">The Smallest Planet - Closest to the Sun</p> </div> </header> <main class="planet-detail" data-planet="mercury"> <div class="hero-section"> <img src="../images/mercury.jpg" alt="Mercury" class="hero-image"> <div class="hero-info"> <h2>The Swift Planet</h2> <p class="hero-description">Mercury is the smallest and innermost planet in the Solar System. Its orbital period around the Sun of 87.97 days is the shortest of all the planets in the Solar System.</p> </div> </div> <div class="content-grid"> <section class="info-card"> <h3>Basic Facts</h3> <ul> <li><strong>Type:</strong> Terrestrial Planet</li> <li><strong>Distance from Sun:</strong> 57.9 million km</li> <li><strong>Diameter:</strong> 4,879 km (0.38 × Earth)</li> <li><strong>Mass:</strong> 3.285 × 10²³ kg (0.055 × Earth)</li> <li><strong>Surface Temperature:</strong> -180°C to 430°C</li> <li><strong>Orbital Period:</strong> 87.97 Earth days</li> </ul> </section> <section class="info-card"> <h3>Surface Features</h3> <ul> <li><strong>Caloris Basin:</strong> Largest impact crater (1,550 km)</li> <li><strong>Scarps:</strong> Long cliffs formed by cooling</li> <li><strong>Volcanic Plains:</strong> Smooth areas from lava flows</li> <li><strong>Impact Craters:</strong> Heavily cratered surface</li> <li><strong>Hollows:</strong> Bright, shallow depressions</li> <li><strong>Ridges:</strong> Wrinkle-like surface features</li> </ul> </section> <section class="info-card"> <h3>Atmosphere & Environment</h3> <ul> <li><strong>Atmosphere:</strong> Extremely thin (exosphere)</li> <li><strong>Composition:</strong> Oxygen, sodium, hydrogen</li> <li><strong>Surface Pressure:</strong> Near zero</li> <li><strong>Solar Radiation:</strong> Intense due to proximity</li> <li><strong>Magnetic Field:</strong> Weak but present</li> <li><strong>Surface Gravity:</strong> 0.38 × Earth's</li> </ul> </section> <section class="info-card"> <h3>Composition</h3> <ul> <li><strong>Core:</strong> Large iron-nickel core (85% of radius)</li> <li><strong>Mantle:</strong> Silicate rock layer</li> <li><strong>Crust:</strong> Thin silicate crust</li> <li><strong>Surface:</strong> Silicate minerals and metals</li> <li><strong>Density:</strong> 5.43 g/cm³ (second highest)</li> <li><strong>Internal Structure:</strong> Differentiated</li> </ul> </section> <section class="info-card"> <h3>Exploration History</h3> <ul> <li><strong>Mariner 10:</strong> First flyby (1974-1975)</li> <li><strong>MESSENGER:</strong> Orbital mission (2011-2015)</li> <li><strong>BepiColombo:</strong> Current mission (2018-)</li> <li><strong>Surface Coverage:</strong> 100% mapped</li> <li><strong>Key Discoveries:</strong> Water ice in craters</li> <li><strong>Future Missions:</strong> Sample return planned</li> </ul> </section> <section class="info-card"> <h3>Unique Characteristics</h3> <ul> <li><strong>Orbital Eccentricity:</strong> Highest of all planets</li> <li><strong>Solar Day:</strong> 176 Earth days</li> <li><strong>Temperature Range:</strong> Largest in solar system</li> <li><strong>Core Size:</strong> Largest relative to planet size</li> <li><strong>Surface Age:</strong> 4.5 billion years old</li> <li><strong>No Moons:</strong> Only planet without satellites</li> </ul> </section> </div> <section class="fun-facts"> <h3>Fun Facts</h3> <div class="facts-grid"> <div class="fact"> <h4>🌡️ Extreme Temperatures</h4> <p>Mercury has the largest temperature range of any planet, from -180°C to 430°C.</p> </div> <div class="fact"> <h4>⚡ Fastest Orbit</h4> <p>Mercury orbits the Sun faster than any other planet at 47.4 km/s.</p> </div> <div class="fact"> <h4>💎 Iron Core</h4> <p>Mercury's iron core makes up 85% of its radius, the largest core-to-planet ratio.</p> </div> <div class="fact"> <h4>🌊 Water Ice</h4> <p>Despite being closest to the Sun, Mercury has water ice in permanently shadowed craters.</p> </div> </div> </section> </main> <footer> <p>&copy; 2024 Solar System Explorer. All images from NASA.</p> </footer> <script src="js/app.js"></script> <script src="js/favorites.js"></script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/solar-system-explorer/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercury - Solar System Explorer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planet-detail.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="pages/index.html" class="back-button">← Back to Solar System</a>
+            <h1>Mercury</h1>
+            <p class="subtitle">The Smallest Planet - Closest to the Sun</p>
+        </div>
+    </header>
+    
+    <main class="planet-detail" data-planet="mercury">
+        <div class="hero-section">
+            <img src="images/mercury.jpg" alt="Mercury" class="hero-image">
+            <div class="hero-info">
+                <h2>The Swift Planet</h2>
+                <p class="hero-description">Mercury is the smallest and innermost planet in the Solar System. Its orbital period around the Sun of 87.97 days is the shortest of all the planets in the Solar System.</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <section class="info-card">
+                <h3>Basic Facts</h3>
+                <ul>
+                    <li><strong>Type:</strong> Terrestrial Planet</li>
+                    <li><strong>Distance from Sun:</strong> 57.9 million km</li>
+                    <li><strong>Diameter:</strong> 4,879 km (0.38 × Earth)</li>
+                    <li><strong>Mass:</strong> 3.285 × 10²³ kg (0.055 × Earth)</li>
+                    <li><strong>Surface Temperature:</strong> -180°C to 430°C</li>
+                    <li><strong>Orbital Period:</strong> 87.97 Earth days</li>
+                </ul>
+            </section>
+
+            <section class="info-card">
+                <h3>Surface Features</h3>
+                <ul>
+                    <li><strong>Caloris Basin:</strong> Largest impact crater (1,550 km)</li>
+                    <li><strong>Scarps:</strong> Long cliffs formed by cooling</li>
+                    <li><strong>Volcanic Plains:</strong> Smooth areas from lava flows</li>
+                    <li><strong>Impact Craters:</strong> Heavily cratered surface</li>
+                    <li><strong>Hollows:</strong> Bright, shallow depressions</li>
+                    <li><strong>Ridges:</strong> Wrinkle-like surface features</li>
+                </ul>
+            </section>
+
+            <section class="info-card">
+                <h3>Atmosphere & Environment</h3>
+                <ul>
+                    <li><strong>Atmosphere:</strong> Extremely thin (exosphere)</li>
+                    <li><strong>Composition:</strong> Oxygen, sodium, hydrogen</li>
+                    <li><strong>Surface Pressure:</strong> Near zero</li>
+                    <li><strong>Solar Radiation:</strong> Intense due to proximity</li>
+                    <li><strong>Magnetic Field:</strong> Weak but present</li>
+                    <li><strong>Surface Gravity:</strong> 0.38 × Earth's</li>
+                </ul>
+            </section>
+
+            <section class="info-card">
+                <h3>Composition</h3>
+                <ul>
+                    <li><strong>Core:</strong> Large iron-nickel core (85% of radius)</li>
+                    <li><strong>Mantle:</strong> Silicate rock layer</li>
+                    <li><strong>Crust:</strong> Thin silicate crust</li>
+                    <li><strong>Surface:</strong> Silicate minerals and metals</li>
+                    <li><strong>Density:</strong> 5.43 g/cm³ (second highest)</li>
+                    <li><strong>Internal Structure:</strong> Differentiated</li>
+                </ul>
+            </section>
+
+            <section class="info-card">
+                <h3>Exploration History</h3>
+                <ul>
+                    <li><strong>Mariner 10:</strong> First flyby (1974-1975)</li>
+                    <li><strong>MESSENGER:</strong> Orbital mission (2011-2015)</li>
+                    <li><strong>BepiColombo:</strong> Current mission (2018-)</li>
+                    <li><strong>Surface Coverage:</strong> 100% mapped</li>
+                    <li><strong>Key Discoveries:</strong> Water ice in craters</li>
+                    <li><strong>Future Missions:</strong> Sample return planned</li>
+                </ul>
+            </section>
+
+            <section class="info-card">
+                <h3>Unique Characteristics</h3>
+                <ul>
+                    <li><strong>Orbital Eccentricity:</strong> Highest of all planets</li>
+                    <li><strong>Solar Day:</strong> 176 Earth days</li>
+                    <li><strong>Temperature Range:</strong> Largest in solar system</li>
+                    <li><strong>Core Size:</strong> Largest relative to planet size</li>
+                    <li><strong>Surface Age:</strong> 4.5 billion years old</li>
+                    <li><strong>No Moons:</strong> Only planet without satellites</li>
+                </ul>
+            </section>
+        </div>
+
+        <section class="fun-facts">
+            <h3>Fun Facts</h3>
+            <div class="facts-grid">
+                <div class="fact">
+                    <h4>🌡️ Extreme Temperatures</h4>
+                    <p>Mercury has the largest temperature range of any planet, from -180°C to 430°C.</p>
+                </div>
+                <div class="fact">
+                    <h4>⚡ Fastest Orbit</h4>
+                    <p>Mercury orbits the Sun faster than any other planet at 47.4 km/s.</p>
+                </div>
+                <div class="fact">
+                    <h4>💎 Iron Core</h4>
+                    <p>Mercury's iron core makes up 85% of its radius, the largest core-to-planet ratio.</p>
+                </div>
+                <div class="fact">
+                    <h4>🌊 Water Ice</h4>
+                    <p>Despite being closest to the Sun, Mercury has water ice in permanently shadowed craters.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/favorites.js"></script>
+</body>
+</html> 

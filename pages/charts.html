@@ -1,1 +1,147 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Solar System Data Visualization</title> <link rel="stylesheet" href="../css/style.css"> <link rel="stylesheet" href="../css/optimized.css"> <link rel="stylesheet" href="../css/charts.css"> </head> <body> <header> <div class="header-content"> <h1>Solar System Data Visualization</h1> <p class="subtitle">Interactive charts and comparisons</p> <div class="header-actions"> <a href="index.html" class="action-button">🏠 Home</a> <button id="themeToggle" class="action-button">🌙</button> </div> </div> </header> <main> <div class="chart-nav"> <button class="chart-nav-btn active" data-chart="size">Size Comparison</button> <button class="chart-nav-btn" data-chart="distance">Distance from Sun</button> <button class="chart-nav-btn" data-chart="temperature">Temperature</button> <button class="chart-nav-btn" data-chart="moons">Number of Moons</button> </div> <div class="charts-container"> <div class="chart-section active" id="sizeSection"> <div class="chart-header"> <h2>Planet Size Comparison</h2> <p>Compare the diameters of all planets in our solar system</p> </div> <div class="chart-wrapper"> <canvas id="sizeChart"></canvas> </div> <div class="chart-info"> <h3>Key Insights:</h3> <ul> <li>Jupiter is the largest planet with a diameter of 139,822 km</li> <li>Mercury is the smallest planet with a diameter of 4,879 km</li> <li>Earth is the largest of the terrestrial planets</li> <li>Gas giants are significantly larger than rocky planets</li> </ul> </div> </div> <div class="chart-section" id="distanceSection"> <div class="chart-header"> <h2>Distance from Sun</h2> <p>See how far each planet is from our star</p> </div> <div class="chart-wrapper"> <canvas id="distanceChart"></canvas> </div> <div class="chart-info"> <h3>Key Insights:</h3> <ul> <li>Mercury is closest to the Sun at 57.9 million km</li> <li>Neptune is farthest at 4,495 million km</li> <li>The outer planets are much farther from the Sun</li> <li>Distance affects temperature and orbital period</li> </ul> </div> </div> <div class="chart-section" id="temperatureSection"> <div class="chart-header"> <h2>Temperature Comparison</h2> <p>Average temperatures across all planets</p> </div> <div class="chart-wrapper"> <canvas id="temperatureChart"></canvas> </div> <div class="chart-info"> <h3>Key Insights:</h3> <ul> <li>Venus has the highest average temperature</li> <li>Outer planets are extremely cold</li> <li>Earth has the most moderate temperature range</li> <li>Temperature decreases with distance from Sun</li> </ul> </div> </div> <div class="chart-section" id="moonsSection"> <div class="chart-header"> <h2>Number of Moons</h2> <p>Satellite count for each planet</p> </div> <div class="chart-wrapper"> <canvas id="moonsChart"></canvas> </div> <div class="chart-info"> <h3>Key Insights:</h3> <ul> <li>Saturn has the most moons (146)</li> <li>Jupiter has 95 moons</li> <li>Mercury and Venus have no moons</li> <li>Gas giants have more moons than terrestrial planets</li> </ul> </div> </div> </div> <div class="interactive-features"> <div class="feature-card"> <h3>🔍 Interactive Charts</h3> <p>Hover over data points to see detailed information</p> </div> <div class="feature-card"> <h3>📊 Real Data</h3> <p>All data is based on NASA's latest measurements</p> </div> <div class="feature-card"> <h3>📱 Responsive</h3> <p>Charts adapt to your screen size</p> </div> </div> </main> <footer> <p>&copy; 2024 Solar System Explorer. All data from NASA.</p> </footer> <script src="../js/app.js"></script> <script src="../js/lazy-loading.js"></script> <script src="../js/charts.js"></script> <script src="../js/chart-interactions.js"></script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/solar-system-explorer/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Data Visualization</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/optimized.css">
+    <link rel="stylesheet" href="css/charts.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>Solar System Data Visualization</h1>
+            <p class="subtitle">Interactive charts and comparisons</p>
+            
+            <!-- Navigation -->
+            <div class="header-actions">
+                <a href="pages/index.html" class="action-button">🏠 Home</a>
+                <button id="themeToggle" class="action-button">🌙</button>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Chart Navigation -->
+        <div class="chart-nav">
+            <button class="chart-nav-btn active" data-chart="size">Size Comparison</button>
+            <button class="chart-nav-btn" data-chart="distance">Distance from Sun</button>
+            <button class="chart-nav-btn" data-chart="temperature">Temperature</button>
+            <button class="chart-nav-btn" data-chart="moons">Number of Moons</button>
+        </div>
+        
+        <!-- Charts Container -->
+        <div class="charts-container">
+            <!-- Size Comparison Chart -->
+            <div class="chart-section active" id="sizeSection">
+                <div class="chart-header">
+                    <h2>Planet Size Comparison</h2>
+                    <p>Compare the diameters of all planets in our solar system</p>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="sizeChart"></canvas>
+                </div>
+                <div class="chart-info">
+                    <h3>Key Insights:</h3>
+                    <ul>
+                        <li>Jupiter is the largest planet with a diameter of 139,822 km</li>
+                        <li>Mercury is the smallest planet with a diameter of 4,879 km</li>
+                        <li>Earth is the largest of the terrestrial planets</li>
+                        <li>Gas giants are significantly larger than rocky planets</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Distance Chart -->
+            <div class="chart-section" id="distanceSection">
+                <div class="chart-header">
+                    <h2>Distance from Sun</h2>
+                    <p>See how far each planet is from our star</p>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="distanceChart"></canvas>
+                </div>
+                <div class="chart-info">
+                    <h3>Key Insights:</h3>
+                    <ul>
+                        <li>Mercury is closest to the Sun at 57.9 million km</li>
+                        <li>Neptune is farthest at 4,495 million km</li>
+                        <li>The outer planets are much farther from the Sun</li>
+                        <li>Distance affects temperature and orbital period</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Temperature Chart -->
+            <div class="chart-section" id="temperatureSection">
+                <div class="chart-header">
+                    <h2>Temperature Comparison</h2>
+                    <p>Average temperatures across all planets</p>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+                <div class="chart-info">
+                    <h3>Key Insights:</h3>
+                    <ul>
+                        <li>Venus has the highest average temperature</li>
+                        <li>Outer planets are extremely cold</li>
+                        <li>Earth has the most moderate temperature range</li>
+                        <li>Temperature decreases with distance from Sun</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Moons Chart -->
+            <div class="chart-section" id="moonsSection">
+                <div class="chart-header">
+                    <h2>Number of Moons</h2>
+                    <p>Satellite count for each planet</p>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="moonsChart"></canvas>
+                </div>
+                <div class="chart-info">
+                    <h3>Key Insights:</h3>
+                    <ul>
+                        <li>Saturn has the most moons (146)</li>
+                        <li>Jupiter has 95 moons</li>
+                        <li>Mercury and Venus have no moons</li>
+                        <li>Gas giants have more moons than terrestrial planets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Features -->
+        <div class="interactive-features">
+            <div class="feature-card">
+                <h3>🔍 Interactive Charts</h3>
+                <p>Hover over data points to see detailed information</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 Real Data</h3>
+                <p>All data is based on NASA's latest measurements</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Responsive</h3>
+                <p>Charts adapt to your screen size</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. All data from NASA.</p>
+    </footer>
+    
+    <script src="js/app.js"></script>
+    <script src="js/lazy-loading.js"></script>
+
+    <script src="js/charts.js"></script>
+    <script src="js/chart-interactions.js"></script>
+</body>
+</html> 
