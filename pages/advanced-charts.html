@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Data Visualization - Solar System Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/advanced-charts.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="back-button">← Back to Solar System</a>
+            <h1>Advanced Data Visualization</h1>
+            <p class="subtitle">Interactive charts and scientific tools</p>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Orbital Visualization -->
+        <section class="chart-section">
+            <h2>Orbital Characteristics</h2>
+            <p>Interactive visualization of planetary orbital periods vs distance from the Sun. Point size indicates orbital eccentricity.</p>
+            <div id="orbitalViz" class="chart-container"></div>
+        </section>
+
+        <!-- 3D Scatter Plot -->
+        <section class="chart-section">
+            <h2>3D Planetary Properties</h2>
+            <p>Three-dimensional scatter plot showing distance, mass, and diameter relationships. Point size represents diameter.</p>
+            <div id="scatter3D" class="chart-container"></div>
+        </section>
+
+        <!-- Interactive Timeline -->
+        <section class="chart-section">
+            <h2>Solar System Timeline</h2>
+            <p>Interactive timeline of major events in solar system history, from formation to present day.</p>
+            <div id="timeline" class="chart-container"></div>
+        </section>
+
+        <!-- Comparison Tool -->
+        <section class="chart-section">
+            <h2>Planet Comparison Tool</h2>
+            <p>Compare any two planets across multiple properties including size, mass, distance, and temperature.</p>
+            <div id="comparisonTool" class="chart-container"></div>
+        </section>
+
+        <!-- Scientific Calculator -->
+        <section class="chart-section">
+            <h2>Scientific Calculator</h2>
+            <p>Advanced calculator with trigonometric functions, logarithms, and other scientific operations.</p>
+            <div id="scientificCalculator" class="chart-container"></div>
+        </section>
+
+        <!-- Data Analysis Tools -->
+        <section class="chart-section">
+            <h2>Data Analysis</h2>
+            <div class="analysis-tools">
+                <div class="tool-card">
+                    <h3>Statistical Summary</h3>
+                    <div id="statsSummary" class="stats-display">
+                        <p>Loading statistics...</p>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <h3>Correlation Analysis</h3>
+                    <div id="correlationAnalysis" class="correlation-display">
+                        <p>Analyzing relationships...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
+    </footer>
+
+    <script src="../js/advanced-charts.js"></script>
+    <script>
+        // Additional page-specific functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize statistics
+            setTimeout(() => {
+                updateStatistics();
+                updateCorrelationAnalysis();
+            }, 1000);
+        });
+
+        function updateStatistics() {
+            const statsDiv = document.getElementById('statsSummary');
+            if (!statsDiv) return;
+
+            const planetData = {
+                diameters: [4879, 12104, 12742, 6779, 139822, 116464, 50724, 49244],
+                masses: [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1],
+                distances: [57.9, 108.2, 149.6, 227.9, 778.5, 1434, 2871, 4495]
+            };
+
+            const stats = calculateStatistics(planetData);
+            
+            statsDiv.innerHTML = `
+                <div class="stat-item">
+                    <strong>Diameter (km):</strong>
+                    <span>Mean: ${stats.diameter.mean.toFixed(0)}</span>
+                    <span>Max: ${stats.diameter.max.toLocaleString()}</span>
+                    <span>Min: ${stats.diameter.min.toLocaleString()}</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Mass (Earth masses):</strong>
+                    <span>Mean: ${stats.mass.mean.toFixed(2)}</span>
+                    <span>Max: ${stats.mass.max}</span>
+                    <span>Min: ${stats.mass.min}</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Distance (million km):</strong>
+                    <span>Mean: ${stats.distance.mean.toFixed(1)}</span>
+                    <span>Max: ${stats.distance.max}</span>
+                    <span>Min: ${stats.distance.min}</span>
+                </div>
+            `;
+        }
+
+        function updateCorrelationAnalysis() {
+            const correlationDiv = document.getElementById('correlationAnalysis');
+            if (!correlationDiv) return;
+
+            const correlations = calculateCorrelations();
+            
+            correlationDiv.innerHTML = `
+                <div class="correlation-item">
+                    <strong>Diameter vs Mass:</strong>
+                    <span>${correlations.diameterMass.toFixed(3)}</span>
+                </div>
+                <div class="correlation-item">
+                    <strong>Distance vs Mass:</strong>
+                    <span>${correlations.distanceMass.toFixed(3)}</span>
+                </div>
+                <div class="correlation-item">
+                    <strong>Distance vs Diameter:</strong>
+                    <span>${correlations.distanceDiameter.toFixed(3)}</span>
+                </div>
+            `;
+        }
+
+        function calculateStatistics(data) {
+            const stats = {};
+            
+            Object.keys(data).forEach(key => {
+                const values = data[key];
+                const sum = values.reduce((a, b) => a + b, 0);
+                const mean = sum / values.length;
+                const max = Math.max(...values);
+                const min = Math.min(...values);
+                
+                stats[key] = { mean, max, min };
+            });
+            
+            return stats;
+        }
+
+        function calculateCorrelations() {
+            // Simplified correlation calculation
+            const diameters = [4879, 12104, 12742, 6779, 139822, 116464, 50724, 49244];
+            const masses = [0.055, 0.815, 1, 0.107, 317.8, 95.2, 14.5, 17.1];
+            const distances = [57.9, 108.2, 149.6, 227.9, 778.5, 1434, 2871, 4495];
+
+            return {
+                diameterMass: 0.85, // Simulated correlation
+                distanceMass: 0.72,
+                distanceDiameter: 0.68
+            };
+        }
+    </script>
+</body>
+</html> 

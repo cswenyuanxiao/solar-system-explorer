@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility - Solar System Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/accessibility.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="back-button">← Back to Solar System</a>
+            <h1>Accessibility Features</h1>
+            <p class="subtitle">Making space exploration accessible to everyone</p>
+        </div>
+    </header>
+    
+    <main id="main-content">
+        <!-- Skip Links -->
+        <div class="skip-links">
+            <a href="#main-content" class="skip-link">Skip to main content</a>
+            <a href="#navigation" class="skip-link">Skip to navigation</a>
+        </div>
+
+        <!-- Accessibility Overview -->
+        <section class="accessibility-section">
+            <h2>Accessibility Features</h2>
+            <p>Our Solar System Explorer is designed to be accessible to users with various abilities and needs. We follow WCAG 2.1 guidelines to ensure an inclusive experience for everyone.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🎧 Screen Reader Support</h3>
+                    <p>Full compatibility with screen readers including JAWS, NVDA, and VoiceOver. All content is properly labeled with ARIA attributes.</p>
+                    <ul>
+                        <li>Semantic HTML structure</li>
+                        <li>ARIA labels and roles</li>
+                        <li>Live regions for dynamic content</li>
+                        <li>Skip navigation links</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⌨️ Keyboard Navigation</h3>
+                    <p>Complete keyboard accessibility with logical tab order and keyboard shortcuts for all functions.</p>
+                    <ul>
+                        <li>Tab navigation through all elements</li>
+                        <li>Arrow key navigation</li>
+                        <li>Enter/Space to activate buttons</li>
+                        <li>Escape to close modals</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🌙 High Contrast Mode</h3>
+                    <p>High contrast color scheme for users with visual impairments. Automatically detects system preferences.</p>
+                    <ul>
+                        <li>High contrast color scheme</li>
+                        <li>System preference detection</li>
+                        <li>Manual toggle option</li>
+                        <li>Print-friendly styles</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎤 Voice Control</h3>
+                    <p>Voice command support for hands-free navigation and interaction with the application.</p>
+                    <ul>
+                        <li>Voice navigation commands</li>
+                        <li>Search by voice</li>
+                        <li>Zoom controls</li>
+                        <li>Help system</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts -->
+        <section class="accessibility-section">
+            <h2>Keyboard Shortcuts</h2>
+            <div class="shortcuts-grid">
+                <div class="shortcut-item">
+                    <kbd>Tab</kbd>
+                    <span>Navigate through interactive elements</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Arrow Keys</kbd>
+                    <span>Navigate vertically and horizontally</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Enter</kbd>
+                    <span>Activate buttons and links</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Space</kbd>
+                    <span>Activate buttons and checkboxes</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Escape</kbd>
+                    <span>Close modals and dropdowns</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl + H</kbd>
+                    <span>Toggle high contrast mode</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl + V</kbd>
+                    <span>Toggle voice control</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl + +</kbd>
+                    <span>Zoom in</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl + -</kbd>
+                    <span>Zoom out</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl + 0</kbd>
+                    <span>Reset zoom</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voice Commands -->
+        <section class="accessibility-section">
+            <h2>Voice Commands</h2>
+            <p>Enable voice control and use these commands to navigate the application:</p>
+            
+            <div class="voice-commands">
+                <div class="command-group">
+                    <h3>Navigation Commands</h3>
+                    <ul>
+                        <li><strong>"Navigate to [planet name]"</strong> - Go to a specific planet</li>
+                        <li><strong>"Go home"</strong> - Return to main page</li>
+                        <li><strong>"Go back"</strong> - Navigate to previous page</li>
+                        <li><strong>"Search [term]"</strong> - Search for content</li>
+                    </ul>
+                </div>
+
+                <div class="command-group">
+                    <h3>Control Commands</h3>
+                    <ul>
+                        <li><strong>"Zoom in"</strong> - Increase zoom level</li>
+                        <li><strong>"Zoom out"</strong> - Decrease zoom level</li>
+                        <li><strong>"High contrast"</strong> - Toggle high contrast mode</li>
+                        <li><strong>"Help"</strong> - Show available commands</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessibility Testing -->
+        <section class="accessibility-section">
+            <h2>Accessibility Testing</h2>
+            <p>Test our accessibility features with these tools and techniques:</p>
+            
+            <div class="testing-tools">
+                <div class="tool-item">
+                    <h3>Screen Reader Testing</h3>
+                    <p>Test with popular screen readers:</p>
+                    <ul>
+                        <li>JAWS (Windows)</li>
+                        <li>NVDA (Windows, free)</li>
+                        <li>VoiceOver (macOS/iOS)</li>
+                        <li>TalkBack (Android)</li>
+                    </ul>
+                </div>
+
+                <div class="tool-item">
+                    <h3>Keyboard Testing</h3>
+                    <p>Navigate using only the keyboard:</p>
+                    <ul>
+                        <li>Tab through all elements</li>
+                        <li>Use arrow keys for navigation</li>
+                        <li>Test all interactive elements</li>
+                        <li>Verify focus indicators</li>
+                    </ul>
+                </div>
+
+                <div class="tool-item">
+                    <h3>Visual Testing</h3>
+                    <p>Test visual accessibility:</p>
+                    <ul>
+                        <li>High contrast mode</li>
+                        <li>Color blindness simulation</li>
+                        <li>Zoom functionality</li>
+                        <li>Focus indicators</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- WCAG Compliance -->
+        <section class="accessibility-section">
+            <h2>WCAG 2.1 Compliance</h2>
+            <p>Our application strives to meet WCAG 2.1 Level AA standards:</p>
+            
+            <div class="compliance-grid">
+                <div class="compliance-item">
+                    <h3>Perceivable</h3>
+                    <ul>
+                        <li>✓ Text alternatives for images</li>
+                        <li>✓ Captions for multimedia</li>
+                        <li>✓ Adaptable content structure</li>
+                        <li>✓ Distinguishable content</li>
+                    </ul>
+                </div>
+
+                <div class="compliance-item">
+                    <h3>Operable</h3>
+                    <ul>
+                        <li>✓ Keyboard accessible</li>
+                        <li>✓ Sufficient time for interaction</li>
+                        <li>✓ No content that causes seizures</li>
+                        <li>✓ Navigable interface</li>
+                    </ul>
+                </div>
+
+                <div class="compliance-item">
+                    <h3>Understandable</h3>
+                    <ul>
+                        <li>✓ Readable text content</li>
+                        <li>✓ Predictable interface</li>
+                        <li>✓ Input assistance</li>
+                        <li>✓ Error identification</li>
+                    </ul>
+                </div>
+
+                <div class="compliance-item">
+                    <h3>Robust</h3>
+                    <ul>
+                        <li>✓ Compatible with assistive technology</li>
+                        <li>✓ Valid HTML structure</li>
+                        <li>✓ ARIA implementation</li>
+                        <li>✓ Cross-browser compatibility</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact and Feedback -->
+        <section class="accessibility-section">
+            <h2>Accessibility Feedback</h2>
+            <p>We welcome feedback on our accessibility features. If you encounter any accessibility issues or have suggestions for improvement, please let us know.</p>
+            
+            <div class="feedback-form">
+                <h3>Report Accessibility Issues</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="issue-type">Issue Type:</label>
+                        <select id="issue-type" name="issue-type">
+                            <option value="">Select an issue type</option>
+                            <option value="screen-reader">Screen Reader Issue</option>
+                            <option value="keyboard">Keyboard Navigation Issue</option>
+                            <option value="visual">Visual Accessibility Issue</option>
+                            <option value="voice">Voice Control Issue</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Please describe the accessibility issue you encountered..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email (optional):</label>
+                        <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Feedback</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solar System Explorer. Committed to accessibility for all users.</p>
+    </footer>
+
+    <script src="../js/accessibility.js"></script>
+    <script>
+        // Page-specific accessibility enhancements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add page-specific ARIA labels
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.setAttribute('role', 'main');
+            }
+
+            // Form validation for accessibility
+            const form = document.querySelector('.feedback-form form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const issueType = document.getElementById('issue-type').value;
+                    const description = document.getElementById('description').value;
+                    
+                    if (!issueType || !description) {
+                        alert('Please fill in all required fields.');
+                        return;
+                    }
+                    
+                    // Simulate form submission
+                    alert('Thank you for your feedback! We will review your accessibility report.');
+                    form.reset();
+                });
+            }
+
+            // Announce page load to screen readers
+            if (window.accessibilityManager) {
+                window.accessibilityManager.announceToScreenReader('Accessibility page loaded. This page provides information about accessibility features and testing.');
+            }
+        });
+    </script>
+</body>
+</html> 

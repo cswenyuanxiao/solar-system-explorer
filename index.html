@@ -3,43 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar System Explorer - Redirecting...</title>
-    <meta http-equiv="refresh" content="0; url=pages/index.html">
+    <title>Solar System Explorer - Project Hub</title>
     <style>
         body {
-            background: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
         }
-        .redirect-message {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
             text-align: center;
+            margin-bottom: 2rem;
+            color: #ffd700;
         }
-        .spinner {
-            border: 2px solid #333;
-            border-top: 2px solid #ff4444;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        .section {
+            margin-bottom: 2rem;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .section h2 {
+            color: #ffd700;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 0.5rem;
+        }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .link-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .link-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .link-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #ffd700;
+        }
+        .link-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .directory-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        .directory-info h3 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        .directory-info ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        .directory-info li {
+            margin-bottom: 0.25rem;
         }
     </style>
 </head>
 <body>
-    <div class="redirect-message">
-        <h1>Solar System Explorer</h1>
-        <div class="spinner"></div>
-        <p>Redirecting to the main application...</p>
-        <p><a href="pages/index.html" style="color: #ff4444;">Click here if not redirected automatically</a></p>
+    <div class="container">
+        <h1>🌌 Solar System Explorer</h1>
+        <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+            Welcome to the project hub! This page provides navigation to all project components.
+        </p>
+
+        <div class="section">
+            <h2>📄 Main Pages</h2>
+            <div class="link-grid">
+                <a href="pages/index.html" class="link-card">
+                    <h3>🏠 Home Page</h3>
+                    <p>Main solar system overview with planet cards</p>
+                </a>
+                <a href="pages/api.html" class="link-card">
+                    <h3>🚀 NASA API</h3>
+                    <p>Real-time space data and daily astronomy pictures</p>
+                </a>
+                <a href="pages/charts.html" class="link-card">
+                    <h3>📊 Data Charts</h3>
+                    <p>Interactive data visualization of planetary information</p>
+                </a>
+                <a href="pages/education.html" class="link-card">
+                    <h3>📚 Education</h3>
+                    <p>Educational content and learning resources</p>
+                </a>
+                <a href="pages/advanced-charts.html" class="link-card">
+                    <h3>📈 Advanced Charts</h3>
+                    <p>D3.js visualizations and scientific calculator</p>
+                </a>
+                <a href="pages/accessibility.html" class="link-card">
+                    <h3>♿ Accessibility</h3>
+                    <p>Accessibility features and testing tools</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🪐 Planet Pages</h2>
+            <div class="link-grid">
+                <a href="pages/sun.html" class="link-card">
+                    <h3>☀️ The Sun</h3>
+                    <p>Our star - the heart of the solar system</p>
+                </a>
+                <a href="pages/mercury.html" class="link-card">
+                    <h3>🌑 Mercury</h3>
+                    <p>The smallest planet, closest to the Sun</p>
+                </a>
+                <a href="pages/venus.html" class="link-card">
+                    <h3>♀️ Venus</h3>
+                    <p>The hottest planet, Earth's twin</p>
+                </a>
+                <a href="pages/earth.html" class="link-card">
+                    <h3>🌍 Earth</h3>
+                    <p>Our home planet, the blue marble</p>
+                </a>
+                <a href="pages/mars.html" class="link-card">
+                    <h3>🔴 Mars</h3>
+                    <p>The red planet, future human destination</p>
+                </a>
+                <a href="pages/jupiter.html" class="link-card">
+                    <h3>🪐 Jupiter</h3>
+                    <p>The largest planet, gas giant</p>
+                </a>
+                <a href="pages/saturn.html" class="link-card">
+                    <h3>💍 Saturn</h3>
+                    <p>The ringed planet, most beautiful</p>
+                </a>
+                <a href="pages/uranus.html" class="link-card">
+                    <h3>🔵 Uranus</h3>
+                    <p>The ice giant, tilted on its side</p>
+                </a>
+                <a href="pages/neptune.html" class="link-card">
+                    <h3>🌊 Neptune</h3>
+                    <p>The windiest planet, deep blue</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Special Features</h2>
+            <div class="link-grid">
+                <a href="pages/3d-simulator.html" class="link-card">
+                    <h3>🎮 3D Simulator</h3>
+                    <p>Interactive 3D solar system simulation</p>
+                </a>
+                <a href="pages/search.html" class="link-card">
+                    <h3>🔍 Search Planets</h3>
+                    <p>Search and filter planetary information</p>
+                </a>
+                <a href="pages/favorites.html" class="link-card">
+                    <h3>❤️ My Favorites</h3>
+                    <p>Your saved favorite planets</p>
+                </a>
+                <a href="pages/user-system.html" class="link-card">
+                    <h3>👤 User System</h3>
+                    <p>User accounts and progress tracking</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📁 Project Structure</h2>
+            <div class="directory-info">
+                <h3>📂 Directory Organization</h3>
+                <ul>
+                    <li><strong>pages/</strong> - All main HTML pages and planet detail pages</li>
+                    <li><strong>css/</strong> - All stylesheet files</li>
+                    <li><strong>js/</strong> - All JavaScript files</li>
+                    <li><strong>images/</strong> - Planet images and assets</li>
+                    <li><strong>docs/</strong> - Documentation and project files</li>
+                    <li><strong>scripts/</strong> - Build and deployment scripts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Documentation</h2>
+            <div class="link-grid">
+                <a href="docs/README.md" class="link-card">
+                    <h3>📖 README</h3>
+                    <p>Main project documentation</p>
+                </a>
+                <a href="docs/PERFORMANCE_REPORT.md" class="link-card">
+                    <h3>⚡ Performance Report</h3>
+                    <p>Optimization details and metrics</p>
+                </a>
+                <a href="docs/DOWNLOAD_FEATURES.md" class="link-card">
+                    <h3>📥 Download Features</h3>
+                    <p>Documentation for download functionality</p>
+                </a>
+                <a href="docs/PROJECT_SUMMARY.md" class="link-card">
+                    <h3>📋 Project Summary</h3>
+                    <p>Overview of project features and capabilities</p>
+                </a>
+                <a href="docs/功能优先级矩阵.md" class="link-card">
+                    <h3>📊 Feature Priority Matrix</h3>
+                    <p>Project roadmap and feature priorities</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Quick Start</h2>
+            <div class="directory-info">
+                <h3>🎯 Getting Started</h3>
+                <p>To start exploring the solar system:</p>
+                <ol>
+                    <li>Click on "🏠 Home Page" to see the main solar system overview</li>
+                    <li>Use the search function to find specific planets or features</li>
+                    <li>Explore individual planet pages for detailed information</li>
+                    <li>Try the 3D simulator for an interactive experience</li>
+                    <li>Check out the advanced charts for data visualization</li>
+                </ol>
+            </div>
+        </div>
     </div>
 </body>
 </html> 

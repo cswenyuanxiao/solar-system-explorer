@@ -1,487 +1,499 @@
+/*
+ * NASA-Inspired Theme for Solar System Explorer
+ * Version: 1.0
+ * Description: A clean, professional, and modern theme based on NASA's official design guidelines.
+ */
+
+/* 1. Root Variables & Basic Setup =================================== */
+:root {
+    --nasa-blue: #0B3D91;
+    --nasa-red: #FC3D21;
+    --nasa-dark-blue: #102A43;
+    --nasa-light-gray: #F5F5F5;
+    --nasa-medium-gray: #D8D8D8;
+    --nasa-dark-gray: #333333;
+    --nasa-text-primary: #FFFFFF;
+    --nasa-text-secondary: #E0E0E0;
+    --nasa-background: #000000;
+    --font-primary: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-serif: 'Merriweather', serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@400;700&display=swap');
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-primary);
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
+    background: var(--nasa-background);
+    color: var(--nasa-text-secondary);
     line-height: 1.6;
 }
 
+/* 2. Header ========================================================= */
 header {
-    background: #000000;
-    padding: 1rem 0;
-    border-bottom: 1px solid #333333;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--nasa-dark-gray);
     position: sticky;
     top: 0;
     z-index: 1000;
+    padding: 1rem 0;
 }
 
 .header-content {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .header-content h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--nasa-text-primary);
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
 .subtitle {
     font-size: 0.9rem;
-    margin-top: 0.3rem;
-    color: #cccccc;
-    font-weight: 300;
+    margin: 0;
+    color: var(--nasa-medium-gray);
+    font-weight: 400;
 }
 
-/* NASA风格的搜索框 */
 .main-search-container {
-    margin: 1rem 0;
     position: relative;
-    max-width: 300px;
+    flex-grow: 1;
+    max-width: 400px;
 }
 
 .search-box {
     display: flex;
-    background: #ffffff;
+    background: var(--nasa-dark-gray);
     border-radius: 4px;
-    padding: 0.5rem;
-    border: 1px solid #333333;
-}
-
-.search-box:focus-within {
-    border-color: #ffffff;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    border: 1px solid #555;
 }
 
 #mainSearchInput {
     flex: 1;
-    padding: 0.6rem 0.8rem;
+    padding: 0.6rem 1rem;
     border: none;
     background: transparent;
-    color: #000000;
-    font-size: 0.9rem;
+    color: var(--nasa-text-primary);
+    font-size: 1rem;
     outline: none;
 }
 
-#mainSearchInput::placeholder {
-    color: #666666;
-}
-
 #mainSearchButton {
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: none;
-    background: #ff4444;
-    border-radius: 4px;
+    background: var(--nasa-blue);
+    border-radius: 0 4px 4px 0;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
-    color: #ffffff;
+    transition: background-color 0.2s ease;
+    color: var(--nasa-text-primary);
     font-weight: 600;
     text-transform: uppercase;
 }
 
 #mainSearchButton:hover {
-    background: #cc3333;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3);
+    background: #1E60C5;
 }
 
-/* NASA风格的按钮 */
 .header-actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: center;
     flex-wrap: wrap;
 }
 
 .action-button {
     background: transparent;
-    border: 1px solid #ffffff;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
+    border: 1px solid var(--nasa-medium-gray);
+    color: var(--nasa-text-primary);
+    padding: 0.6rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.8rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .action-button:hover {
-    background: #ffffff;
-    color: #000000;
+    background: var(--nasa-text-primary);
+    color: var(--nasa-background);
+    border-color: var(--nasa-text-primary);
 }
 
-/* NASA风格的强调按钮 */
-.action-button.primary {
-    background: #ff4444;
-    border: 1px solid #ff4444;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.action-button.primary:hover {
-    background: #cc3333;
-    border-color: #cc3333;
-    color: #ffffff;
-}
-
-/* 主要内容区域 */
+/* 3. Main Content & Hero Section ==================================== */
 main {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
-    background: transparent; /* Remove white background from main */
-    color: #000000;
-    min-height: calc(100vh - 70px); /* Subtract header height */
 }
 
-/* NASA风格的英雄区域 */
 .hero-section {
-    background: #ffffff; /* Change to white */
-    padding: 6rem 2rem;
+    padding: 5rem 2rem;
     text-align: center;
     margin-bottom: 3rem;
-    border-radius: 8px; /* Add slight rounding */
-    color: #000000; /* Text color to black */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    background: url('../images/background.jpg') no-repeat center center/cover;
+    position: relative;
 }
 
 .hero-section::before {
-    display: none; /* Remove background image overlay */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+    position: relative;
 }
 
 .hero-content h2 {
+    font-family: var(--font-serif);
     font-size: 3.5rem;
     font-weight: 700;
-    color: #000000;
-    margin-bottom: 1.5rem;
+    color: var(--nasa-text-primary);
+    margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    text-shadow: none; /* Remove text shadow */
 }
 
 .hero-content p {
-    font-size: 1.1rem;
-    color: #555555; /* Darken paragraph text */
+    font-size: 1.2rem;
+    color: var(--nasa-medium-gray);
     max-width: 800px;
     margin: 0 auto;
-    line-height: 1.6;
 }
 
-/* NASA风格的特色内容 */
-.featured-section {
-    margin-bottom: 3rem;
-}
-
-/* NASA风格的强调点 */
-.accent-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: #ff4444;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-}
-
-/* NASA风格的分隔线 */
-.section-divider {
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #ff4444, transparent);
-    margin: 2rem 0;
-}
-
-.featured-section h3 {
-    font-size: 1.5rem;
+/* 4. Planet Cards =================================================== */
+.featured-section h3, .planets-container h3 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
     font-weight: 700;
-    color: #000000;
+    color: var(--nasa-text-primary);
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
-.featured-grid {
+.planets-container, .featured-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.featured-card {
-    background: #f8f9fa;
-    border-radius: 0;
-    padding: 2rem;
-    text-align: center;
-    border: 1px solid #dee2e6;
-    transition: all 0.3s ease;
-}
-
-.featured-card:hover {
-    border-color: #ff4444;
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.featured-card h4 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.featured-card p {
-    color: #666666;
-    margin-bottom: 1.5rem;
-    line-height: 1.5;
-}
-
-.featured-link {
-    display: inline-block;
-    background: #ff4444;
-    color: #ffffff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 0;
-    text-decoration: none;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-}
-
-.featured-link:hover {
-    background: #cc3333;
-}
-
-/* NASA风格的星球卡片 */
-.planets-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.planet-card {
-    background: #ffffff;
-    border-radius: 0;
+.planet-card, .featured-card {
+    background: var(--nasa-dark-gray);
+    border-radius: 4px;
     overflow: hidden;
     transition: all 0.3s ease;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #dee2e6;
-    position: relative;
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
 }
 
-.planet-card:hover {
-    border-color: #ff4444;
-    background: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 68, 68, 0.2);
-}
-
-.planet-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: #ff4444;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-.planet-card:hover::before {
-    transform: scaleX(1);
+.planet-card:hover, .featured-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--nasa-blue);
+    box-shadow: 0 8px 25px rgba(11, 61, 145, 0.3);
 }
 
 .planet-img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    background-color: #000;
 }
 
-.planet-card:hover .planet-img {
-    transform: scale(1.02);
-}
-
-.planet-info {
+.planet-info, .featured-card {
     padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.planet-info h2 {
+.planet-info h2, .featured-card h4 {
     margin: 0 0 0.5rem 0;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #000000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    color: var(--nasa-text-primary);
 }
 
-.planet-info p {
+.planet-info p, .featured-card p {
     margin: 0;
-    color: #666666;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    color: var(--nasa-text-secondary);
+    font-size: 1rem;
+    flex-grow: 1;
 }
 
-/* NASA风格的任务信息 */
-.mission-info {
-    background: #111111;
-    padding: 2rem;
-    border-radius: 0;
-    margin-top: 3rem;
-    border: 1px solid #333333;
-}
-
-.mission-info h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 1rem;
+.featured-link {
+    display: inline-block;
+    background: var(--nasa-blue);
+    color: var(--nasa-text-primary);
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s ease;
+    margin-top: 1.5rem;
+    align-self: flex-start;
 }
 
-.mission-info p {
-    color: #cccccc;
-    line-height: 1.6;
-    font-size: 0.95rem;
+.featured-link:hover {
+    background: #1E60C5;
 }
 
-/* NASA风格的页脚 */
+/* 5. Footer ========================================================= */
 footer {
-    background: #000000;
-    padding: 2rem;
+    background: #111;
+    padding: 2.5rem 2rem;
     text-align: center;
-    margin-top: 3rem;
-    border-top: 1px solid #333333;
+    margin-top: 4rem;
+    border-top: 1px solid var(--nasa-dark-gray);
 }
 
 footer p {
     margin: 0;
-    color: #cccccc;
+    color: var(--nasa-medium-gray);
     font-size: 0.9rem;
 }
 
-/* 搜索结果显示 */
+/* 6. Search Results & Other Components ============================== */
 .search-results {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: #111111;
-    border-radius: 0;
+    background: var(--nasa-dark-gray);
+    border-radius: 4px;
     margin-top: 0.5rem;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
-    z-index: 1000;
-    border: 1px solid #333333;
+    z-index: 1100;
+    border: 1px solid #555;
+    backdrop-filter: blur(5px);
 }
 
 .search-result-item {
     padding: 1rem;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid #555;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.2s ease;
     text-decoration: none;
     color: inherit;
     display: block;
 }
 
 .search-result-item:hover {
-    background: #1a1a1a;
+    background: var(--nasa-blue);
 }
 
-.search-result-item:last-child {
-    border-bottom: none;
+/* 7. Mission Info Section =========================================== */
+.mission-info {
+    background: var(--nasa-dark-gray);
+    padding: 3rem 2rem;
+    margin: 3rem 0;
+    border-radius: 4px;
+    border: 1px solid #444;
 }
 
-.search-result-title {
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 0.3rem;
+.mission-info h3 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--nasa-text-primary);
+    text-align: center;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 2px;
 }
 
-.search-result-description {
-    font-size: 0.9rem;
-    color: #cccccc;
+.mission-info p {
+    text-align: center;
+    color: var(--nasa-text-secondary);
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .header-content h1 {
-        font-size: 1.5rem;
-    }
-    
-    .header-actions {
-        justify-content: center;
-    }
-    
-    .planets-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    main {
-        padding: 1rem;
-    }
-    
-    .hero-content h2 {
-        font-size: 2rem;
-    }
-    
-    .hero-content p {
-        font-size: 1rem;
-    }
-    
-    .featured-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .featured-card {
-        padding: 1.5rem;
-    }
-    
-    .featured-card h4 {
-        font-size: 1.1rem;
-    }
-}
-
-/* NASA风格的加载动画 */
+/* 8. Loading States ================================================= */
 .loading {
     display: inline-block;
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid var(--nasa-medium-gray);
     border-radius: 50%;
-    border-top-color: #ffd700;
+    border-top-color: var(--nasa-blue);
     animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* 9. Notifications ================================================== */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--nasa-blue);
+    color: var(--nasa-text-primary);
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    z-index: 2000;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* 10. Responsive Design ============================================= */
+@media (max-width: 1024px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .main-search-container {
+        width: 100%;
+        max-width: none;
+        order: 3;
+    }
+    .header-actions {
+        order: 2;
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+    .planets-container, .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    main {
+        padding: 1.5rem;
+    }
+    .header-content {
+        padding: 0 1rem;
+    }
+    .action-button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h2 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+    .planets-container, .featured-grid {
+        gap: 1rem;
+    }
+    .planet-card, .featured-card {
+        margin-bottom: 1rem;
+    }
+    .mission-info {
+        padding: 2rem 1rem;
+    }
+    .mission-info h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* 11. Accessibility Enhancements ==================================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    :root {
+        --nasa-text-secondary: #FFFFFF;
+        --nasa-medium-gray: #FFFFFF;
+    }
+    
+    .planet-card, .featured-card {
+        border: 2px solid var(--nasa-text-primary);
+    }
+    
+    .action-button {
+        border: 2px solid var(--nasa-text-primary);
+    }
+}
+
+/* 12. Focus States ================================================== */
+*:focus {
+    outline: 2px solid var(--nasa-blue);
+    outline-offset: 2px;
+}
+
+.planet-card:focus,
+.featured-card:focus,
+.action-button:focus {
+    outline: 2px solid var(--nasa-blue);
+    outline-offset: 2px;
+}
+
+/* 13. Print Styles ================================================== */
+@media print {
+    header {
+        position: static;
+        background: white;
+        color: black;
+    }
+    
+    .hero-section {
+        background: none;
+        color: black;
+    }
+    
+    .planet-card,
+    .featured-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+        background: white;
+        color: black;
+    }
 }

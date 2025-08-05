@@ -593,6 +593,83 @@ class AdvancedSolarSystemSimulator {
             
             this.updatePlanetPositions();
             this.renderer.render(this.scene, this.camera);
+            
+            // 定期检查导航状态（每5秒检查一次）
+            if (!this.lastNavigationCheck) {
+                this.lastNavigationCheck = Date.now();
+            }
+            
+            if (Date.now() - this.lastNavigationCheck > 5000) {
+                this.checkAndResetNavigation();
+                this.lastNavigationCheck = Date.now();
+            }
+        }
+    }
+    
+    // 检查并重置导航状态
+    checkAndResetNavigation() {
+        // 检查是否有导航问题
+        const navLinks = document.querySelectorAll('.main-nav a');
+        let hasNavigationIssue = false;
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && !href.startsWith('http')) {
+                // 检查链接是否被正确设置
+                if (window.location.pathname.includes('/pages/') && href.startsWith('pages/')) {
+                    hasNavigationIssue = true;
+                } else if (!window.location.pathname.includes('/pages/') && !href.startsWith('pages/')) {
+                    hasNavigationIssue = true;
+                }
+            }
+        });
+        
+        if (hasNavigationIssue) {
+            console.log('🔧 检测到导航问题，正在重置...');
+            this.resetNavigationState();
+        }
+    }
+    
+    // 重置导航状态
+    resetNavigationState() {
+        // 重新设置导航链接
+        const navLinks = document.querySelectorAll('.main-nav a');
+        const isPagesDirectory = window.location.pathname.includes('/pages/');
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href) {
+                if (isPagesDirectory) {
+                    // 在pages目录下，移除pages/前缀
+                    if (href.startsWith('pages/')) {
+                        link.href = href.replace('pages/', '');
+                    }
+                } else {
+                    // 在根目录下，添加pages/前缀
+                    if (!href.startsWith('pages/') && !href.startsWith('http')) {
+                        link.href = 'pages/' + href;
+                    }
+                }
+            }
+        });
+        
+        // 确保点击事件正常工作
+        navLinks.forEach(link => {
+            // 移除可能存在的旧事件监听器
+            link.removeEventListener('click', this.handleNavClick);
+            // 添加新的事件监听器
+            link.addEventListener('click', this.handleNavClick);
+        });
+    }
+    
+    // 导航点击处理
+    handleNavClick = function(e) {
+        const href = this.getAttribute('href');
+        if (href && !href.startsWith('http')) {
+            console.log('🔗 导航到:', href);
+            // 使用window.location进行导航
+            window.location.href = href;
+            e.preventDefault();
         }
     }
 }

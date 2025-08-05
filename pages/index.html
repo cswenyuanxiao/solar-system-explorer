@@ -6,6 +6,7 @@
     <title>Solar System Explorer - NASA</title>
     <link rel="stylesheet" href="../css/style.css?v=20240803">
     <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
+    <link rel="stylesheet" href="../css/accessibility.css">
     <link rel="stylesheet" href="../css/scroll-optimized.css?v=20240803">
 </head>
 <body>
@@ -47,14 +48,9 @@
             </div>
         </section>
 
-        <!-- NASA风格的分隔线 -->
-        <div class="section-divider"></div>
-
         <!-- 所有星球网格 -->
         <section id="planets" class="planets-container">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;">
-                <span class="accent-dot"></span>EXPLORE ALL PLANETS
-            </h3>
+            <h3>EXPLORE ALL PLANETS</h3>
             <!-- ✅ 修复：移除pages/前缀，图片路径改为../images/ -->
             <a href="sun.html" class="planet-card">
                 <img data-src="../images/sun.jpg" alt="The Sun" class="planet-img lazy" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23FFD700'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23000' font-size='24'%3ELoading...%3C/text%3E%3C/svg%3E">
@@ -129,47 +125,26 @@
             </a>
         </section>
 
-        <!-- Quick Stats Section -->
-        <section class="quick-stats">
-            <h3>QUICK STATISTICS</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>9</h4>
-                    <p>Celestial Bodies</p>
-                </div>
-                <div class="stat-card">
-                    <h4>8</h4>
-                    <p>Planets</p>
-                </div>
-                <div class="stat-card">
-                    <h4>200+</h4>
-                    <p>Known Moons</p>
-                </div>
-                <div class="stat-card">
-                    <h4>4.6B</h4>
-                    <p>Years Old</p>
-                </div>
-            </div>
+        <!-- Mission Info Section -->
+        <section class="mission-info">
+            <h3>ABOUT THIS MISSION</h3>
+            <p>This Solar System Explorer provides an interactive journey through our cosmic neighborhood, featuring real-time data from NASA's missions and the latest discoveries in planetary science. Explore detailed information about each celestial body, view stunning imagery, and discover the latest scientific findings.</p>
         </section>
     </main>
 
     <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
-            <div class="footer-links">
-                <!-- ✅ 修复：返回根目录的链接 -->
-                <a href="../index.html">Project Structure</a>
-                <a href="search.html">Search</a>
-                <a href="api.html">NASA API</a>
-            </div>
-        </div>
+        <p>&copy; 2024 Solar System Explorer. All images and data from NASA. Exploring the universe through science and discovery.</p>
     </footer>
 
     <!-- ✅ 添加：必要的JavaScript文件 -->
+    <script src="../js/planet-data.js"></script>
     <script src="../js/languages.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/shared-header.js"></script>
     <script src="../js/lazy-loading.js"></script>
     <script src="../js/loading-manager.js"></script>
+    <script src="../js/favorites.js"></script>
+    <script src="../js/accessibility.js"></script>
+    <script src="../js/main-integration.js"></script>
 </body>
 </html>
