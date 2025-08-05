@@ -235,7 +235,21 @@
 /* Header layout fixes for favorites button */
 header .header-content {
     position: relative;
-    padding-right: 150px; /* Make space for favorites button */
+    padding-right: 200px !important; /* Increased space for favorites button */
+    min-height: 80px; /* Ensure minimum height for layout */
+}
+
+header .header-content h1 {
+    margin-right: 180px !important; /* Ensure title doesn't overlap with button */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+header .header-content .subtitle {
+    margin-right: 180px !important; /* Ensure subtitle doesn't overlap with button */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: calc(100% - 200px) !important; /* Limit width to prevent overlap */
 }
 
 .favorite-button {
@@ -250,8 +264,10 @@ header .header-content {
     cursor: pointer !important;
     font-size: 0.9rem !important;
     transition: all 0.3s ease !important;
-    z-index: 10 !important;
+    z-index: 100 !important; /* Higher z-index to ensure it's on top */
     font-weight: bold !important;
+    min-width: 140px !important; /* Ensure minimum button width */
+    white-space: nowrap !important; /* Prevent button text from wrapping */
 }
 
 .favorite-button:hover {
@@ -267,11 +283,36 @@ header .header-content {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     header .header-content {
-        padding-right: 120px;
+        padding-right: 160px !important;
+    }
+    
+    header .header-content h1,
+    header .header-content .subtitle {
+        margin-right: 140px !important;
+        max-width: calc(100% - 160px) !important;
     }
     
     .favorite-button {
         font-size: 0.8rem !important;
         padding: 0.4rem 0.8rem !important;
+        min-width: 120px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    header .header-content {
+        padding-right: 140px !important;
+    }
+    
+    header .header-content h1,
+    header .header-content .subtitle {
+        margin-right: 120px !important;
+        max-width: calc(100% - 140px) !important;
+    }
+    
+    .favorite-button {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.6rem !important;
+        min-width: 100px !important;
     }
 } 
