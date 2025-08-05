@@ -32,7 +32,8 @@
 #searchButton {
     padding: 1rem 1.5rem;
     border: none;
-    background: #ffd700;
+    background: #ffffff;
+    color: #000000;
     border-radius: 20px;
     cursor: pointer;
     font-size: 1.2rem;
@@ -40,7 +41,7 @@
 }
 
 #searchButton:hover {
-    background: #ffed4a;
+    background: #e0e0e0;
     transform: scale(1.05);
 }
 
@@ -75,7 +76,7 @@
 
 .result-title {
     font-size: 1.3rem;
-    color: #ffd700;
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
@@ -99,7 +100,7 @@
     height: 20px;
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    border-top-color: #ffd700;
+    border-top-color: #ffffff;
     animation: spin 1s ease-in-out infinite;
 }
 

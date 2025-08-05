@@ -4,8 +4,8 @@
   The :root selector is kept to prevent any legacy scripts from failing if they reference these variables, but the values are not used in the new NASA theme.
 */
 :root {
-    --primary-color: #ff0000;
-    --secondary-color: #cc0000;
+    --primary-color: #ffffff;
+    --secondary-color: #e0e0e0;
     --text-color: #ffffff;
     --background-dark: rgba(0, 0, 0, 0.8);
     --card-background: #111111;

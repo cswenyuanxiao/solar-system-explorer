@@ -58,8 +58,8 @@ header {
 }
 
 .search-box:focus-within {
-    border-color: #ff0000;
-    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 #mainSearchInput {
@@ -79,18 +79,18 @@ header {
 #mainSearchButton {
     padding: 0.6rem 1rem;
     border: none;
-    background: #ff0000;
+    background: #ffffff;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    color: #ffffff;
+    color: #000000;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 #mainSearchButton:hover {
-    background: #cc0000;
+    background: #e0e0e0;
 }
 
 /* NASA风格的按钮 */
@@ -200,7 +200,7 @@ main {
 }
 
 .featured-card:hover {
-    border-color: #ff0000;
+    border-color: #ffffff;
     background: #1a1a1a;
 }
 
@@ -221,8 +221,8 @@ main {
 
 .featured-link {
     display: inline-block;
-    background: #ff0000;
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
     padding: 0.8rem 1.5rem;
     border-radius: 0;
     text-decoration: none;
@@ -233,7 +233,7 @@ main {
 }
 
 .featured-link:hover {
-    background: #cc0000;
+    background: #e0e0e0;
 }
 
 /* NASA风格的星球卡片 */
@@ -255,7 +255,7 @@ main {
 }
 
 .planet-card:hover {
-    border-color: #ff0000;
+    border-color: #ffffff;
     background: #1a1a1a;
     transform: translateY(-2px);
 }
