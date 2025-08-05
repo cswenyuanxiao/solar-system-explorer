@@ -13,35 +13,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const rootPath = isPagesDirectory ? '../' : './';
 
     const headerHTML = `
-        <div class="header-content-new">
+        <div class="header-content">
             <div class="logo-section">
-                <a href="${rootPath}index.html" class="logo-link">Solar System</a>
+                <h1 data-i18n="main_title">SOLAR SYSTEM EXPLORER</h1>
+                <p class="subtitle" data-i18n="subtitle">Exploring the cosmos through NASA's lens</p>
             </div>
             
-            <nav class="main-nav">
-                <a href="${basePath}3d-simulator.html" class="nav-link ${currentPage === '3d-simulator.html' ? 'active' : ''}" data-i18n="3d_simulator">3D Simulator</a>
-                <a href="${basePath}charts.html" class="nav-link ${currentPage === 'charts.html' ? 'active' : ''}" data-i18n="charts">Charts</a>
-                <a href="${basePath}education.html" class="nav-link ${currentPage === 'education.html' ? 'active' : ''}" data-i18n="education">Education</a>
-                <a href="${basePath}api.html" class="nav-link ${currentPage === 'api.html' ? 'active' : ''}" data-i18n="api">API</a>
-                <a href="${basePath}search.html" class="nav-link ${currentPage === 'search.html' ? 'active' : ''}" data-i18n="search">Search</a>
-                <a href="${basePath}user-system.html" class="nav-link ${currentPage === 'user-system.html' ? 'active' : ''}" data-i18n="user_account">Account</a>
-            </nav>
-
-            <div class="header-actions-new">
-                <button id="favoritesButton" class="action-button-new">
-                    <span class="icon">⭐</span>
-                    <span class="text" data-i18n="favorites">Favorites</span>
-                    (<span id="favoritesCount">0</span>)
+            <div class="main-search-container">
+                <div class="search-box">
+                    <input type="text" id="mainSearchInput" placeholder="Search planets and missions..." autocomplete="off" data-i18n-placeholder="search_placeholder">
+                    <button id="mainSearchButton" data-i18n="search_button">SEARCH</button>
+                </div>
+                <div class="search-results" id="mainSearchResults" style="display: none;"></div>
+            </div>
+            
+            <div class="header-actions">
+                <button id="favoritesButton" class="action-button">
+                    <span data-i18n="favorites">FAVORITES</span> (<span id="favoritesCount">0</span>)
                 </button>
-
-                <button id="language-switcher" class="action-button-new">
-                    <span id="lang-flag">🇨🇳</span>
-                    <span id="lang-name" class="text" data-i18n="language">中文</span>
+                <a href="charts.html" class="action-button" data-i18n="charts">DATA VISUALIZATION</a>
+                <a href="education.html" class="action-button" data-i18n="education">LEARNING RESOURCES</a>
+                <a href="api.html" class="action-button" data-i18n="api">NASA API</a>
+                <button id="language-switcher" class="action-button">
+                    <span id="lang-flag">🇺🇸</span>
+                    <span id="lang-name" data-i18n="language">LANGUAGE</span>
                 </button>
-
-                <button id="themeToggle" class="action-button-new">
-                    <span class="icon">🌙</span>
-                </button>
+                <button id="themeToggle" class="action-button">🌙</button>
             </div>
         </div>
     `;
