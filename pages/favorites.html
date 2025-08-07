@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Favorites - Solar System Explorer</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/favorites.css">
+    <link rel="stylesheet" href="../css/style.css?v=20250109">
 </head>
 <body>
-    <header>
-        <div class="header-content">
+    <header class="header">
+        <div class="header__content">
             <a href="../index.html" class="back-button">← Back to Solar System</a>
-            <h1>My Favorites</h1>
-            <p class="subtitle">Your favorite celestial bodies</p>
+            <h1 class="header__title">My Favorites</h1>
+            <p class="header__subtitle">Your favorite celestial bodies</p>
         </div>
     </header>
     
@@ -40,7 +39,6 @@
         <p>&copy; 2024 Solar System Explorer. All images from NASA.</p>
     </footer>
 
-    <script src="../js/favorites.js"></script>
     <script>
         // Favorites page specific functionality
         class FavoritesPage {
@@ -233,5 +231,10 @@
             new FavoritesPage();
         });
     </script>
+    <script src="../js/shared-header.js?v=20250109"></script>
+    <script src="../js/theme-manager.js?v=20250109"></script>
+    <script src="../js/social-sharing.js?v=20250109"></script>
+    <script src="../js/favorites.js?v=20250109"></script>
+    <script src="../js/breadcrumbs.js?v=20250109"></script>
 </body>
 </html> 
