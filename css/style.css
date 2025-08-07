@@ -959,3 +959,101 @@ body {
 .explore-btn { display: inline-block; margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-secondary); color: var(--text-primary); border-radius: var(--radius-sm); text-decoration: none; }
 
 @media (max-width: 768px) { .favorites-header { flex-direction: column; gap: var(--space-sm); align-items: stretch; } }
+
+/* ==========================================================================
+   16. MOBILE REFINEMENTS (critical)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .header__title {
+    font-size: var(--font-size-xl);
+    line-height: 1.2;
+  }
+  .header__subtitle {
+    font-size: var(--font-size-sm);
+  }
+  .header__actions {
+    gap: var(--space-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--space-xs);
+    scrollbar-width: none;
+  }
+  .header__actions::-webkit-scrollbar { display: none; }
+  .btn { padding: 0.35rem 0.55rem; font-size: var(--font-size-xs); }
+  .btn__text { display: none; }
+  .btn__count { margin-left: 0; font-size: 0.65rem; padding: 0.1rem 0.35rem; }
+  .search-box { border-radius: var(--radius-sm); }
+  .search-box__input { padding: 0.6rem 0.75rem; font-size: var(--font-size-sm); }
+  .search-box__button { padding: 0.55rem 0.9rem; font-size: var(--font-size-xs); }
+  .hero__title { font-size: var(--font-size-2xl); }
+  .hero__subtitle { font-size: var(--font-size-base); }
+}
+
+@media (max-width: 480px) {
+  .header__content { padding: var(--space-sm); }
+  .btn { padding: 0.3rem 0.45rem; }
+}
+
+/* ==========================================================================
+   17. EDUCATION PAGE
+   ========================================================================== */
+
+.education-nav { 
+  max-width: 900px; margin: 0 auto var(--space-xl); 
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md);
+}
+.edu-nav-btn {
+  background: var(--bg-card); color: var(--text-primary);
+  border: 1px solid var(--border-secondary); border-radius: 999px;
+  padding: 0.75rem 1rem; font-weight: 600; transition: all var(--transition-fast);
+}
+.edu-nav-btn.active, .edu-nav-btn:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); }
+
+.education-section { max-width: 1100px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: var(--space-xl); }
+.education-section:not(.active) { display: none; }
+
+@media (max-width: 768px) {
+  .education-nav { grid-template-columns: 1fr; }
+  .education-section { padding: var(--space-lg); }
+}
+
+/* ==========================================================================
+   18. NASA API PAGE
+   ========================================================================== */
+
+.api-key-section { max-width: 900px; margin: 0 auto var(--space-xl); background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: var(--space-xl); }
+.api-key-form { display: grid; grid-template-columns: 1fr auto auto auto; gap: var(--space-sm); margin-top: var(--space-sm); }
+.api-key-input { padding: var(--space-sm); background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-secondary); border-radius: var(--radius-sm); }
+.api-key-btn { padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-secondary); background: transparent; color: var(--text-primary); border-radius: var(--radius-sm); }
+.api-key-info { color: var(--text-secondary); margin-top: var(--space-sm); }
+
+.weather-grid, .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); max-width: 1100px; margin: var(--space-xl) auto; }
+.weather-item, .stat-item { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: var(--space-lg); display: flex; align-items: center; gap: var(--space-md); }
+.weather-icon { font-size: 1.5rem; }
+.stat-value { font-size: var(--font-size-2xl); font-weight: 700; color: var(--text-primary); }
+.stat-label { color: var(--text-secondary); }
+.toast-notification { position: fixed; bottom: 20px; right: 20px; background: var(--color-primary); color: #fff; padding: 0.75rem 1rem; border-radius: var(--radius-sm); z-index: var(--z-tooltip); }
+
+.daily-fact { max-width: 900px; margin: var(--space-xl) auto; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: var(--space-lg); }
+
+@media (max-width: 1024px) { .weather-grid, .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .api-key-form { grid-template-columns: 1fr; } .weather-grid, .stats-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   19. CHARTS PAGE
+   ========================================================================== */
+
+.chart-nav { max-width: 1100px; margin: 0 auto var(--space-lg); display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+.chart-nav-btn { border: 1px solid var(--border-secondary); background: var(--bg-card); color: var(--text-primary); border-radius: 999px; padding: 0.5rem 0.9rem; cursor: pointer; }
+.chart-nav-btn.active, .chart-nav-btn:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); }
+
+.charts-container { max-width: 1100px; margin: 0 auto; }
+.chart-section { display: none; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: var(--space-lg); }
+.chart-section.active { display: block; }
+.chart-header h2 { margin: 0 0 var(--space-xs); }
+.chart-wrapper { position: relative; width: 100%; min-height: 300px; }
+
+@media (max-width: 768px) {
+  .chart-wrapper { min-height: 220px; }
+}
