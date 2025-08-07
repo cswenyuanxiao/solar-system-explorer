@@ -9,16 +9,16 @@ class ThemeManager {
                 name: 'Light',
                 icon: '☀️',
                 properties: {
-                    '--bg-primary': '#ffffff',
-                    '--bg-secondary': '#f8f9fa',
+                    '--bg-primary': '#f8fafc',
+                    '--bg-secondary': '#ffffff',
                     '--bg-card': '#ffffff',
-                    '--text-primary': '#212529',
-                    '--text-secondary': '#6c757d',
-                    '--border-color': '#dee2e6',
-                    '--shadow': 'rgba(0, 0, 0, 0.1)',
-                    '--nasa-blue': '#0B3D91',
-                    '--nasa-red': '#FC3D21',
-                    '--accent-color': '#FFD700'
+                    '--text-primary': '#1e293b',
+                    '--text-secondary': '#475569',
+                    '--border-color': '#e2e8f0',
+                    '--shadow': 'rgba(15, 23, 42, 0.08)',
+                    '--nasa-blue': '#1e40af',
+                    '--nasa-red': '#dc2626',
+                    '--accent-color': '#f59e0b'
                 }
             },
             dark: {
@@ -210,14 +210,54 @@ class ThemeManager {
             
             /* 浅色主题特定样式 */
             .theme-light {
-                --star-color: #FFD700;
+                --star-color: #f59e0b;
             }
             
             .theme-light .hero-section {
                 background: linear-gradient(135deg, 
-                    rgba(11, 61, 145, 0.1) 0%, 
-                    rgba(255, 255, 255, 0.8) 50%, 
-                    rgba(248, 249, 250, 0.9) 100%);
+                    rgba(30, 64, 175, 0.05) 0%, 
+                    rgba(248, 250, 252, 0.95) 30%,
+                    rgba(255, 255, 255, 0.98) 70%,
+                    rgba(241, 245, 249, 0.9) 100%);
+                backdrop-filter: blur(20px);
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .theme-light .planet-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 2px 8px var(--shadow), 0 1px 3px rgba(15, 23, 42, 0.04);
+            }
+            
+            .theme-light .planet-card:hover {
+                box-shadow: 0 8px 25px rgba(15, 23, 42, 0.12), 0 4px 10px rgba(15, 23, 42, 0.06);
+                transform: translateY(-2px);
+                border-color: var(--nasa-blue);
+            }
+            
+            .theme-light .featured-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 1px 3px var(--shadow);
+            }
+            
+            .theme-light .featured-card:hover {
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+                border-color: var(--accent-color);
+            }
+            
+            .theme-light .action-button {
+                background: var(--bg-card);
+                border-color: var(--border-color);
+                color: var(--text-primary);
+                box-shadow: 0 1px 2px var(--shadow);
+            }
+            
+            .theme-light .action-button:hover {
+                background: var(--nasa-blue);
+                color: white;
+                border-color: var(--nasa-blue);
+                box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
             }
             
             /* 通知样式 */

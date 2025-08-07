@@ -28,15 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             
             <div class="header-actions">
-                <button id="favoritesButton" class="action-button">
-                    <span data-i18n="favorites">FAVORITES</span> (<span id="favoritesCount">0</span>)
-                </button>
                 <a href="charts.html" class="action-button" data-i18n="charts">DATA VISUALIZATION</a>
                 <a href="education.html" class="action-button" data-i18n="education">LEARNING RESOURCES</a>
                 <a href="api.html" class="action-button" data-i18n="api">NASA API</a>
+                <button id="favoritesButton" class="action-button favorites-button">
+                    <span class="favorites-icon">❤️</span>
+                    <span class="favorites-text">Favorites</span>
+                    <span id="favoritesCount" class="favorites-count">(0)</span>
+                </button>
                 <button id="language-switcher" class="action-button">
                     <span id="lang-flag">🇺🇸</span>
-                    <span id="lang-name" data-i18n="language">LANGUAGE</span>
+                    <span id="lang-name">English</span>
                 </button>
                 <button id="theme-toggle" class="action-button theme-toggle">
                     <span class="theme-icon">🌙</span>
