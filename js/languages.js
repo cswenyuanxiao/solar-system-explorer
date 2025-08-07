@@ -287,6 +287,7 @@ class LanguageManager {
         this.translatePage();
         this.setupLanguageSwitcher();
         this.updateDocumentLanguage();
+        this.updateLanguageSwitcherUI(); // 确保初始化时更新UI
         this.notifyLanguageChange();
     }
     
@@ -297,7 +298,8 @@ class LanguageManager {
     detectLanguage() {
         const browserLang = navigator.language || navigator.userLanguage;
         const shortLang = browserLang.split('-')[0];
-        return LANGUAGES[shortLang] ? shortLang : 'en';
+        // 如果浏览器语言是中文，返回zh，否则返回en
+        return shortLang === 'zh' ? 'zh' : 'en';
     }
     
     setLanguage(lang) {
@@ -360,10 +362,13 @@ class LanguageManager {
         const langName = document.getElementById('lang-name');
         
         if (langFlag && langName) {
-            const currentLangData = LANGUAGES[this.currentLanguage];
-            if (currentLangData) {
-                langFlag.textContent = currentLangData.flag;
-                langName.textContent = currentLangData.name;
+            // 显示将要切换到的语言，而不是当前语言
+            const nextLanguage = this.currentLanguage === 'zh' ? 'en' : 'zh';
+            const nextLangData = LANGUAGES[nextLanguage];
+            
+            if (nextLangData) {
+                langFlag.textContent = nextLangData.flag;
+                langName.textContent = nextLangData.name;
             }
         }
     }
@@ -442,8 +447,11 @@ let languageManager;
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
-    languageManager = new LanguageManager();
-    window.languageManager = languageManager;
+    // 延迟初始化，确保header已经被shared-header.js创建
+    setTimeout(() => {
+        languageManager = new LanguageManager();
+        window.languageManager = languageManager;
+    }, 100);
     
     // 添加CSS动画
     if (!document.querySelector('#language-animations')) {

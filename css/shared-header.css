@@ -2,12 +2,13 @@
 
 /* Main Header Container */
 header {
-    background: #0a0a0a;
-    border-bottom: 1px solid #222;
+    background: var(--bg-secondary, #0a0a0a);
+    border-bottom: 1px solid var(--border-color, #222);
     padding: 0 2rem;
     position: sticky;
     top: 0;
     z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .header-content-new {
@@ -122,6 +123,47 @@ header {
     border-color: #777;
 }
 
+/* Favorites Button Styles */
+.favorites-button {
+    background: transparent;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 38px;
+}
+
+.favorites-button:hover {
+    background: #ff6b6b;
+    color: #ffffff;
+    border-color: #ff6b6b;
+}
+
+.favorites-icon {
+    font-size: 1.1rem;
+}
+
+.favorites-text {
+    font-weight: 500;
+}
+
+.favorites-count {
+    background: #ff6b6b;
+    color: #ffffff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
 #favoritesButton .text,
 #language-switcher .text {
     display: inline;
@@ -131,6 +173,14 @@ header {
     #favoritesButton .text,
     #language-switcher .text {
         display: none;
+    }
+    
+    .favorites-text {
+        display: none;
+    }
+    
+    .favorites-count {
+        margin-left: 0.2rem;
     }
 }
 
