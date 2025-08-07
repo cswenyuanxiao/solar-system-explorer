@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
     <link rel="stylesheet" href="../css/accessibility.css">
     <link rel="stylesheet" href="../css/scroll-optimized.css?v=20240803">
+    <link rel="stylesheet" href="../css/print-styles.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#0B3D91">
 </head>
 <body>
     <header>
@@ -145,6 +148,62 @@
     <script src="../js/loading-manager.js"></script>
     <script src="../js/favorites.js"></script>
     <script src="../js/accessibility.js"></script>
+    <script src="../js/theme-manager.js"></script>
+    <script src="../js/social-sharing.js"></script>
     <script src="../js/main-integration.js"></script>
+    <script>
+        // Service Worker 注册
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+        
+        // PWA 安装提示
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPromotion();
+        });
+        
+        function showInstallPromotion() {
+            if (deferredPrompt) {
+                const installBtn = document.createElement('button');
+                installBtn.textContent = '📱 Install App';
+                installBtn.className = 'install-btn';
+                installBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 20px;
+                    background: var(--nasa-blue, #0B3D91);
+                    color: white;
+                    border: none;
+                    padding: 1rem 2rem;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                `;
+                
+                installBtn.addEventListener('click', async () => {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log('User response to the install prompt: ', outcome);
+                    deferredPrompt = null;
+                    installBtn.remove();
+                });
+                
+                document.body.appendChild(installBtn);
+            }
+        }
+    </script>
 </body>
 </html>

@@ -38,7 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span id="lang-flag">🇺🇸</span>
                     <span id="lang-name" data-i18n="language">LANGUAGE</span>
                 </button>
-                <button id="themeToggle" class="action-button">🌙</button>
+                <button id="theme-toggle" class="action-button theme-toggle">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-text" data-i18n="dark_mode">Dark Mode</span>
+                </button>
             </div>
         </div>
     `;

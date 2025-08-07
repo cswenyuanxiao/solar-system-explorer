@@ -118,6 +118,11 @@ const TRANSLATIONS = {
         'error_search': '搜索时出错',
         'error_favorites': '收藏功能出错',
         'try_again': '请重试',
+        
+        // 打印和分享
+        'print_page': '打印页面',
+        'share_page': '分享页面',
+        'install_app': '安装应用',
 
         // 语言测试页面
         'language_test_title': '语言测试 - 太阳系探索器',
@@ -242,6 +247,11 @@ const TRANSLATIONS = {
         'error_search': 'Error searching',
         'error_favorites': 'Error with favorites',
         'try_again': 'Please try again',
+        
+        // Print and sharing
+        'print_page': 'Print Page',
+        'share_page': 'Share Page',
+        'install_app': 'Install App',
 
         // Language test page
         'language_test_title': 'Language Test - Solar System Explorer',
