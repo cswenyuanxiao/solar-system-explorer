@@ -276,6 +276,44 @@ const TRANSLATIONS = {
     }
 };
 
+// Add extra languages metadata (names/flags). Translations will fallback to runtime translation if not present.
+Object.assign(LANGUAGES, {
+    es: { name: 'Español', flag: '🇪🇸', direction: 'ltr' },
+    fr: { name: 'Français', flag: '🇫🇷', direction: 'ltr' },
+    ja: { name: '日本語', flag: '🇯🇵', direction: 'ltr' }
+});
+
+// Runtime translation fallback using a simple fetch to a free endpoint is not allowed here.
+// Instead, implement a heuristic client-side dictionary fallback: if target language is not in TRANSLATIONS,
+// we map keys from English and keep English text as placeholder. This enables UI language selection immediately.
+
+function runtimeTranslate(key, targetLang) {
+    // If translation exists, return
+    if (TRANSLATIONS[targetLang] && TRANSLATIONS[targetLang][key]) return TRANSLATIONS[targetLang][key];
+    // Fallback to English
+    if (TRANSLATIONS.en && TRANSLATIONS.en[key]) return TRANSLATIONS.en[key];
+    // Otherwise key
+    return key;
+}
+
+// Patch LanguageManager.getText to use runtime fallback
+LanguageManager.prototype.getText = function(key) {
+    const lang = this.currentLanguage || 'en';
+    return runtimeTranslate(key, lang);
+};
+
+// Expose global setter so header dropdown can invoke
+window.setLanguage = function(lang) {
+    if (window.languageManager) {
+        window.languageManager.setLanguage(lang);
+    } else {
+        // Defer until initialized
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => window.languageManager && window.languageManager.setLanguage(lang), 100);
+        });
+    }
+};
+
 // 语言管理类
 class LanguageManager {
     constructor() {

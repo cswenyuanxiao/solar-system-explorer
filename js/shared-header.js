@@ -4,10 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerElement = document.querySelector('header');
     if (!headerElement) return;
 
-    // Get current page to set 'active' class on the correct link
     const currentPage = window.location.pathname.split('/').pop();
-
-    // 简化的路径处理逻辑
     const isPagesDirectory = window.location.pathname.includes('/pages/');
     const basePath = isPagesDirectory ? '' : 'pages/';
     const rootPath = isPagesDirectory ? '../' : './';
@@ -36,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="btn__text">Favorites</span>
                     <span id="favoritesCount" class="btn__count">(0)</span>
                 </button>
-                <button id="language-switcher" class="btn btn--language">
+                <button id="language-switcher" class="btn btn--language" aria-haspopup="true" aria-expanded="false">
                     <span id="lang-flag" class="btn__flag">🇺🇸</span>
                     <span id="lang-name" class="btn__text">English</span>
                 </button>
@@ -49,39 +46,99 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     headerElement.innerHTML = headerHTML;
-    
-    // 添加导航链接点击事件处理
+
+    // Create language menu lazily on first open
+    let langMenuEl = null;
+    function buildLanguageMenu() {
+        if (langMenuEl) return langMenuEl;
+        const langs = (typeof LANGUAGES !== 'undefined') ? LANGUAGES : { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
+        langMenuEl = document.createElement('div');
+        langMenuEl.className = 'lang-menu';
+        langMenuEl.setAttribute('role', 'menu');
+        langMenuEl.innerHTML = Object.entries(langs).map(([code, info]) => (
+            `<button class="lang-menu__item" data-lang="${code}" role="menuitem">${info.flag} ${info.name}</button>`
+        )).join('');
+        document.body.appendChild(langMenuEl);
+
+        // Click handler
+        langMenuEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('.lang-menu__item');
+            if (!btn) return;
+            const lang = btn.getAttribute('data-lang');
+            if (typeof window.setLanguage === 'function') {
+                window.setLanguage(lang);
+            } else if (window.languageManager) {
+                window.languageManager.setLanguage(lang);
+            }
+            hideMenu();
+        });
+        return langMenuEl;
+    }
+
+    function positionMenu(button) {
+        const rect = button.getBoundingClientRect();
+        langMenuEl.style.minWidth = rect.width + 'px';
+        langMenuEl.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+        langMenuEl.style.left = (window.scrollX + rect.left) + 'px';
+    }
+
+    function showMenu(button) {
+        buildLanguageMenu();
+        positionMenu(button);
+        langMenuEl.classList.add('is-open');
+        button.setAttribute('aria-expanded', 'true');
+        document.addEventListener('click', onDocClick);
+        window.addEventListener('resize', onWindow);
+        window.addEventListener('scroll', onWindow, { passive: true });
+    }
+
+    function hideMenu() {
+        if (!langMenuEl) return;
+        langMenuEl.classList.remove('is-open');
+        document.getElementById('language-switcher')?.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('click', onDocClick);
+        window.removeEventListener('resize', onWindow);
+        window.removeEventListener('scroll', onWindow);
+    }
+
+    function onDocClick(e) {
+        const button = document.getElementById('language-switcher');
+        if (!button) return;
+        if (e.target.closest('#language-switcher') || (langMenuEl && e.target.closest('.lang-menu'))) return;
+        hideMenu();
+    }
+
+    function onWindow() {
+        const button = document.getElementById('language-switcher');
+        if (button && langMenuEl && langMenuEl.classList.contains('is-open')) positionMenu(button);
+    }
+
+    const langBtn = document.getElementById('language-switcher');
+    if (langBtn) {
+        langBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (langMenuEl && langMenuEl.classList.contains('is-open')) hideMenu();
+            else showMenu(langBtn);
+        });
+    }
+
+    // Re-init dependencies
     addNavigationHandlers();
-    
-    // After creating the header, re-initialize components that depend on it
-    if (typeof initializeTheme === 'function') {
-        initializeTheme();
-    }
-    if (typeof updateFavoritesCount === 'function') {
-        updateFavoritesCount();
-    }
+    if (typeof initializeTheme === 'function') initializeTheme();
+    if (typeof updateFavoritesCount === 'function') updateFavoritesCount();
     if (typeof languageManager !== 'undefined') {
         languageManager.translatePage();
-        updateLanguageSwitcherUI(); // A new function to update our new switcher
+        updateLanguageSwitcherUI();
     }
 });
 
-// 添加导航处理函数
 function addNavigationHandlers() {
     const navLinks = document.querySelectorAll('.main-nav a');
-    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            
-            // 确保导航正常工作
             if (href && !href.startsWith('http')) {
-                console.log('🔗 导航到:', href);
-                
-                // 使用window.location进行导航，确保页面完全重新加载
                 window.location.href = href;
-                
-                // 阻止默认行为，使用我们的导航逻辑
                 e.preventDefault();
             }
         });
@@ -91,7 +148,6 @@ function addNavigationHandlers() {
 function updateLanguageSwitcherUI() {
     const langFlag = document.getElementById('lang-flag');
     const langName = document.getElementById('lang-name');
-
     if (langFlag && langName && typeof languageManager !== 'undefined') {
         const currentLangKey = languageManager.currentLanguage;
         const currentLangData = LANGUAGES[currentLangKey];
@@ -102,8 +158,6 @@ function updateLanguageSwitcherUI() {
     }
 }
 
-// We need to update the language switcher on language change.
-// This requires modifying the LanguageManager in languages.js
 function onLanguageChange() {
     updateLanguageSwitcherUI();
 }
