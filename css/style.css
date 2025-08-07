@@ -62,6 +62,7 @@ header {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    min-height: 80px;
 }
 
 .header-content h1 {
@@ -126,6 +127,7 @@ header {
     align-items: center;
     flex-wrap: wrap;
     min-width: 0;
+    justify-content: flex-end;
 }
 
 .action-button {
@@ -427,16 +429,31 @@ footer p {
         padding: 0 1rem;
         flex-direction: column;
         gap: 1rem;
+        align-items: stretch;
     }
     .header-actions {
         gap: 0.5rem;
         justify-content: center;
         flex-wrap: wrap;
+        width: 100%;
     }
     .action-button {
         padding: 0.5rem 0.8rem;
         font-size: 0.7rem;
         min-width: auto;
+        flex: 0 1 auto;
+    }
+    .logo-section {
+        text-align: center;
+        order: 1;
+    }
+    .main-search-container {
+        order: 2;
+        width: 100%;
+        max-width: none;
+    }
+    .header-actions {
+        order: 3;
     }
 }
 
@@ -463,10 +480,19 @@ footer p {
     .header-actions {
         gap: 0.3rem;
         justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     .action-button {
         padding: 0.4rem 0.6rem;
         font-size: 0.65rem;
+        flex: 1 1 calc(50% - 0.15rem);
+        max-width: calc(50% - 0.15rem);
+        text-align: center;
+    }
+    /* 特殊处理favorites按钮，确保数字显示正确 */
+    .favorites-button {
+        flex: 1 1 calc(50% - 0.15rem);
     }
 }
 

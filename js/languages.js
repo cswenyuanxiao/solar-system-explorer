@@ -362,13 +362,12 @@ class LanguageManager {
         const langName = document.getElementById('lang-name');
         
         if (langFlag && langName) {
-            // 显示将要切换到的语言，而不是当前语言
-            const nextLanguage = this.currentLanguage === 'zh' ? 'en' : 'zh';
-            const nextLangData = LANGUAGES[nextLanguage];
+            // 显示当前语言
+            const currentLangData = LANGUAGES[this.currentLanguage];
             
-            if (nextLangData) {
-                langFlag.textContent = nextLangData.flag;
-                langName.textContent = nextLangData.name;
+            if (currentLangData) {
+                langFlag.textContent = currentLangData.flag;
+                langName.textContent = currentLangData.name;
             }
         }
     }
