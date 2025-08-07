@@ -1,0 +1,438 @@
+/* 打印样式 - Print Styles */
+/* 为太阳系探索器网站优化的打印样式 */
+
+@media print {
+  /* 通用打印重置 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* 页面设置 */
+  @page {
+    margin: 2cm;
+    size: A4;
+  }
+  
+  @page :first {
+    margin-top: 3cm;
+  }
+  
+  /* 基本布局 */
+  html {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: "Times New Roman", serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 隐藏不需要打印的元素 */
+  .no-print,
+  nav,
+  .navigation,
+  header nav,
+  .social-share-container,
+  .theme-toggle,
+  #language-switcher,
+  .search-container,
+  .favorite-btn,
+  .download-btn,
+  button:not(.print-keep),
+  input[type="button"]:not(.print-keep),
+  input[type="submit"]:not(.print-keep),
+  input[type="reset"]:not(.print-keep),
+  .lazy-loading,
+  .loading-animation,
+  .notification,
+  .modal,
+  .tooltip,
+  .share-modal,
+  .accessibility-panel,
+  canvas:not(.print-keep),
+  video,
+  audio,
+  iframe:not(.print-keep),
+  .interactive-element:not(.print-keep) {
+    display: none !important;
+  }
+  
+  /* 标题样式 */
+  h1 {
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 20pt;
+    page-break-after: avoid;
+    color: black !important;
+  }
+  
+  h2 {
+    font-size: 20pt;
+    font-weight: bold;
+    margin-top: 24pt;
+    margin-bottom: 12pt;
+    page-break-after: avoid;
+    color: black !important;
+  }
+  
+  h3 {
+    font-size: 16pt;
+    font-weight: bold;
+    margin-top: 18pt;
+    margin-bottom: 9pt;
+    page-break-after: avoid;
+    color: black !important;
+  }
+  
+  h4, h5, h6 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+    color: black !important;
+  }
+  
+  /* 段落和文本 */
+  p {
+    margin-bottom: 12pt;
+    orphans: 3;
+    widows: 3;
+    color: black !important;
+  }
+  
+  /* 链接处理 */
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    font-style: italic;
+  }
+  
+  a[href^="mailto:"]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    font-style: italic;
+  }
+  
+  /* 列表样式 */
+  ul, ol {
+    margin-bottom: 12pt;
+    padding-left: 30pt;
+  }
+  
+  li {
+    margin-bottom: 6pt;
+    page-break-inside: avoid;
+  }
+  
+  /* 表格样式 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12pt;
+    page-break-inside: avoid;
+  }
+  
+  th, td {
+    border: 1pt solid black;
+    padding: 6pt;
+    text-align: left;
+    vertical-align: top;
+  }
+  
+  th {
+    background-color: #f0f0f0 !important;
+    font-weight: bold;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  /* 图片处理 */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    margin-bottom: 12pt;
+    border: 1pt solid #ccc;
+  }
+  
+  .planet-img,
+  .planet-card img {
+    width: 200pt !important;
+    height: auto !important;
+    display: block;
+    margin: 12pt auto;
+  }
+  
+  /* 行星卡片打印样式 */
+  .planet-card {
+    border: 2pt solid black !important;
+    margin-bottom: 24pt !important;
+    padding: 12pt !important;
+    page-break-inside: avoid;
+    background: white !important;
+    display: block !important;
+  }
+  
+  .planet-info h2 {
+    font-size: 18pt;
+    margin-bottom: 6pt;
+    color: black !important;
+  }
+  
+  .planet-info p {
+    margin-bottom: 6pt;
+    color: black !important;
+  }
+  
+  /* 数据表格优化 */
+  .planet-data-table,
+  .comparison-table {
+    width: 100%;
+    font-size: 10pt;
+    border: 2pt solid black;
+    margin-bottom: 12pt;
+  }
+  
+  .planet-data-table th,
+  .planet-data-table td,
+  .comparison-table th,
+  .comparison-table td {
+    border: 1pt solid black;
+    padding: 4pt;
+  }
+  
+  /* 英雄区域打印样式 */
+  .hero-section {
+    background: none !important;
+    padding: 24pt 0 !important;
+    border-bottom: 2pt solid black;
+    margin-bottom: 24pt;
+    text-align: center;
+  }
+  
+  .hero-content h1,
+  .hero-content h2 {
+    color: black !important;
+    margin-bottom: 12pt;
+  }
+  
+  .hero-content p {
+    color: black !important;
+    font-size: 12pt;
+    max-width: none;
+  }
+  
+  /* 特色内容区域 */
+  .featured-section,
+  .planets-container {
+    margin-bottom: 24pt;
+  }
+  
+  .featured-grid {
+    display: block !important;
+  }
+  
+  .featured-card {
+    border: 1pt solid black;
+    padding: 12pt;
+    margin-bottom: 12pt;
+    background: white !important;
+    page-break-inside: avoid;
+  }
+  
+  /* 页脚处理 */
+  footer {
+    border-top: 1pt solid black;
+    padding-top: 12pt;
+    margin-top: 24pt;
+    font-size: 10pt;
+    color: black !important;
+  }
+  
+  /* 图表和可视化 */
+  .chart-container {
+    page-break-inside: avoid;
+    margin-bottom: 24pt;
+  }
+  
+  .chart-title {
+    font-weight: bold;
+    margin-bottom: 12pt;
+    color: black !important;
+  }
+  
+  /* 避免孤儿和寡妇行 */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  /* 强制分页 */
+  .page-break {
+    page-break-before: always;
+  }
+  
+  .page-break-after {
+    page-break-after: always;
+  }
+  
+  /* 避免分页 */
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+  
+  /* 打印专用内容 */
+  .print-only {
+    display: block !important;
+  }
+  
+  /* 打印信息头 */
+  .print-header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 24pt;
+    padding-bottom: 12pt;
+    border-bottom: 1pt solid black;
+  }
+  
+  .print-header::before {
+    content: "Solar System Explorer - Printed on " attr(data-print-date);
+    font-size: 10pt;
+    font-style: italic;
+  }
+  
+  /* NASA标志和品牌 */
+  .nasa-logo {
+    max-width: 100pt !important;
+    height: auto !important;
+  }
+  
+  /* 教育内容优化 */
+  .education-section {
+    page-break-inside: avoid;
+    margin-bottom: 24pt;
+    border: 1pt solid black;
+    padding: 12pt;
+  }
+  
+  .quiz-section,
+  .interactive-content {
+    border: 1pt solid black;
+    padding: 12pt;
+    margin-bottom: 12pt;
+  }
+  
+  /* API数据表格 */
+  .api-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12pt;
+    font-size: 10pt;
+  }
+  
+  .api-data-table th {
+    background-color: #e0e0e0 !important;
+    font-weight: bold;
+    border: 1pt solid black;
+    padding: 4pt;
+  }
+  
+  .api-data-table td {
+    border: 1pt solid black;
+    padding: 4pt;
+  }
+  
+  /* 3D模拟器说明 */
+  .simulator-description {
+    border: 2pt solid black;
+    padding: 12pt;
+    margin-bottom: 12pt;
+    background-color: #f9f9f9 !important;
+  }
+  
+  .simulator-description::before {
+    content: "Note: 3D interactive content is not available in print. ";
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6pt;
+  }
+  
+  /* 可访问性信息 */
+  .accessibility-info {
+    font-size: 10pt;
+    font-style: italic;
+    margin-top: 12pt;
+    padding-top: 6pt;
+    border-top: 1pt solid #ccc;
+  }
+  
+  /* 响应式打印调整 */
+  .print-responsive {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* 数据单位显示 */
+  .data-value::after {
+    font-size: 9pt;
+    font-style: italic;
+  }
+  
+  /* 引用和注释 */
+  blockquote {
+    border-left: 3pt solid black;
+    margin-left: 0;
+    padding-left: 12pt;
+    font-style: italic;
+    margin-bottom: 12pt;
+  }
+  
+  .footnote {
+    font-size: 10pt;
+    margin-top: 24pt;
+    padding-top: 12pt;
+    border-top: 1pt solid black;
+  }
+  
+  /* 版权和出处信息 */
+  .print-attribution {
+    font-size: 9pt;
+    text-align: center;
+    margin-top: 24pt;
+    padding-top: 12pt;
+    border-top: 1pt solid #ccc;
+  }
+  
+  .print-attribution::before {
+    content: "Data and images courtesy of NASA. Visit nasa.gov for more information.";
+    display: block;
+    margin-bottom: 6pt;
+  }
+}
