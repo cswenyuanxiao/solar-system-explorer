@@ -367,23 +367,35 @@ class LanguageManager {
     }
     
     translatePage() {
-        // 翻译所有带有 data-i18n 属性的元素
+        // translate text content
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(element => {
             const key = element.getAttribute('data-i18n');
             const translation = this.getText(key);
             if (translation && translation !== key) {
-                if (element.tagName === 'INPUT' && element.type === 'placeholder') {
-                    element.placeholder = translation;
-                } else {
-                    element.textContent = translation;
-                }
+                element.textContent = translation;
             }
         });
 
-        // 翻译页面标题
-        const titleElement = document.querySelector('title');
-        if (titleElement && titleElement.getAttribute('data-i18n')) {
+        // translate attributes
+        const attrMap = [
+            { selector: '[data-i18n-placeholder]', attr: 'placeholder', dataAttr: 'data-i18n-placeholder' },
+            { selector: '[data-i18n-title]', attr: 'title', dataAttr: 'data-i18n-title' },
+            { selector: '[data-i18n-aria-label]', attr: 'aria-label', dataAttr: 'data-i18n-aria-label' }
+        ];
+        attrMap.forEach(({ selector, attr, dataAttr }) => {
+            document.querySelectorAll(selector).forEach(el => {
+                const key = el.getAttribute(dataAttr);
+                const translation = this.getText(key);
+                if (translation && translation !== key) {
+                    el.setAttribute(attr, translation);
+                }
+            });
+        });
+
+        // translate <title>
+        const titleElement = document.querySelector('title[data-i18n]');
+        if (titleElement) {
             const titleKey = titleElement.getAttribute('data-i18n');
             const titleTranslation = this.getText(titleKey);
             if (titleTranslation && titleTranslation !== titleKey) {
@@ -391,7 +403,7 @@ class LanguageManager {
             }
         }
 
-        // 更新语言切换器UI
+        // update language switcher UI
         this.updateLanguageSwitcherUI();
     }
     
