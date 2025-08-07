@@ -294,6 +294,12 @@ body {
   font-size: var(--font-size-lg);
 }
 
+/* Language menu */
+.lang-menu { position: absolute; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); display: none; z-index: var(--z-dropdown); }
+.lang-menu.is-open { display: block; }
+.lang-menu__item { display: block; width: 100%; text-align: left; padding: 0.5rem 0.75rem; background: transparent; color: var(--text-primary); border: none; cursor: pointer; }
+.lang-menu__item:hover { background: var(--bg-secondary); }
+
 /* ==========================================================================
    4. MAIN CONTENT
    ========================================================================== */
