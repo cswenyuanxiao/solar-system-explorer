@@ -828,3 +828,45 @@ body {
     padding: var(--space-lg);
   }
 }
+
+/* ==========================================================================
+   13. BREADCRUMBS
+   ========================================================================== */
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.breadcrumbs__link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.breadcrumbs__link:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.breadcrumbs__sep {
+  color: var(--text-muted);
+}
+
+.breadcrumbs__current {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .breadcrumbs {
+    font-size: var(--font-size-xs);
+  }
+}

@@ -5,19 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Solar System Simulator - Solar System Explorer</title>
     <link rel="stylesheet" href="../css/style.css?v=20240803">
-    <link rel="stylesheet" href="../css/shared-header.css?v=20240803">
-    <link rel="stylesheet" href="../css/3d-simulator.css?v=20240803">
 </head>
 <body>
-    <header>
-        <!-- Shared header will be dynamically injected here by shared-header.js -->
+    <header class="header">
     </header>
 
     <main>
         <!-- 3D Simulator Hero Section -->
         <section class="simulator-hero">
             <div class="hero-content">
-                <h1>3D Solar System Simulator</h1>
+                <h1 class="header__title">3D Solar System Simulator</h1>
                 <p>Explore the solar system in immersive 3D. Navigate through planets, observe their orbits, and learn about our cosmic neighborhood.</p>
                 <div class="simulator-controls">
                     <button id="play-pause" class="control-btn">
@@ -122,7 +119,6 @@
     <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
     
     <!-- Custom Scripts -->
-    <script src="../js/shared-header.js"></script>
     <script src="../js/planet-textures.js"></script>
     <script src="../js/navigation-fix.js"></script>
     <script src="../js/navigation-monitor.js"></script>
@@ -188,5 +184,10 @@
             console.log('✅ 3D模拟器导航重置完成');
         })();
     </script>
+    <script src="../js/shared-header.js?v=20250109"></script>
+    <script src="../js/theme-manager.js?v=20250109"></script>
+    <script src="../js/social-sharing.js?v=20250109"></script>
+    <script src="../js/favorites.js?v=20250109"></script>
+    <script src="../js/breadcrumbs.js?v=20250109"></script>
 </body>
 </html> 
