@@ -690,3 +690,141 @@ body {
     opacity: 1;
   }
 }
+
+/* ==========================================================================
+   12. PLANET DETAIL PAGES
+   ========================================================================== */
+
+.planet-detail {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+.planet-detail .header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+  margin-bottom: var(--space-xl);
+}
+
+.planet-detail .header__content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.back-button:hover {
+  color: var(--text-primary);
+}
+
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+  align-items: center;
+}
+
+.hero-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-info h2 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-description {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-xl);
+}
+
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.info-card h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-card li {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-secondary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.info-card li:last-child {
+  border-bottom: none;
+}
+
+.info-card strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Responsive design for planet detail pages */
+@media (max-width: 768px) {
+  .hero-section {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  .hero-image {
+    height: 300px;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .planet-detail {
+    padding: var(--space-lg);
+  }
+}
