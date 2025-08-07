@@ -1,607 +1,692 @@
 /*
- * NASA-Inspired Theme for Solar System Explorer
- * Version: 1.0
- * Description: A clean, professional, and modern theme based on NASA's official design guidelines.
+ * Solar System Explorer - Unified CSS System
+ * Version: 2.0 - Complete Restructure
+ * 
+ * Design Principles:
+ * 1. Mobile-first responsive design
+ * 2. BEM naming convention
+ * 3. CSS custom properties for theming
+ * 4. Minimal nesting (max 3 levels)
+ * 5. Consistent spacing and typography
+ * 6. Accessibility-first approach
  */
 
-/* 1. Root Variables & Basic Setup =================================== */
+/* ==========================================================================
+   1. CSS CUSTOM PROPERTIES (Design Tokens)
+   ========================================================================== */
+
 :root {
-    /* Theme colors - will be overridden by theme-manager.js */
-    --bg-primary: #000000;
-    --bg-secondary: #1a1a1a;
-    --bg-card: #2d2d2d;
-    --text-primary: #ffffff;
-    --text-secondary: #e0e0e0;
-    --border-color: #333333;
-    --shadow: rgba(255, 255, 255, 0.1);
-    
-    /* NASA Brand Colors */
-    --nasa-blue: #0B3D91;
-    --nasa-red: #FC3D21;
-    --nasa-dark-blue: #102A43;
-    --nasa-light-gray: #F5F5F5;
-    --nasa-medium-gray: #D8D8D8;
-    --nasa-dark-gray: #333333;
-    --accent-color: #FFD700;
-    
-    /* Fonts */
-    --font-primary: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-serif: 'Merriweather', serif;
+  /* Color Palette */
+  --color-primary: #0B3D91;
+  --color-primary-dark: #102A43;
+  --color-secondary: #FC3D21;
+  --color-accent: #FFD700;
+  
+  /* Background Colors */
+  --bg-primary: #000000;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #2d2d2d;
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-muted: #999999;
+  
+  /* Border Colors */
+  --border-primary: #333333;
+  --border-secondary: #555555;
+  --border-accent: #ff6b6b;
+  
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Typography */
+  --font-family-primary: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-display: 'Merriweather', serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Z-index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-tooltip: 1060;
 }
+
+/* ==========================================================================
+   2. RESET & BASE STYLES
+   ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@400;700&display=swap');
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
 body {
-    font-family: var(--font-primary);
-    margin: 0;
-    padding: 0;
-    background: var(--bg-primary);
-    color: var(--text-secondary);
-    line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  margin: 0;
+  padding: 0;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* 2. Header ========================================================= */
-header {
-    background: var(--bg-secondary);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    padding: 1rem 0;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+/* ==========================================================================
+   3. LAYOUT COMPONENTS
+   ========================================================================== */
+
+/* Header */
+.header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
 }
 
-/* Favorites Button Styles */
-.favorites-button {
-    background: transparent;
-    border: 1px solid #ff6b6b;
-    color: #ff6b6b;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    height: 38px;
+.header__content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  min-height: 80px;
 }
 
-.favorites-button:hover {
-    background: #ff6b6b;
-    color: #ffffff;
-    border-color: #ff6b6b;
+.header__logo {
+  flex-shrink: 0;
 }
 
-.favorites-icon {
-    font-size: 1.1rem;
+.header__title {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.favorites-text {
-    font-weight: 500;
+.header__subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
-.favorites-count {
-    background: #ff6b6b;
-    color: #ffffff;
-    padding: 0.2rem 0.5rem;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 20px;
-    text-align: center;
-}
-
-.header-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    min-height: 80px;
-}
-
-.header-content h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--nasa-text-primary);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.subtitle {
-    font-size: 0.9rem;
-    margin: 0;
-    color: var(--nasa-medium-gray);
-    font-weight: 400;
-}
-
-.main-search-container {
-    position: relative;
-    flex-grow: 1;
-    max-width: 400px;
+/* Search Container */
+.header__search {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .search-box {
-    display: flex;
-    background: var(--nasa-dark-gray);
-    border-radius: 4px;
-    border: 1px solid #555;
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
-#mainSearchInput {
-    flex: 1;
-    padding: 0.6rem 1rem;
-    border: none;
-    background: transparent;
-    color: var(--nasa-text-primary);
-    font-size: 1rem;
-    outline: none;
+.search-box__input {
+  flex: 1;
+  padding: var(--space-md);
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  outline: none;
+  transition: all var(--transition-fast);
 }
 
-#mainSearchButton {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    background: var(--nasa-blue);
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease;
-    color: var(--nasa-text-primary);
-    font-weight: 600;
-    text-transform: uppercase;
+.search-box__input::placeholder {
+  color: var(--text-muted);
 }
 
-#mainSearchButton:hover {
-    background: #1E60C5;
+.search-box__input:focus {
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
-.header-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-    min-width: 0;
-    justify-content: flex-end;
+.search-box__button {
+  padding: var(--space-md) var(--space-lg);
+  border: none;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  text-transform: uppercase;
 }
 
-.action-button {
-    background: transparent;
-    border: 1px solid var(--nasa-medium-gray);
-    color: var(--nasa-text-primary);
-    padding: 0.6rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    flex-shrink: 0;
+.search-box__button:hover {
+  background: var(--color-primary-dark);
 }
 
-.action-button:hover {
-    background: var(--nasa-text-primary);
-    color: var(--nasa-background);
-    border-color: var(--nasa-text-primary);
+/* Header Actions */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
 }
 
-/* 3. Main Content & Hero Section ==================================== */
-main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
+/* Action Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.hero-section {
-    padding: 5rem 2rem;
-    text-align: center;
-    margin-bottom: 3rem;
-    background: url('../images/background.jpg') no-repeat center center/cover;
-    position: relative;
+.btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
 }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+.btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-.hero-content {
-    position: relative;
+/* Favorites Button */
+.btn--favorites {
+  border-color: var(--border-accent);
+  color: var(--border-accent);
 }
 
-.hero-content h2 {
-    font-family: var(--font-serif);
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--nasa-text-primary);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+.btn--favorites:hover {
+  background: var(--border-accent);
+  border-color: var(--border-accent);
+  color: white;
 }
 
-.hero-content p {
-    font-size: 1.2rem;
-    color: var(--nasa-medium-gray);
-    max-width: 800px;
-    margin: 0 auto;
+.btn__icon {
+  font-size: var(--font-size-lg);
 }
 
-/* 4. Planet Cards =================================================== */
-.featured-section h3, .planets-container h3 {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--nasa-text-primary);
-    text-align: center;
-    margin-bottom: 2.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.btn__text {
+  font-weight: 500;
 }
 
-.planets-container, .featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+.btn__count {
+  background: var(--border-accent);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
 }
 
-.planet-card, .featured-card {
-    background: var(--nasa-dark-gray);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid #444;
-    display: flex;
+/* Language Switcher */
+.btn--language {
+  min-width: 100px;
+  justify-content: center;
+}
+
+.btn__flag {
+  font-size: var(--font-size-lg);
+}
+
+/* Theme Toggle */
+.btn--theme .btn__icon {
+  font-size: var(--font-size-lg);
+}
+
+/* ==========================================================================
+   4. MAIN CONTENT
+   ========================================================================== */
+
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+/* Hero Section */
+.hero {
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../images/background.jpg') no-repeat center center/cover;
+  position: relative;
+  border-radius: var(--radius-lg);
+}
+
+.hero__title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Section Headers */
+.section__title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* ==========================================================================
+   5. CARD COMPONENTS
+   ========================================================================== */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border-primary);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.card:hover .card__image {
+  transform: scale(1.05);
+}
+
+.card__content {
+  padding: var(--space-lg);
+}
+
+.card__title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+}
+
+.card__description {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+  line-height: 1.6;
+}
+
+.card__link {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  letter-spacing: 0.5px;
+}
+
+.card__link:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   6. RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .header__content {
+    gap: var(--space-xl);
+  }
+}
+
+/* Medium screens (768px to 1199px) */
+@media (max-width: 1199px) {
+  .btn__text {
+    display: none;
+  }
+  
+  .btn__count {
+    margin-left: var(--space-xs);
+  }
+}
+
+/* Small screens (768px and down) */
+@media (max-width: 768px) {
+  .header__content {
     flex-direction: column;
-}
-
-.planet-card:hover, .featured-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--nasa-blue);
-    box-shadow: 0 8px 25px rgba(11, 61, 145, 0.3);
-}
-
-.planet-img {
+    align-items: stretch;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+  
+  .header__logo {
+    text-align: center;
+    order: 1;
+  }
+  
+  .header__search {
+    order: 2;
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background-color: #000;
+    max-width: none;
+  }
+  
+  .header__actions {
+    order: 3;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .btn {
+    padding: var(--space-sm);
+    font-size: var(--font-size-xs);
+    flex: 0 1 auto;
+  }
+  
+  .hero__title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .hero__subtitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .main {
+    padding: var(--space-lg);
+  }
 }
 
-.planet-info, .featured-card {
-    padding: 1.5rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.planet-info h2, .featured-card h4 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--nasa-text-primary);
-}
-
-.planet-info p, .featured-card p {
-    margin: 0;
-    color: var(--nasa-text-secondary);
-    font-size: 1rem;
-    flex-grow: 1;
-}
-
-.featured-link {
-    display: inline-block;
-    background: var(--nasa-blue);
-    color: var(--nasa-text-primary);
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: background-color 0.2s ease;
-    margin-top: 1.5rem;
-    align-self: flex-start;
-}
-
-.featured-link:hover {
-    background: #1E60C5;
-}
-
-/* 5. Footer ========================================================= */
-footer {
-    background: #111;
-    padding: 2.5rem 2rem;
+/* Extra small screens (480px and down) */
+@media (max-width: 480px) {
+  .header__actions {
+    gap: var(--space-xs);
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+    flex: 1 1 calc(50% - var(--space-xs));
+    max-width: calc(50% - var(--space-xs));
     text-align: center;
-    margin-top: 4rem;
-    border-top: 1px solid var(--nasa-dark-gray);
-}
-
-footer p {
-    margin: 0;
-    color: var(--nasa-medium-gray);
-    font-size: 0.9rem;
-}
-
-/* 6. Search Results & Other Components ============================== */
-.search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--nasa-dark-gray);
-    border-radius: 4px;
-    margin-top: 0.5rem;
-    max-height: 400px;
-    overflow-y: auto;
-    z-index: 1100;
-    border: 1px solid #555;
-    backdrop-filter: blur(5px);
-}
-
-.search-result-item {
-    padding: 1rem;
-    border-bottom: 1px solid #555;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.search-result-item:hover {
-    background: var(--nasa-blue);
-}
-
-/* 7. Mission Info Section =========================================== */
-.mission-info {
-    background: var(--nasa-dark-gray);
-    padding: 3rem 2rem;
-    margin: 3rem 0;
-    border-radius: 4px;
-    border: 1px solid #444;
-}
-
-.mission-info h3 {
-    font-family: var(--font-serif);
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--nasa-text-primary);
-    text-align: center;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
+  }
+  
+  .btn--favorites {
+    flex: 1 1 calc(50% - var(--space-xs));
+  }
+  
+  .hero__title {
+    font-size: var(--font-size-2xl);
     letter-spacing: 2px;
+  }
+  
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .card-grid {
+    gap: var(--space-md);
+  }
+  
+  .card {
+    margin-bottom: var(--space-md);
+  }
 }
 
-.mission-info p {
-    text-align: center;
-    color: var(--nasa-text-secondary);
-    font-size: 1.1rem;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.8;
+/* ==========================================================================
+   7. ACCESSIBILITY ENHANCEMENTS
+   ========================================================================== */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-/* 8. Loading States ================================================= */
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --text-secondary: #FFFFFF;
+    --text-muted: #FFFFFF;
+  }
+  
+  .card {
+    border: 2px solid var(--text-primary);
+  }
+  
+  .btn {
+    border: 2px solid var(--text-primary);
+  }
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.card:focus,
+.btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   8. UTILITY CLASSES
+   ========================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-xs); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-3 { margin-bottom: var(--space-md); }
+.mb-4 { margin-bottom: var(--space-lg); }
+.mb-5 { margin-bottom: var(--space-xl); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-xs); }
+.mt-2 { margin-top: var(--space-sm); }
+.mt-3 { margin-top: var(--space-md); }
+.mt-4 { margin-top: var(--space-lg); }
+.mt-5 { margin-top: var(--space-xl); }
+
+/* ==========================================================================
+   9. PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  .header {
+    position: static;
+    background: white;
+    color: black;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .hero {
+    background: white !important;
+    color: black;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+  
+  .btn {
+    border: 1px solid #ccc;
+    background: white;
+    color: black;
+  }
+}
+
+/* ==========================================================================
+   10. LOADING STATES
+   ========================================================================== */
+
 .loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid var(--nasa-medium-gray);
-    border-radius: 50%;
-    border-top-color: var(--nasa-blue);
-    animation: spin 1s ease-in-out infinite;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* 9. Notifications ================================================== */
+/* ==========================================================================
+   11. NOTIFICATIONS
+   ========================================================================== */
+
 .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: var(--nasa-blue);
-    color: var(--nasa-text-primary);
-    padding: 1rem 2rem;
-    border-radius: 4px;
-    z-index: 2000;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--color-primary);
+  color: white;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-sm);
+  z-index: var(--z-tooltip);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  animation: slideIn var(--transition-normal);
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* 10. Responsive Design ============================================= */
-@media (max-width: 1024px) {
-    .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .main-search-container {
-        width: 100%;
-        max-width: none;
-        order: 3;
-    }
-    .header-actions {
-        order: 2;
-        align-self: flex-end;
-    }
-}
-
-@media (max-width: 1200px) {
-    .favorites-text {
-        display: none;
-    }
-    
-    .favorites-count {
-        margin-left: 0.2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-content h2 {
-        font-size: 2.5rem;
-    }
-    .hero-content p {
-        font-size: 1.1rem;
-    }
-    .planets-container, .featured-grid {
-        grid-template-columns: 1fr;
-    }
-    main {
-        padding: 1.5rem;
-    }
-    .header-content {
-        padding: 0 1rem;
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    .header-actions {
-        gap: 0.5rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-    .action-button {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.7rem;
-        min-width: auto;
-        flex: 0 1 auto;
-    }
-    .logo-section {
-        text-align: center;
-        order: 1;
-    }
-    .main-search-container {
-        order: 2;
-        width: 100%;
-        max-width: none;
-    }
-    .header-actions {
-        order: 3;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-content h2 {
-        font-size: 2rem;
-        letter-spacing: 2px;
-    }
-    .hero-content p {
-        font-size: 1rem;
-    }
-    .planets-container, .featured-grid {
-        gap: 1rem;
-    }
-    .planet-card, .featured-card {
-        margin-bottom: 1rem;
-    }
-    .mission-info {
-        padding: 2rem 1rem;
-    }
-    .mission-info h3 {
-        font-size: 1.5rem;
-    }
-    .header-actions {
-        gap: 0.3rem;
-        justify-content: center;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    .action-button {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.65rem;
-        flex: 1 1 calc(50% - 0.15rem);
-        max-width: calc(50% - 0.15rem);
-        text-align: center;
-    }
-    /* 特殊处理favorites按钮，确保数字显示正确 */
-    .favorites-button {
-        flex: 1 1 calc(50% - 0.15rem);
-    }
-}
-
-/* 11. Accessibility Enhancements ==================================== */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-@media (prefers-contrast: high) {
-    :root {
-        --nasa-text-secondary: #FFFFFF;
-        --nasa-medium-gray: #FFFFFF;
-    }
-    
-    .planet-card, .featured-card {
-        border: 2px solid var(--nasa-text-primary);
-    }
-    
-    .action-button {
-        border: 2px solid var(--nasa-text-primary);
-    }
-}
-
-/* 12. Focus States ================================================== */
-*:focus {
-    outline: 2px solid var(--nasa-blue);
-    outline-offset: 2px;
-}
-
-.planet-card:focus,
-.featured-card:focus,
-.action-button:focus {
-    outline: 2px solid var(--nasa-blue);
-    outline-offset: 2px;
-}
-
-/* 13. Print Styles ================================================== */
-@media print {
-    header {
-        position: static;
-        background: white;
-        color: black;
-    }
-    
-    .hero-section {
-        background: none;
-        color: black;
-    }
-    
-    .planet-card,
-    .featured-card {
-        break-inside: avoid;
-        border: 1px solid #ccc;
-        background: white;
-        color: black;
-    }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
