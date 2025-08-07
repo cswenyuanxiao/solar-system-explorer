@@ -9,6 +9,15 @@ class SearchEngine {
         
         this.initializeEventListeners();
         this.displayAllPlanets();
+
+        // Re-translate dynamic placeholders when language changes
+        document.addEventListener('languageChanged', () => {
+            if (window.languageManager) {
+                window.languageManager.translatePage();
+            }
+            // Re-render results text
+            if (!this.searchInput.value.trim()) this.displayAllPlanets();
+        });
     }
 
     initializeEventListeners() {
@@ -46,108 +55,26 @@ class SearchEngine {
         const searchTerm = query.toLowerCase().trim();
         
         return planets.filter(planet => {
-            // Search in name
             if (planet.name.toLowerCase().includes(searchTerm) ||
-                planet.displayName.toLowerCase().includes(searchTerm)) {
-                return true;
-            }
-            
-            // Search in description
-            if (planet.description.toLowerCase().includes(searchTerm)) {
-                return true;
-            }
-            
-            // Search in keywords
-            return planet.keywords.some(keyword => 
-                keyword.toLowerCase().includes(searchTerm)
-            );
+                planet.displayName.toLowerCase().includes(searchTerm)) return true;
+            if (planet.description.toLowerCase().includes(searchTerm)) return true;
+            return planet.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm));
         });
     }
 
     // Fallback local planet data (for backward compatibility)
     getLocalPlanets() {
-        return [
-            {
-                name: 'Sun',
-                displayName: 'THE SUN',
-                description: 'Our star - the heart of the solar system',
-                image: '../images/sun.jpg',
-                url: 'sun.html',
-                keywords: ['star', 'solar', 'fusion', 'energy', 'light', 'heat']
-            },
-            {
-                name: 'Mercury',
-                displayName: 'MERCURY',
-                description: 'The smallest planet, closest to the Sun',
-                image: '../images/mercury.jpg',
-                url: 'mercury.html',
-                keywords: ['smallest', 'closest', 'hot', 'cold', 'extreme', 'temperature']
-            },
-            {
-                name: 'Venus',
-                displayName: 'VENUS',
-                description: 'The hottest planet, Earth\'s twin',
-                image: '../images/venus.jpg',
-                url: 'venus.html',
-                keywords: ['hottest', 'twin', 'greenhouse', 'thick', 'atmosphere', 'backwards']
-            },
-            {
-                name: 'Earth',
-                displayName: 'EARTH',
-                description: 'Our home planet, the blue marble',
-                image: '../images/earth.jpg',
-                url: 'earth.html',
-                keywords: ['home', 'blue', 'life', 'water', 'atmosphere', 'habitable']
-            },
-            {
-                name: 'Mars',
-                displayName: 'MARS',
-                description: 'The red planet, future human destination',
-                image: '../images/mars.jpg',
-                url: 'mars.html',
-                keywords: ['red', 'rust', 'future', 'human', 'colonization', 'rovers']
-            },
-            {
-                name: 'Jupiter',
-                displayName: 'JUPITER',
-                description: 'The largest planet, gas giant',
-                image: '../images/jupiter.jpg',
-                url: 'jupiter.html',
-                keywords: ['largest', 'gas', 'giant', 'great', 'red', 'spot', 'moons']
-            },
-            {
-                name: 'Saturn',
-                displayName: 'SATURN',
-                description: 'The ringed planet, most beautiful',
-                image: '../images/saturn.jpg',
-                url: 'saturn.html',
-                keywords: ['rings', 'beautiful', 'gas', 'giant', 'float', 'water']
-            },
-            {
-                name: 'Uranus',
-                displayName: 'URANUS',
-                description: 'The ice giant, tilted on its side',
-                image: '../images/uranus.jpg',
-                url: 'uranus.html',
-                keywords: ['ice', 'giant', 'tilted', 'sideways', 'cold', 'methane']
-            },
-            {
-                name: 'Neptune',
-                displayName: 'NEPTUNE',
-                description: 'The windiest planet, deep blue',
-                image: '../images/neptune.jpg',
-                url: 'neptune.html',
-                keywords: ['windy', 'blue', 'ice', 'giant', 'storms', 'farthest']
-            }
-        ];
+        return (window.planetData ? window.planetData.getAllPlanets() : []);
     }
 
     displayResults(results, query = '') {
-        if (results.length === 0) {
+        const t = (key) => (window.languageManager ? window.languageManager.getText(key) : key);
+
+        if (!results || results.length === 0) {
+            const msg = t('no_results') || 'No results found';
             this.searchResults.innerHTML = `
                 <div class="no-results">
-                    <p>No planets found for "${query}"</p>
-                    <p>Try searching for: sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune</p>
+                    <p>${msg} "${query}"</p>
                 </div>
             `;
             return;
@@ -155,8 +82,7 @@ class SearchEngine {
 
         this.searchResults.innerHTML = results.map(planet => `
             <a href="${planet.url}" class="search-result-card">
-                <img src="${planet.image}" alt="${planet.name}" class="result-image" 
-                     onerror="this.src='images/placeholder.jpg'">
+                <img src="${planet.image}" alt="${planet.name}" class="result-image" onerror="this.src='images/placeholder.jpg'">
                 <div class="result-info">
                     <h3 class="result-title">${this.highlightText(planet.name, query)}</h3>
                     <p class="result-description">${this.highlightText(planet.description, query)}</p>
@@ -166,12 +92,12 @@ class SearchEngine {
     }
 
     displayAllPlanets() {
-        this.displayResults(planets);
+        const all = window.planetData ? window.planetData.getAllPlanets() : this.getLocalPlanets();
+        this.displayResults(all, '');
     }
 
     highlightText(text, query) {
         if (!query.trim()) return text;
-        
         const regex = new RegExp(`(${query})`, 'gi');
         return text.replace(regex, '<mark style="background: #ffd700; color: #000;">$1</mark>');
     }
