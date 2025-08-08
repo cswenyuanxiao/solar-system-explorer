@@ -563,7 +563,6 @@ if (typeof window !== 'undefined') window.ensureLanguageManagerInitialized = ens
     } catch (err) {
         console.warn('i18n: failed to run translatePage on DOMContentLoaded', err);
     }
-});
 
 // Also ensure translation runs on full load
 window.addEventListener('load', () => {
