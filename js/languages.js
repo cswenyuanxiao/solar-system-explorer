@@ -696,6 +696,32 @@ async function autoTranslatePageText(targetLang) {
             }
         });
     }
+
+    // Special handling: translate values after labels in info cards (e.g., <li><strong>Label:</strong> Value)</n+    try {
+        const valueTextNodes = [];
+        const valueOriginals = [];
+        document.querySelectorAll('.info-card li').forEach(li => {
+            // Find text nodes that are not inside <strong>
+            const childNodes = Array.from(li.childNodes);
+            childNodes.forEach(n => {
+                if (n.nodeType === Node.TEXT_NODE) {
+                    const t = normalizeTextContent(n.nodeValue);
+                    if (/[A-Za-z]/.test(t)) {
+                        valueTextNodes.push(n);
+                        valueOriginals.push(t);
+                    }
+                }
+            });
+        });
+        for (let i = 0; i < valueOriginals.length; i += chunkSize) {
+            const slice = valueOriginals.slice(i, i + chunkSize);
+            const translated = await translateBatchAuto(slice, 'en', targetLang);
+            translated.forEach((tr, idx) => {
+                const node = valueTextNodes[i + idx];
+                if (node && typeof tr === 'string' && tr.trim()) node.nodeValue = ' ' + tr; // keep leading space
+            });
+        }
+    } catch (e) { /* ignore */ }
 }
 
 // Expose global setter so header dropdown can invoke
