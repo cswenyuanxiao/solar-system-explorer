@@ -20,15 +20,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </a>
 
-            <nav class="nav-links" aria-label="Primary">
-                <a href="charts.html" class="nav-link" data-i18n="charts">Charts</a>
-                <a href="education.html" class="nav-link" data-i18n="education">Education</a>
-                <a href="api.html" class="nav-link" data-i18n="api">NASA API</a>
-                <a href="blog.html" class="nav-link">Blog</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="contact.html" class="nav-link">Contact</a>
-                <a href="credits.html" class="nav-link">Credits</a>
-                <a href="faq.html" class="nav-link">FAQ</a>
+            <nav class="nav-links mega-nav" aria-label="Primary">
+                <div class="mega-item">
+                  <button class="mega-toggle" aria-expanded="false" aria-controls="mega-explore">Explore ▾</button>
+                  <div id="mega-explore" class="mega-panel" hidden>
+                    <div class="mega-grid">
+                      <section class="mega-section">
+                        <h4 class="mega-title">Planets</h4>
+                        <a class="mega-link" href="mercury.html">Mercury</a>
+                        <a class="mega-link" href="venus.html">Venus</a>
+                        <a class="mega-link" href="earth.html">Earth</a>
+                        <a class="mega-link" href="mars.html">Mars</a>
+                        <a class="mega-link" href="jupiter.html">Jupiter</a>
+                        <a class="mega-link" href="saturn.html">Saturn</a>
+                        <a class="mega-link" href="uranus.html">Uranus</a>
+                        <a class="mega-link" href="neptune.html">Neptune</a>
+                        <a class="mega-link" href="sun.html">Sun</a>
+                      </section>
+
+                      <section class="mega-section">
+                        <h4 class="mega-title">Tools</h4>
+                        <a class="mega-link" href="3d-simulator.html">3D Simulator</a>
+                        <a class="mega-link" href="search.html">Search</a>
+                        <a class="mega-link" href="favorites.html">Favorites</a>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mega-item">
+                  <button class="mega-toggle" aria-expanded="false" aria-controls="mega-learn">Learn ▾</button>
+                  <div id="mega-learn" class="mega-panel" hidden>
+                    <div class="mega-grid">
+                      <section class="mega-section">
+                        <h4 class="mega-title">Learning</h4>
+                        <a class="mega-link" href="education.html">Education</a>
+                        <a class="mega-link" href="charts.html">Charts</a>
+                        <a class="mega-link" href="advanced-charts.html">Advanced Charts</a>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mega-item">
+                  <button class="mega-toggle" aria-expanded="false" aria-controls="mega-data">Data ▾</button>
+                  <div id="mega-data" class="mega-panel" hidden>
+                    <div class="mega-grid">
+                      <section class="mega-section">
+                        <h4 class="mega-title">NASA APIs</h4>
+                        <a class="mega-link" href="api.html">NASA API Console</a>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mega-item">
+                  <button class="mega-toggle" aria-expanded="false" aria-controls="mega-about">About ▾</button>
+                  <div id="mega-about" class="mega-panel" hidden>
+                    <div class="mega-grid">
+                      <section class="mega-section">
+                        <h4 class="mega-title">Project</h4>
+                        <a class="mega-link" href="about.html">About</a>
+                        <a class="mega-link" href="blog.html">Blog</a>
+                        <a class="mega-link" href="credits.html">Credits</a>
+                        <a class="mega-link" href="faq.html">FAQ</a>
+                        <a class="mega-link" href="contact.html">Contact</a>
+                      </section>
+                    </div>
+                  </div>
+                </div>
             </nav>
 
             <div class="header__search modern-search">
@@ -219,6 +279,43 @@ document.addEventListener('DOMContentLoaded', () => {
             container?.classList.toggle('is-open');
         });
     }
+
+    // Mega menu behavior (desktop overlay style)
+    const toggles = Array.from(document.querySelectorAll('.mega-toggle'));
+    function closeAllMega(exceptId) {
+        toggles.forEach(btn => {
+            const targetId = btn.getAttribute('aria-controls');
+            if (!targetId) return;
+            if (targetId === exceptId) return;
+            const panel = document.getElementById(targetId);
+            if (panel && !panel.hidden) panel.hidden = true;
+            btn.setAttribute('aria-expanded', 'false');
+        });
+    }
+    toggles.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = btn.getAttribute('aria-controls');
+            const panel = id ? document.getElementById(id) : null;
+            if (!panel) return;
+            const isOpen = btn.getAttribute('aria-expanded') === 'true';
+            if (isOpen) {
+                btn.setAttribute('aria-expanded', 'false');
+                panel.hidden = true;
+            } else {
+                closeAllMega(id);
+                btn.setAttribute('aria-expanded', 'true');
+                panel.hidden = false;
+            }
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.mega-item') || e.target.closest('.menu-toggle')) return;
+        closeAllMega();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllMega();
+    });
 
     // Re-init dependencies
     addNavigationHandlers();

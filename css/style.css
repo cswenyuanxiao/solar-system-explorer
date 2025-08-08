@@ -151,6 +151,18 @@ body {
 .nav-link { padding: 0.5rem 0.8rem; border-radius: 10px; text-decoration: none; color: var(--text-secondary); border: 1px solid transparent; }
 .nav-link:hover { color: var(--text-primary); border-color: var(--border-secondary); background: rgba(255,255,255,0.04); }
 
+/* Mega menu (NASA-style overlay) */
+.mega-nav { position: relative; gap: var(--space-md); }
+.mega-item { position: relative; }
+.mega-toggle { background: transparent; color: var(--text-primary); border: 1px solid transparent; border-radius: 10px; padding: .5rem .8rem; cursor: pointer; }
+.mega-toggle:hover, .mega-toggle[aria-expanded="true"] { background: rgba(255,255,255,0.06); border-color: var(--border-secondary); }
+.mega-panel { position: absolute; left: 0; top: calc(100% + 10px); min-width: 520px; background: var(--bg-overlay); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: var(--space-lg); z-index: var(--z-dropdown); }
+.mega-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: var(--space-xl); }
+.mega-section { min-width: 220px; }
+.mega-title { margin: 0 0 var(--space-sm); color: var(--text-primary); font-weight: 700; }
+.mega-link { display: block; color: var(--text-secondary); text-decoration: none; padding: .35rem 0; border-radius: 6px; }
+.mega-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+
 /* Keep search at a pleasant width on very wide screens */
 .header__search { max-width: 640px; width: 100%; }
 
@@ -941,6 +953,10 @@ body {
   .nav-links { display: none; }
   .modern-header.is-open .nav-links { display: grid; grid-template-columns: 1fr; gap: var(--space-sm); position: absolute; top: 100%; left: 0; right: 0; padding: var(--space-md) var(--space-xl); background: rgba(20,20,28,.96); border-bottom: 1px solid rgba(255,255,255,0.06); }
   .modern-header.is-open .header__search { margin-top: var(--space-sm); }
+  .modern-header.is-open .mega-item { width: 100%; }
+  .modern-header.is-open .mega-toggle { width: 100%; text-align: left; }
+  .modern-header.is-open .mega-panel { position: static; min-width: 0; background: transparent; border: none; border-radius: 0; box-shadow: none; padding: 0 var(--space-md) var(--space-md); }
+  .modern-header.is-open .mega-grid { grid-template-columns: 1fr; gap: var(--space-sm); }
 }
 
 .search-result-card {
