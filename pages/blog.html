@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - Solar System Explorer</title>
+  <link rel="stylesheet" href="../css/style.css?v=20250109">
+</head>
+<body>
+  <header class="header"></header>
+
+  <main class="main" id="blogRoot">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a class="breadcrumbs__link" href="index.html">Home</a>
+      <span class="breadcrumbs__sep">/</span>
+      <span class="breadcrumbs__current">Blog</span>
+    </nav>
+
+    <section class="education-section" style="display:block">
+      <h2 class="section__title">News & Updates</h2>
+      <p class="text-muted">Latest releases, astronomy insights, and feature highlights.</p>
+
+      <div id="blogList" class="content-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-md)"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Solar System Explorer. All images and data from NASA.</p>
+  </footer>
+
+  <script src="../js/languages.js?v=20250109"></script>
+  <script src="../js/shared-header.js?v=20250109"></script>
+  <script src="../js/theme-manager.js?v=20250109"></script>
+  <script>
+  const BLOG_POSTS = [
+    { title: 'Introducing Global Search', date: '2025-01-09', excerpt: 'Search visible text on any page with throttled, fast highlighting.', link: 'search.html' },
+    { title: 'Education Page Refresh', date: '2025-01-08', excerpt: 'Single-UX learning tracks with inline quizzes and progress.', link: 'education.html' },
+    { title: 'Performance Improvements', date: '2025-01-07', excerpt: 'Defer heavy work, limit node processing, and optimize theme + i18n.', link: 'index.html' }
+  ];
+  function createPostCard(post){
+    const el = document.createElement('article');
+    el.className = 'featured-card';
+    el.innerHTML = `
+      <div class="featured-card__content">
+        <h3 class="featured-card__title">${post.title}</h3>
+        <div class="featured-card__meta">${post.date}</div>
+        <p class="featured-card__text">${post.excerpt}</p>
+        <a class="btn btn--primary" href="${post.link}">Read more</a>
+      </div>
+    `;
+    return el;
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const list = document.getElementById('blogList');
+    BLOG_POSTS.forEach(p => list.appendChild(createPostCard(p)));
+  });
+  </script>
+</body>
+</html>
+
+

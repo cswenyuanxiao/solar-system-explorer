@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="charts.html" class="nav-link" data-i18n="charts">Charts</a>
                 <a href="education.html" class="nav-link" data-i18n="education">Education</a>
                 <a href="api.html" class="nav-link" data-i18n="api">NASA API</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="credits.html" class="nav-link">Credits</a>
                 <a href="faq.html" class="nav-link">FAQ</a>
             </nav>
 
