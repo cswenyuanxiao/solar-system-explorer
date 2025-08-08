@@ -54,14 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     headerElement.innerHTML = headerHTML;
 
-    // Ensure global search is loaded on every page
+    // Ensure global search is loaded on every page (defer to idle to reduce TTI)
     try {
         const alreadyLoaded = Array.from(document.scripts).some(s => (s.src || '').includes('/js/search.js'));
         if (!alreadyLoaded) {
-            const s = document.createElement('script');
-            s.src = rootPath + 'js/search.js?v=20250109';
-            s.defer = true;
-            document.body.appendChild(s);
+            const loader = () => {
+                const s = document.createElement('script');
+                s.src = rootPath + 'js/search.js?v=20250109';
+                s.defer = true;
+                document.body.appendChild(s);
+            };
+            if ('requestIdleCallback' in window) requestIdleCallback(loader, { timeout: 1500 });
+            else setTimeout(loader, 800);
         }
     } catch (e) { /* noop */ }
 

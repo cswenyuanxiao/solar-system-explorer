@@ -23,8 +23,12 @@ class GlobalSearch {
       this.hide();
       return;
     }
-    const items = this.scanVisibleText(q);
-    this.render(items, q);
+    // Debounce heavy scan to avoid jank while typing fast
+    clearTimeout(this._debounce);
+    this._debounce = setTimeout(() => {
+      const items = this.scanVisibleText(q);
+      this.render(items, q);
+    }, 120);
   }
 
   scanVisibleText(query) {
@@ -44,12 +48,13 @@ class GlobalSearch {
       }
     });
     let node;
+    const MAX = 400;
     while ((node = walker.nextNode())) {
       const el = node.parentElement;
       const snippet = this.contextSnippet(node.nodeValue, query, 60);
       const anchor = this.buildAnchor(el);
       results.push({ text: snippet, element: el, anchor });
-      if (results.length >= 200) break;
+      if (results.length >= MAX) break;
     }
     const seen = new Set();
     return results.filter(r => {
