@@ -51,9 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let langMenuEl = null;
     function buildLanguageMenu() {
         if (langMenuEl) return langMenuEl;
-        // Only show languages for which we have TRANSLATIONS (avoid showing incomplete languages)
-        const available = (typeof TRANSLATIONS !== 'undefined') ? Object.keys(TRANSLATIONS) : ['en', 'zh'];
-        const langsMeta = (typeof LANGUAGES !== 'undefined') ? LANGUAGES : { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
+        // Ensure i18n is initialized so window.LANGUAGES / TRANSLATIONS are available
+        if (typeof window.ensureLanguageManagerInitialized === 'function') {
+            try { window.ensureLanguageManagerInitialized(); } catch (e) { /* ignore */ }
+        }
+        // Build a union of available language codes from global sources
+        const availableSet = new Set();
+        try {
+            if (window.LANGUAGES) Object.keys(window.LANGUAGES).forEach(k => availableSet.add(k));
+        } catch (e) {}
+        try {
+            if (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS) Object.keys(TRANSLATIONS).forEach(k => availableSet.add(k));
+        } catch (e) {}
+        // Ensure at least en and zh are present
+        ['en', 'zh'].forEach(k => availableSet.add(k));
+        const available = Array.from(availableSet);
+        const langsMeta = (window.LANGUAGES || (typeof LANGUAGES !== 'undefined' ? LANGUAGES : null) ) || { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
         langMenuEl = document.createElement('div');
         langMenuEl.className = 'lang-menu';
         langMenuEl.setAttribute('role', 'menu');
@@ -68,6 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('.lang-menu__item');
             if (!btn) return;
             const lang = btn.getAttribute('data-lang');
+            // ensure language manager exists before invoking
+            if (typeof window.ensureLanguageManagerInitialized === 'function') {
+                try { window.ensureLanguageManagerInitialized(); } catch (err) { /* ignore */ }
+            }
             if (typeof window.setLanguage === 'function') {
                 window.setLanguage(lang);
             } else if (window.languageManager) {
@@ -86,6 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMenu(button) {
+        // Ensure i18n ready before building/showing menu
+        if (typeof window.ensureLanguageManagerInitialized === 'function') {
+            try { window.ensureLanguageManagerInitialized(); } catch (e) { /* ignore */ }
+        }
         buildLanguageMenu();
         positionMenu(button);
         langMenuEl.classList.add('is-open');
