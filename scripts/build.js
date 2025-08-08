@@ -90,7 +90,7 @@ async function build() {
         console.log(`   ✨ Created redirect index.html -> pages/index.html`);
     }
     
-    const rootFiles = ['robots.txt', 'sitemap.xml'];
+    const rootFiles = ['robots.txt', 'sitemap.xml', 'manifest.json', 'sw.js'];
     for (const file of rootFiles) {
         const sourcePath = path.join(__dirname, '..', file);
         if (await fs.pathExists(sourcePath)) {
