@@ -300,12 +300,16 @@ function runtimeTranslate(key, targetLang) {
 
 // Expose global setter so header dropdown can invoke
 window.setLanguage = function(lang) {
+    // If translations for the requested language are not present, pick a fallback
+    const available = Object.keys(TRANSLATIONS || {});
+    const target = available.includes(lang) ? lang : (available.includes('zh') ? 'zh' : (available.includes('en') ? 'en' : available[0]));
+    console.debug('i18n: window.setLanguage requested', lang, '-> using', target);
     if (window.languageManager) {
-        window.languageManager.setLanguage(lang);
+        window.languageManager.setLanguage(target);
     } else {
         // Defer until initialized
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => window.languageManager && window.languageManager.setLanguage(lang), 100);
+            setTimeout(() => window.languageManager && window.languageManager.setLanguage(target), 100);
         });
     }
 };
