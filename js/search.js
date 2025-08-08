@@ -1,11 +1,135 @@
-// Search functionality for Solar System Explorer
-// Uses unified planet data source to avoid duplication
+// Global header search over visible DOM + standalone page fallback
 
+class GlobalSearch {
+  constructor(inputEl, resultsEl) {
+    this.inputEl = inputEl;
+    this.resultsEl = resultsEl;
+    this.minLen = 2;
+    this.maxItems = 15;
+    this.bind();
+  }
+
+  bind() {
+    if (!this.inputEl) return;
+    this.inputEl.addEventListener('input', (e) => this.search(e.target.value));
+    const btn = document.getElementById('mainSearchButton');
+    if (btn) btn.addEventListener('click', () => this.search(this.inputEl.value));
+    document.addEventListener('languageChanged', () => this.search(this.inputEl.value));
+  }
+
+  search(query) {
+    const q = (query || '').trim();
+    if (!q || q.length < this.minLen) {
+      this.hide();
+      return;
+    }
+    const items = this.scanVisibleText(q);
+    this.render(items, q);
+  }
+
+  scanVisibleText(query) {
+    const results = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        const tag = parent.tagName;
+        if (/(SCRIPT|STYLE|NOSCRIPT|IFRAME|CANVAS)/.test(tag)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest('#mainSearchResults')) return NodeFilter.FILTER_REJECT;
+        const style = parent.ownerDocument.defaultView.getComputedStyle(parent);
+        if (style && (style.visibility === 'hidden' || style.display === 'none')) return NodeFilter.FILTER_REJECT;
+        const text = node.nodeValue || '';
+        if (!text.trim()) return NodeFilter.FILTER_REJECT;
+        return text.toLowerCase().includes(query.toLowerCase()) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    let node;
+    while ((node = walker.nextNode())) {
+      const el = node.parentElement;
+      const snippet = this.contextSnippet(node.nodeValue, query, 60);
+      const anchor = this.buildAnchor(el);
+      results.push({ text: snippet, element: el, anchor });
+      if (results.length >= 200) break;
+    }
+    const seen = new Set();
+    return results.filter(r => {
+      const key = (r.anchor || '') + '|' + r.text;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, this.maxItems);
+  }
+
+  buildAnchor(el) {
+    const idEl = el.closest('[id]');
+    if (idEl && idEl.id) return '#' + idEl.id;
+    return '';
+  }
+
+  contextSnippet(text, query, span = 50) {
+    const t = text || '';
+    const idx = t.toLowerCase().indexOf(query.toLowerCase());
+    if (idx < 0) return t.slice(0, span);
+    const start = Math.max(0, idx - span);
+    const end = Math.min(t.length, idx + query.length + span);
+    const pre = start > 0 ? '…' : '';
+    const post = end < t.length ? '…' : '';
+    const raw = t.slice(start, end);
+    return pre + this.highlight(raw, query) + post;
+  }
+
+  highlight(text, query) {
+    const re = new RegExp('(' + this.escape(query) + ')', 'ig');
+    return (text || '').replace(re, '<mark style="background:#ffd700;color:#000">$1</mark>');
+  }
+
+  escape(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  render(items) {
+    if (!this.resultsEl) return;
+    if (!items.length) { this.hide(); return; }
+    const html = items.map((it, i) => `<a href="${it.anchor || 'javascript:void(0)'}" class="search-result-item" data-index="${i}">${it.text}</a>`).join('');
+    this.resultsEl.innerHTML = html;
+    this.resultsEl.style.display = 'block';
+    this.resultsEl.querySelectorAll('a.search-result-item').forEach((a, idx) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const item = items[idx];
+        if (item.element && item.element.scrollIntoView) {
+          item.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          this.flash(item.element);
+        }
+      });
+    });
+  }
+
+  flash(el) {
+    const original = el.style.outline;
+    el.style.outline = '2px solid var(--color-primary)';
+    setTimeout(() => { el.style.outline = original || 'none'; }, 1200);
+  }
+
+  hide() {
+    if (this.resultsEl) { this.resultsEl.style.display = 'none'; this.resultsEl.innerHTML = ''; }
+  }
+}
+
+// Header global search bootstrap
+(function initHeaderSearch(){
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('mainSearchInput');
+    const results = document.getElementById('mainSearchResults');
+    if (input && results) new GlobalSearch(input, results);
+  });
+})();
+
+// Standalone search page (planet dataset experience)
 class SearchEngine {
     constructor() {
         this.searchInput = document.getElementById('searchInput');
         this.searchButton = document.getElementById('searchButton');
         this.searchResults = document.getElementById('searchResults');
+        if (!this.searchInput || !this.searchResults) return;
         
         this.initializeEventListeners();
         this.displayAllPlanets();
@@ -22,21 +146,13 @@ class SearchEngine {
 
     initializeEventListeners() {
         // Search on input change
-        this.searchInput.addEventListener('input', (e) => {
-            this.performSearch(e.target.value);
-        });
+        this.searchInput.addEventListener('input', (e) => { this.performSearch(e.target.value); });
 
         // Search on button click
-        this.searchButton.addEventListener('click', () => {
-            this.performSearch(this.searchInput.value);
-        });
+        if (this.searchButton) this.searchButton.addEventListener('click', () => { this.performSearch(this.searchInput.value); });
 
         // Search on Enter key
-        this.searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.performSearch(this.searchInput.value);
-            }
-        });
+        this.searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.performSearch(this.searchInput.value); });
     }
 
     performSearch(query) {
@@ -53,13 +169,12 @@ class SearchEngine {
         // Use unified planet data if available, otherwise fall back to local data
         const planets = window.planetData ? window.planetData.getAllPlanets() : this.getLocalPlanets();
         const searchTerm = query.toLowerCase().trim();
-        
-        return planets.filter(planet => {
-            if (planet.name.toLowerCase().includes(searchTerm) ||
-                planet.displayName.toLowerCase().includes(searchTerm)) return true;
-            if (planet.description.toLowerCase().includes(searchTerm)) return true;
-            return planet.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm));
-        });
+        return planets.filter(planet =>
+            (planet.name && planet.name.toLowerCase().includes(searchTerm)) ||
+            (planet.displayName && planet.displayName.toLowerCase().includes(searchTerm)) ||
+            (planet.description && planet.description.toLowerCase().includes(searchTerm)) ||
+            (Array.isArray(planet.keywords) && planet.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm)))
+        );
     }
 
     // Fallback local planet data (for backward compatibility)
@@ -180,47 +295,11 @@ class SearchEngine {
     }
 }
 
-// Initialize search when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    new SearchEngine();
-});
-
-// Add search functionality to main page
-function addSearchToMainPage() {
-    const header = document.querySelector('header .header-content');
-    if (header && !document.querySelector('.main-search')) {
-        const searchLink = document.createElement('a');
-        searchLink.href = 'search.html';
-        searchLink.className = 'main-search';
-        searchLink.innerHTML = '🔍 Search Planets';
-        searchLink.style.cssText = `
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        `;
-        
-        searchLink.addEventListener('mouseenter', () => {
-            searchLink.style.background = 'rgba(255, 215, 0, 0.3)';
-            searchLink.style.transform = 'scale(1.05)';
-        });
-        
-        searchLink.addEventListener('mouseleave', () => {
-            searchLink.style.background = 'rgba(255, 215, 0, 0.2)';
-            searchLink.style.transform = 'scale(1)';
-        });
-        
-        header.style.position = 'relative';
-        header.appendChild(searchLink);
-    }
-}
-
-// Add search to main page if we're on it
-if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
-    document.addEventListener('DOMContentLoaded', addSearchToMainPage);
-}
+// Initialize SearchEngine only on standalone page
+(function initStandaloneSearch(){
+  document.addEventListener('DOMContentLoaded', () => {
+    const pageInput = document.getElementById('searchInput');
+    const pageResults = document.getElementById('searchResults');
+    if (pageInput && pageResults) new SearchEngine();
+  });
+})();

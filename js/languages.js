@@ -741,6 +741,77 @@ async function autoTranslatePageText(targetLang) {
             });
         }
     } catch (e) { /* ignore */ }
+
+    // Translate common attributes globally (placeholder, title, aria-label, alt, value for inputs/buttons)
+    try {
+        await autoTranslateAttributes(targetLang);
+    } catch (e) {
+        console.warn('i18n: autoTranslateAttributes failed', e);
+    }
+}
+
+// Translate common attributes across the whole document using batch requests
+async function autoTranslateAttributes(targetLang) {
+    const ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
+    const VALUE_TAGS = new Set(['BUTTON', 'INPUT']);
+
+    // Collect elements and texts
+    const elements = [];
+    const texts = [];
+    const keys = [];
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, null);
+    let node;
+    while ((node = walker.nextNode())) {
+        // Translate .value for buttons and inputs that show text to users
+        if (VALUE_TAGS.has(node.tagName)) {
+            const type = (node.getAttribute('type') || '').toLowerCase();
+            const isTextButton = node.tagName === 'BUTTON' || ['button', 'submit', 'reset'].includes(type);
+            if (isTextButton) {
+                const val = node.tagName === 'BUTTON' ? (node.textContent || '') : (node.value || '');
+                const norm = normalizeTextContent(val);
+                if (/[A-Za-z]/.test(norm)) {
+                    const k = `value`;
+                    if (!node.getAttribute('data-i18n-auto-en-value')) node.setAttribute('data-i18n-auto-en-value', val);
+                    elements.push({ el: node, attr: k, isButton: node.tagName === 'BUTTON' });
+                    texts.push(norm);
+                    keys.push(k);
+                }
+            }
+        }
+        // Translate common attributes
+        for (const attr of ATTRS) {
+            const raw = node.getAttribute(attr);
+            if (!raw) continue;
+            const norm = normalizeTextContent(raw);
+            if (!/[A-Za-z]/.test(norm)) continue;
+            const dataKey = `data-i18n-auto-en-${attr}`;
+            if (!node.getAttribute(dataKey)) node.setAttribute(dataKey, raw);
+            elements.push({ el: node, attr });
+            texts.push(norm);
+            keys.push(attr);
+        }
+    }
+
+    if (texts.length === 0) return;
+
+    // Batch translate
+    const chunkSize = 40;
+    for (let i = 0; i < texts.length; i += chunkSize) {
+        const slice = texts.slice(i, i + chunkSize);
+        const translated = await translateBatchAuto(slice, 'en', targetLang);
+        translated.forEach((tr, idx) => {
+            const entry = elements[i + idx];
+            if (!entry) return;
+            if (typeof tr !== 'string' || !tr.trim()) return;
+            if (entry.attr === 'value') {
+                if (entry.isButton) entry.el.textContent = tr;
+                else entry.el.value = tr;
+            } else {
+                entry.el.setAttribute(entry.attr, tr);
+            }
+        });
+    }
 }
 
 // Expose global setter so header dropdown can invoke
