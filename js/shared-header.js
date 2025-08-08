@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="api.html" class="btn" data-i18n="api">NASA API</a>
                 <button id="favoritesButton" class="btn btn--favorites">
                     <span class="btn__icon">❤️</span>
-                    <span class="btn__text">Favorites</span>
+                    <span class="btn__text" data-i18n="favorites">Favorites</span>
                     <span id="favoritesCount" class="btn__count">(0)</span>
                 </button>
                 <button id="language-switcher" class="btn btn--language" aria-haspopup="true" aria-expanded="false">

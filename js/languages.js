@@ -294,7 +294,10 @@ const TRANSLATIONS = {
         'subtitle': 'Gráficos interactivos y comparaciones',
         'hero_title': 'EXPLORA NUESTRO SISTEMA SOLAR',
         'hero_subtitle': 'Viaja por los planetas, lunas y cuerpos celestes de nuestro vecindario cósmico. Descubre las últimas misiones de la NASA y hallazgos científicos.',
-        'featured_title': 'MISIONES DESTACADAS'
+        'featured_title': 'MISIONES DESTACADAS',
+        // Header buttons
+        'favorites': 'FAVORITOS',
+        'dark_mode': 'MODO OSCURO'
     },
     fr: {
         'home': 'Accueil',
@@ -309,7 +312,9 @@ const TRANSLATIONS = {
         'subtitle': 'Graphiques et comparaisons interactifs',
         'hero_title': 'EXPLOREZ NOTRE SYSTÈME SOLAIRE',
         'hero_subtitle': 'Parcourez les planètes, les lunes et les corps célestes de notre voisinage cosmique. Découvrez les dernières missions de la NASA et découvertes scientifiques.',
-        'featured_title': 'MISSIONS À LA UNE'
+        'featured_title': 'MISSIONS À LA UNE',
+        'favorites': 'FAVORIS',
+        'dark_mode': 'MODE SOMBRE'
     },
     ja: {
         'home': 'ホーム',
@@ -324,7 +329,9 @@ const TRANSLATIONS = {
         'subtitle': 'インタラクティブなグラフと比較',
         'hero_title': '太陽系を探検しよう',
         'hero_subtitle': '惑星や月などの天体を旅し、最新のNASAミッションと科学的発見を見つけましょう。',
-        'featured_title': '注目のミッション'
+        'featured_title': '注目のミッション',
+        'favorites': 'お気に入り',
+        'dark_mode': 'ダークモード'
     }
 };
 
