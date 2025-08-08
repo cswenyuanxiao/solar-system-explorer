@@ -319,7 +319,7 @@ if (langBtn) {
             };
         }
         // Create a local alias for backward compatibility in this debug page
-        const LANGUAGES = window.LANGUAGES;
+        const debugLANGUAGES = window.LANGUAGES;
         
         let currentLanguage = 'en';
         
@@ -331,8 +331,8 @@ if (langBtn) {
             currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
             
             // 更新按钮显示
-            this.querySelector('#test-flag').textContent = LANGUAGES[currentLanguage].flag;
-            this.querySelector('#test-lang').textContent = LANGUAGES[currentLanguage].name;
+            this.querySelector('#test-flag').textContent = debugLANGUAGES[currentLanguage].flag;
+            this.querySelector('#test-lang').textContent = debugLANGUAGES[currentLanguage].name;
             
             // 更新测试结果
             updateTestResults();
