@@ -2,6 +2,7 @@
 
 (function () {
   const STORAGE_KEY = 'edu.progress.v2';
+  const DAILY_KEY = 'edu.daily.v1';
 
   function getProgress() {
     try {
@@ -224,7 +225,161 @@
       // Optional: auto-open last track
       // openTrack(progress.lastTrack);
     }
+    renderEduHub();
   });
+})();
+
+// External knowledge and API integrations for long-term learning
+(function(){
+  if (typeof window === 'undefined') return;
+
+  function $(sel, root=document){ return root.querySelector(sel); }
+  function el(tag, className, html){ const e=document.createElement(tag); if(className) e.className=className; if(html!=null) e.innerHTML=html; return e; }
+  function getLang(){ try{ return (window.languageManager && window.languageManager.currentLanguage) || 'en'; } catch(_) { return 'en'; } }
+  function getNasaKey(){ try { return localStorage.getItem('nasa_api_key') || 'DEMO_KEY'; } catch(_) { return 'DEMO_KEY'; } }
+
+  const TITLE_MAP_ZH = { Sun:'太阳', Mercury:'水星', Venus:'金星', Earth:'地球', Mars:'火星', Jupiter:'木星', Saturn:'土星', Uranus:'天王星', Neptune:'海王星', Asteroid:'小行星', Comet:'彗星' };
+
+  async function fetchWikiSummary(title){
+    const lang = getLang().startsWith('zh') ? 'zh' : 'en';
+    const subject = lang==='zh' && TITLE_MAP_ZH[title] ? TITLE_MAP_ZH[title] : title;
+    const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(subject)}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('wiki fail');
+    const data = await resp.json();
+    return { title: data.title || subject, extract: data.extract || '', url: data.content_urls?.desktop?.page || `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(subject)}`, thumb: data.thumbnail?.source || '' };
+  }
+
+  async function fetchNasaMedia(query, page=1){
+    const url = `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page=${page}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const items = (data?.collection?.items||[]).slice(0, 12).map(it=>({
+      id: it.data?.[0]?.nasa_id||'',
+      title: it.data?.[0]?.title||'NASA Media',
+      thumb: it.links?.[0]?.href||'',
+      href: it.data?.[0]?.nasa_id ? `https://images.nasa.gov/details-${encodeURIComponent(it.data[0].nasa_id)}` : (it.links?.[0]?.href||'#')
+    }));
+    return items;
+  }
+
+  function getDaily(){
+    try { return JSON.parse(localStorage.getItem(DAILY_KEY)) || { date:'', streak:0, solved:false }; } catch(_) { return { date:'', streak:0, solved:false }; }
+  }
+  function setDaily(v){ try { localStorage.setItem(DAILY_KEY, JSON.stringify(v)); } catch(_){} }
+
+  const QUIZ_BANK = [
+    {q:'Which planet has the most moons?', options:['Earth','Mars','Jupiter','Mercury'], a:2},
+    {q:'What is the main composition of the Sun?', options:['Iron','Hydrogen','Carbon Dioxide','Water'], a:1},
+    {q:'Which planet is known for its prominent rings?', options:['Neptune','Saturn','Venus','Mars'], a:1},
+    {q:'How many terrestrial planets are there?', options:['2','3','4','5'], a:2},
+    {q:'What force keeps planets in their orbits?', options:['Magnetism','Friction','Gravity','Pressure'], a:2},
+  ];
+
+  function pickDailyQuestion(){
+    const today = new Date().toISOString().slice(0,10);
+    const cur = getDaily();
+    if (cur.date !== today) { cur.date = today; cur.solved = false; setDaily(cur); }
+    const idx = Math.abs(hashCode(today)) % QUIZ_BANK.length;
+    return { meta: cur, idx, item: QUIZ_BANK[idx] };
+  }
+  function hashCode(str){ let h=0; for(let i=0;i<str.length;i++){ h = ((h<<5)-h) + str.charCodeAt(i); h|=0; } return h; }
+
+  async function renderKnowledgeCards(root){
+    const topics = ['Sun','Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune'];
+    const grid = el('div','card-grid');
+    root.appendChild(grid);
+    for(const t of topics){
+      try{
+        const data = await fetchWikiSummary(t);
+        const card = el('a','card','');
+        card.href = data.url; card.target = '_blank'; card.rel='noopener';
+        card.innerHTML = `
+          ${data.thumb?`<img class="card__image" src="${data.thumb}" alt="${data.title}">`:''}
+          <div class="card__content">
+            <h3 class="card__title">${data.title}</h3>
+            <p class="card__description">${(data.extract||'').slice(0,180)}...</p>
+            <span class="card__link">Read more</span>
+          </div>`;
+        grid.appendChild(card);
+      } catch(_) {}
+    }
+  }
+
+  async function renderMediaShelf(root){
+    const sec = el('div','', '');
+    const list = el('div','search-results','');
+    sec.appendChild(list);
+    root.appendChild(sec);
+    const items = await fetchNasaMedia('solar system education');
+    list.innerHTML = items.map(it=>`
+      <a class="search-result-card" href="${it.href}" target="_blank" rel="noopener">
+        ${it.thumb?`<img class="result-image" src="${it.thumb}" alt="${it.title}">`:''}
+        <div class="result-info"><div class="result-title">${it.title}</div></div>
+      </a>`).join('');
+  }
+
+  function renderDailyQuiz(root){
+    const { meta, idx, item } = pickDailyQuestion();
+    const box = el('div','info-card','');
+    box.innerHTML = `
+      <h3>Daily Quiz</h3>
+      <p style="margin:.25rem 0 .5rem">${item.q}</p>
+      ${item.options.map((op,i)=>`<label style="display:block;margin:.25rem 0"><input name="dq" type="radio" value="${i}"> ${op}</label>`).join('')}
+      <button id="dqSubmit" class="btn btn--primary" style="margin-top:.5rem" ${meta.solved?'disabled':''}>${meta.solved?'Completed':'Submit'}</button>
+      <div id="dqFb" class="text-muted" style="margin-top:.5rem"></div>
+    `;
+    root.appendChild(box);
+    box.querySelector('#dqSubmit').addEventListener('click',()=>{
+      const checked = box.querySelector('input[name="dq"]:checked');
+      const fb = box.querySelector('#dqFb');
+      if(!checked){ fb.textContent = 'Please select an answer.'; return; }
+      const isCorrect = Number(checked.value) === item.a;
+      const cur = getDaily();
+      if (!cur.solved) {
+        cur.solved = true; cur.streak = isCorrect ? (cur.streak + 1) : 0; setDaily(cur);
+      }
+      fb.textContent = isCorrect ? `Correct! Streak: ${getDaily().streak}` : 'Not correct today. Try again tomorrow!';
+      box.querySelector('#dqSubmit').disabled = true;
+    });
+  }
+
+  function renderExternalLinks(root){
+    const links = [
+      { title:'NASA Educator Resources', url:'https://www.kennedyspacecenter.com/zh/camps-and-education/information-for-educators/educator-resources/', desc:'KSC 教育者资源与活动指南' },
+      { title:'Wikibooks', url:'https://zh.wikipedia.org/wiki/%E7%B6%AD%E5%9F%BA%E6%95%99%E7%A7%91%E6%9B%B8', desc:'自由教科书平台，适合作为参考读物' },
+      { title:'中国科普博览', url:'https://www.5iehome.cc/archives/children-education-website-summary.html', desc:'中文科普教育资源汇总' },
+      { title:'中山大学在线课程目录', url:'https://lms.sysu.edu.cn/course/index.php?categoryid=40', desc:'可参考其课程结构设计学习路径' },
+      { title:'CNKI 学术资源', url:'https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E7%9F%A5%E8%AF%86%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%B7%A5%E7%A8%8B', desc:'用于查阅相关研究与论文综述' }
+    ];
+    const box = el('div','info-card','');
+    box.innerHTML = `<h3>External Learning Resources</h3>` +
+      links.map(l=>`<div style="margin:.25rem 0"><a href="${l.url}" target="_blank" rel="noopener">${l.title}</a> · <span class="text-muted">${l.desc}</span></div>`).join('');
+    root.appendChild(box);
+  }
+
+  window.renderEduHub = async function(){
+    const mount = document.getElementById('eduTracks')?.parentElement || document.querySelector('.main');
+    if (!mount) return;
+    const hub = el('section','education-section','');
+    hub.id = 'eduHub';
+    hub.innerHTML = '<h2 class="section__title">Knowledge & Practice Hub</h2>';
+    mount.appendChild(hub);
+
+    const know = el('div','info-card','<h3>Knowledge Cards</h3>');
+    hub.appendChild(know);
+    await renderKnowledgeCards(know);
+
+    const media = el('div','info-card','<h3>NASA Media Library</h3>');
+    hub.appendChild(media);
+    await renderMediaShelf(media);
+
+    const daily = el('div','info-card','');
+    hub.appendChild(daily);
+    renderDailyQuiz(daily);
+
+    renderExternalLinks(hub);
+  }
 })();
 
 

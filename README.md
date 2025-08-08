@@ -1,3 +1,92 @@
+Solar System Explorer
+
+An interactive solar system exploration site with NASA API data integration.
+
+## Project Overview
+
+Solar System Explorer is a web-based platform that presents information about the solar system, visualizes data, and provides educational resources. It integrates NASA API data and offers interactive charts and simulations for exploring planets and related phenomena.
+
+---
+## Project Structure
+
+```
+Solar_System_Project/
+├── pages/           # All HTML pages
+│   ├── index.html   # Home page (Solar System overview)
+│   ├── charts.html  # Data visualization page
+│   ├── education.html # Education resources page
+│   ├── api.html     # NASA API integration page
+│   └── *.html       # Individual planet detail pages
+├── css/             # Stylesheets
+│   ├── style.css    # Main stylesheet
+│   ├── charts.css   # Chart styles
+│   ├── education.css # Education page styles
+│   └── *.css        # Other styles
+├── js/              # JavaScript files
+│   ├── app.js       # Main application logic
+│   ├── charts.js    # Charting features
+│   ├── lazy-loading.js # Image lazy loading
+│   └── *.js         # Other modules
+├── images/          # Image assets
+│   ├── sun.jpg      # Sun image
+│   ├── earth.jpg    # Earth image
+│   └── *.jpg        # Other planet images
+├── scripts/         # Build scripts
+│   ├── build.js     # Build script
+│   └── fix-paths.js # Path correction script
+└── docs/            # Documentation
+```
+
+---
+## Getting Started
+
+### Local Development
+```
+# Start a local server
+python3 -m http.server 8000
+
+# Open the main page
+http://localhost:8000/pages/index.html
+```
+
+### Path Rules
+- Local development: use relative paths `../css/`, `../js/`, `../images/`
+- Deployment: build scripts adjust to `css/`, `js/`, `images/`
+
+### Build & Deploy
+```
+# Install dependencies
+npm install
+
+# Build project
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy:gh-pages
+```
+
+---
+## Online Access
+- GitHub Pages: `https://cswenyuanxiao.github.io/solar-system-explorer`
+
+---
+## Key Features
+- Planet exploration, data visualization charts, NASA API integration, education resources, responsive design, image lazy loading, optimized downloads
+
+---
+## Tech Stack
+- HTML5 / CSS3 / JavaScript
+- Chart.js (data visualization)
+- NASA API (real-time data)
+- GitHub Pages (deployment)
+
+---
+## Notes
+- All pages reside in the `pages/` directory
+- Asset files live in the root `css/`, `js/`, and `images/` directories
+- Build outputs are placed in `dist/`
+- Local development uses relative paths; deployment adjusts automatically
+
 # Solar System Explorer
 
 一个交互式的太阳系探索网站，集成了NASA API数据。

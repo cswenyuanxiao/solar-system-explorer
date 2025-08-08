@@ -65,8 +65,7 @@ Solar_System_Project/
 ├── 📁 js/ (JavaScript modules)
 │   ├── planet-data.js (Unified data source)
 │   ├── accessibility.js (A11y features)
-│   ├── advanced-charts.js (D3.js charts)
-│   └── favorites.js (User favorites)
+│   └── advanced-charts.js (D3.js charts)
 ├── 📁 images/ (Optimized assets)
 └── 📁 docs/ (Documentation)
 ```

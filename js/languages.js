@@ -117,7 +117,7 @@ const TRANSLATIONS = {
         'added_to_favorites': '已添加到收藏',
         'removed_from_favorites': '已从收藏中移除',
         'language_changed': '语言已切换',
-        'theme_changed': '主题已切换',
+        // 'theme_changed': '主题已切换', // removed
 
         // 错误消息
         'error_loading': '加载错误',
@@ -255,7 +255,7 @@ const TRANSLATIONS = {
         'added_to_favorites': 'Added to favorites',
         'removed_from_favorites': 'Removed from favorites',
         'language_changed': 'Language changed',
-        'theme_changed': 'Theme changed',
+        // 'theme_changed': 'Theme changed', // removed
 
         // Error messages
         'error_loading': 'Error loading',
@@ -922,10 +922,7 @@ window.LanguageManager = class LanguageManager {
             const sample = Array.from(missingKeys.keys()).slice(0, 20);
             console.warn('i18n: missing translations for keys (sample up to 20):', sample);
         }
-        // Update on-page debug overlay (if present)
-        try {
-            if (typeof updateI18nDebug === 'function') updateI18nDebug(translated, missing, this.currentLanguage);
-        } catch (err) { /* noop */ }
+        // i18n debug overlay removed
 
         // translate attributes
         const attrMap = [
@@ -1190,22 +1187,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     document.addEventListener('DOMContentLoaded', initI18nMutationObserver);
 }
 
-// On-page debug overlay to help diagnose translation issues (only in dev)
-function updateI18nDebug(translated = 0, missing = 0, lang = 'en') {
-    try {
-        let el = document.getElementById('i18n-debug');
-        if (!el) {
-            el = document.createElement('div');
-            el.id = 'i18n-debug';
-            el.style.cssText = 'position:fixed;right:12px;bottom:12px;background:rgba(11,61,145,0.95);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;z-index:99999;box-shadow:0 6px 18px rgba(0,0,0,0.4)';
-            document.body.appendChild(el);
-        }
-        el.textContent = `i18n: lang=${lang} translated=${translated} missing=${missing} @${new Date().toLocaleTimeString()}`;
-        // auto-hide after 4s
-        clearTimeout(window.__i18nDebugTimer);
-        window.__i18nDebugTimer = setTimeout(() => { try { el.style.display = 'none'; } catch (e) {} }, 4000);
-    } catch (err) { console.warn('i18n: updateI18nDebug failed', err); }
-}
+// i18n debug overlay removed
 
 // 导出模块（如果使用模块系统）
 if (typeof module !== 'undefined' && module.exports) {

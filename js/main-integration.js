@@ -91,7 +91,7 @@ class MainPageIntegration {
 
     initialize() {
         this.initializeSearch();
-        this.initializeFavorites();
+        // Favorites removed
         this.initializeTheme();
         this.addFavoriteIndicators();
         this.updateFavoritesCount();
@@ -182,142 +182,7 @@ class MainPageIntegration {
         return text.replace(regex, '<mark style="background: #ffd700; color: #000;">$1</mark>');
     }
 
-    // 收藏功能
-    initializeFavorites() {
-        // 等待FavoritesManager初始化
-        setTimeout(() => {
-            this.favoritesManager = window.favoritesManager;
-            this.updateFavoritesCount();
-        }, 100);
-
-        const favoritesButton = document.getElementById('favoritesButton');
-        if (favoritesButton) {
-            favoritesButton.addEventListener('click', () => {
-                this.showFavoritesModal();
-            });
-        }
-    }
-
-    updateFavoritesCount() {
-        const countElement = document.getElementById('favoritesCount');
-        if (countElement && this.favoritesManager) {
-            countElement.textContent = this.favoritesManager.getFavoriteCount();
-        }
-    }
-
-    addFavoriteIndicators() {
-        const planetCards = document.querySelectorAll('.planet-card');
-        planetCards.forEach(card => {
-            const planetName = card.querySelector('h2')?.textContent.trim();
-            if (planetName && this.isFavorite(planetName)) {
-                this.addFavoriteIndicator(card);
-            }
-        });
-    }
-
-    addFavoriteIndicator(card) {
-        if (!card.querySelector('.favorite-indicator')) {
-            const indicator = document.createElement('div');
-            indicator.className = 'favorite-indicator';
-            indicator.innerHTML = '⭐';
-            card.style.position = 'relative';
-            card.appendChild(indicator);
-        }
-    }
-
-    isFavorite(planetName) {
-        if (!this.favoritesManager) {
-            const favorites = JSON.parse(localStorage.getItem('solarSystemFavorites') || '[]');
-            return favorites.includes(planetName);
-        }
-        return this.favoritesManager.isFavorite(planetName);
-    }
-
-    showFavoritesModal() {
-        const favorites = this.favoritesManager ? this.favoritesManager.getFavorites() : 
-                        JSON.parse(localStorage.getItem('solarSystemFavorites') || '[]');
-        
-        if (favorites.length === 0) {
-            this.showNotification('No favorites yet. Add some planets to your favorites!');
-            return;
-        }
-
-        const modal = document.createElement('div');
-        modal.className = 'favorites-modal';
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            backdrop-filter: blur(10px);
-        `;
-
-        const modalContent = document.createElement('div');
-        modalContent.style.cssText = `
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        `;
-
-        const favoritePlanets = this.planets.filter(planet => favorites.includes(planet.name));
-        
-        modalContent.innerHTML = `
-            <h2 style="color: #ffd700; margin-bottom: 1rem;">⭐ Your Favorites</h2>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                ${favoritePlanets.map(planet => `
-                    <a href="${planet.url}" style="
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-                        padding: 1rem;
-                        background: rgba(255, 255, 255, 0.1);
-                        border-radius: 10px;
-                        text-decoration: none;
-                        color: inherit;
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.background='rgba(255, 215, 0, 0.1)'" 
-                       onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
-                        <img src="${planet.image}" alt="${planet.name}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
-                        <div>
-                            <div style="font-weight: bold; color: #ffd700;">${planet.name}</div>
-                            <div style="font-size: 0.9rem; color: #ccc;">${planet.description}</div>
-                        </div>
-                    </a>
-                `).join('')}
-            </div>
-            <div style="margin-top: 1rem; text-align: center;">
-                <button onclick="this.closest('.favorites-modal').remove()" style="
-                    background: rgba(255, 215, 0, 0.2);
-                    border: 1px solid rgba(255, 215, 0, 0.3);
-                    color: #ffd700;
-                    padding: 0.5rem 1rem;
-                    border-radius: 20px;
-                    cursor: pointer;
-                ">Close</button>
-            </div>
-        `;
-
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-
-        // 点击外部关闭
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.remove();
-            }
-        });
-    }
+    // Favorites removed: drop related methods
 
     // 主题切换
     initializeTheme() {

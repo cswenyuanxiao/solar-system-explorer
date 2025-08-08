@@ -38,12 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a class="mega-link" href="sun.html">Sun</a>
                       </section>
 
-                      <section class="mega-section">
-                        <h4 class="mega-title">Tools</h4>
-                        <a class="mega-link" href="3d-simulator.html">3D Simulator</a>
-                        <a class="mega-link" href="search.html">Search</a>
-                        <a class="mega-link" href="favorites.html">Favorites</a>
-                      </section>
+                       <section class="mega-section">
+                         <h4 class="mega-title">Tools</h4>
+                         <a class="mega-link" href="3d-simulator.html">3D Simulator</a>
+                         <a class="mega-link" href="search.html">Search</a>
+                       </section>
                     </div>
                   </div>
                 </div>
@@ -118,11 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="header__actions">
-                <button id="favoritesButton" class="btn btn--pill btn--favorites" aria-label="Favorites">
-                    <span class="btn__icon">❤️</span>
-                    <span class="btn__text" data-i18n="favorites">Favorites</span>
-                    <span id="favoritesCount" class="btn__count">(0)</span>
-                </button>
                 <button id="language-switcher" class="btn btn--pill btn--language" aria-haspopup="true" aria-expanded="false">
                     <span id="lang-flag" class="btn__flag">🇺🇸</span>
                     <span id="lang-name" class="btn__text">English</span>
@@ -460,7 +454,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Re-init dependencies
     addNavigationHandlers();
     if (typeof initializeTheme === 'function') initializeTheme();
-    if (typeof updateFavoritesCount === 'function') updateFavoritesCount();
     // If languageManager exists, translate now; otherwise subscribe to languageChanged to translate later
     // Try to initialize or ensure languageManager is ready synchronously
     try {

@@ -88,7 +88,6 @@ class ThemeManager {
             this.applyTheme(themeName);
             this.updateThemeToggleUI();
             this.notifyThemeChange();
-            this.showNotification(this.getThemeText('theme_changed'));
         }
     }
     
@@ -330,7 +329,6 @@ class ThemeManager {
         
         // 默认翻译
         const defaultTexts = {
-            'theme_changed': 'Theme changed',
             'dark_mode': 'Dark Mode',
             'light_mode': 'Light Mode'
         };
