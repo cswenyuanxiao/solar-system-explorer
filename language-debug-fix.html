@@ -311,10 +311,15 @@ if (langBtn) {
     
     <script>
         // 模拟语言管理器
-        const LANGUAGES = {
-            en: { name: 'English', flag: '🇺🇸' },
-            zh: { name: '中文', flag: '🇨🇳' }
-        };
+        // Guard the debug LANGUAGES so we don't redeclare the global constant from js/languages.js
+        if (typeof window.LANGUAGES === 'undefined') {
+            window.LANGUAGES = {
+                en: { name: 'English', flag: '🇺🇸' },
+                zh: { name: '中文', flag: '🇨🇳' }
+            };
+        }
+        // Create a local alias for backward compatibility in this debug page
+        const LANGUAGES = window.LANGUAGES;
         
         let currentLanguage = 'en';
         
