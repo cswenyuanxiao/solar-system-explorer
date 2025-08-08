@@ -9,32 +9,54 @@ class ThemeManager {
                 name: 'Light',
                 icon: '☀️',
                 properties: {
-                    '--bg-primary': '#f8fafc',
+                    // Surfaces
+                    '--bg-primary': '#f8fafc', // slate-50
                     '--bg-secondary': '#ffffff',
                     '--bg-card': '#ffffff',
-                    '--text-primary': '#1e293b',
-                    '--text-secondary': '#475569',
-                    '--border-color': '#e2e8f0',
+                    // Text
+                    '--text-primary': '#0f172a', // slate-900
+                    '--text-secondary': '#334155', // slate-700
+                    '--text-muted': '#64748b', // slate-500
+                    // Brand / Accents (high-contrast on light)
+                    '--color-primary': '#0B3D91', // NASA blue
+                    '--color-primary-dark': '#0a2f6e',
+                    '--color-secondary': '#FC3D21', // NASA red
+                    '--color-accent': '#115e59',
+                    // Borders & shadows
+                    '--border-primary': '#e2e8f0', // slate-200
+                    '--border-secondary': '#e5e7eb', // gray-200
                     '--shadow': 'rgba(15, 23, 42, 0.08)',
+                    // Legacy aliases for other modules
                     '--nasa-blue': '#1e40af',
                     '--nasa-red': '#dc2626',
-                    '--accent-color': '#f59e0b'
+                    '--accent-color': '#0ea5e9' // sky-500
                 }
             },
             dark: {
                 name: 'Dark',
                 icon: '🌙',
                 properties: {
-                    '--bg-primary': '#1a1a1a',
-                    '--bg-secondary': '#2d2d2d',
-                    '--bg-card': '#333333',
-                    '--text-primary': '#ffffff',
-                    '--text-secondary': '#cccccc',
-                    '--border-color': '#444444',
-                    '--shadow': 'rgba(0, 0, 0, 0.3)',
+                    // Surfaces
+                    '--bg-primary': '#0d1117', // GitHub dark base
+                    '--bg-secondary': '#161b22',
+                    '--bg-card': '#1f2937', // gray-800
+                    // Text
+                    '--text-primary': '#e5e7eb', // gray-200
+                    '--text-secondary': '#cbd5e1', // slate-300
+                    '--text-muted': '#94a3b8', // slate-400
+                    // Brand / Accents (brightened for dark backgrounds)
+                    '--color-primary': '#3b82f6', // blue-500, better contrast on dark
+                    '--color-primary-dark': '#1E5AA8',
+                    '--color-secondary': '#ff6b4a',
+                    '--color-accent': '#22d3ee',
+                    // Borders & shadows
+                    '--border-primary': '#2a3340',
+                    '--border-secondary': '#3a4552',
+                    '--shadow': 'rgba(0, 0, 0, 0.4)',
+                    // Legacy aliases for other modules
                     '--nasa-blue': '#1E5AA8',
                     '--nasa-red': '#FF5733',
-                    '--accent-color': '#FFD700'
+                    '--accent-color': '#22d3ee'
                 }
             }
         };
@@ -81,7 +103,7 @@ class ThemeManager {
         
         const root = document.documentElement;
         
-        // 应用CSS自定义属性
+        // 应用CSS自定义属性（覆盖 style.css 中的 :root token）
         Object.entries(theme.properties).forEach(([property, value]) => {
             root.style.setProperty(property, value);
         });
@@ -90,8 +112,8 @@ class ThemeManager {
         document.body.className = document.body.className.replace(/theme-\w+/g, '');
         document.body.classList.add(`theme-${themeName}`);
         
-        // 更新meta主题颜色
-        this.updateMetaThemeColor(theme.properties['--bg-primary']);
+        // 更新meta主题颜色（使用卡片或主背景作为基色）
+        this.updateMetaThemeColor(theme.properties['--bg-card'] || theme.properties['--bg-primary']);
     }
     
     updateMetaThemeColor(color) {
