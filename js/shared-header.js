@@ -10,36 +10,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const rootPath = isPagesDirectory ? '../' : './';
 
     const headerHTML = `
-        <div class="header__content">
-            <div class="header__logo">
-                <h1 class="header__title" data-i18n="main_title">SOLAR SYSTEM EXPLORER</h1>
-                <p class="header__subtitle" data-i18n="subtitle">Exploring the cosmos through NASA's lens</p>
-            </div>
-            
-            <div class="header__search">
+        <div class="header__content modern-header">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+            <a class="header__brand" href="index.html" aria-label="Home">
+                <span class="brand__logo">🛰️</span>
+                <div class="brand__text">
+                    <h1 class="brand__title" data-i18n="main_title">SOLAR SYSTEM</h1>
+                    <span class="brand__subtitle" data-i18n="subtitle">Explore with NASA data</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" aria-label="Primary">
+                <a href="charts.html" class="nav-link" data-i18n="charts">Charts</a>
+                <a href="education.html" class="nav-link" data-i18n="education">Education</a>
+                <a href="api.html" class="nav-link" data-i18n="api">NASA API</a>
+            </nav>
+
+            <div class="header__search modern-search">
                 <div class="search-box">
                     <input type="text" id="mainSearchInput" class="search-box__input" placeholder="Search planets and missions..." autocomplete="off" data-i18n-placeholder="search_placeholder">
-                    <button id="mainSearchButton" class="search-box__button" data-i18n="search_button">SEARCH</button>
+                    <button id="mainSearchButton" class="search-box__button" title="Search" aria-label="Search">🔍</button>
                 </div>
                 <div class="search-results" id="mainSearchResults" style="display: none;"></div>
             </div>
-            
+
             <div class="header__actions">
-                <a href="charts.html" class="btn" data-i18n="charts">DATA VISUALIZATION</a>
-                <a href="education.html" class="btn" data-i18n="education">LEARNING RESOURCES</a>
-                <a href="api.html" class="btn" data-i18n="api">NASA API</a>
-                <button id="favoritesButton" class="btn btn--favorites">
+                <button id="favoritesButton" class="btn btn--pill btn--favorites" aria-label="Favorites">
                     <span class="btn__icon">❤️</span>
-                    <span class="btn__text">Favorites</span>
+                    <span class="btn__text" data-i18n="favorites">Favorites</span>
                     <span id="favoritesCount" class="btn__count">(0)</span>
                 </button>
-                <button id="language-switcher" class="btn btn--language" aria-haspopup="true" aria-expanded="false">
+                <button id="language-switcher" class="btn btn--pill btn--language" aria-haspopup="true" aria-expanded="false">
                     <span id="lang-flag" class="btn__flag">🇺🇸</span>
                     <span id="lang-name" class="btn__text">English</span>
                 </button>
-                <button id="theme-toggle" class="btn btn--theme">
-                    <span class="btn__icon">🌙</span>
-                    <span class="btn__text" data-i18n="dark_mode">Dark Mode</span>
+                <button id="theme-toggle" class="btn btn--pill btn--theme theme-toggle" aria-label="Toggle theme">
+                    <span class="btn__icon theme-icon">🌙</span>
+                    <span class="btn__text theme-text" data-i18n="dark_mode">Dark</span>
                 </button>
             </div>
         </div>
@@ -49,15 +56,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create language menu lazily on first open
     let langMenuEl = null;
+    // If language changes, remove any existing menu so it can be rebuilt with new data
+    document.addEventListener('languageChanged', () => {
+        try {
+            if (langMenuEl) {
+                langMenuEl.remove();
+                langMenuEl = null;
+            }
+            updateLanguageSwitcherUI();
+        } catch (e) { /* noop */ }
+    });
     function buildLanguageMenu() {
         if (langMenuEl) return langMenuEl;
-        const langs = (typeof LANGUAGES !== 'undefined') ? LANGUAGES : { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
+        // Ensure i18n is initialized so window.LANGUAGES / TRANSLATIONS are available
+        if (typeof window.ensureLanguageManagerInitialized === 'function') {
+            try { window.ensureLanguageManagerInitialized(); } catch (e) { /* ignore */ }
+        }
+        // Build a union of available language codes from global sources
+        const availableSet = new Set();
+        try {
+            if (window.languageManager && typeof window.languageManager.getAvailableLanguages === 'function') {
+                const fromManager = window.languageManager.getAvailableLanguages() || [];
+                fromManager.forEach(item => {
+                    const code = typeof item === 'string' ? item : item.code;
+                    if (code) availableSet.add(code);
+                });
+            }
+        } catch (e) {}
+        try {
+            if (window.LANGUAGES) Object.keys(window.LANGUAGES).forEach(k => availableSet.add(k));
+        } catch (e) {}
+        try {
+            if (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS) Object.keys(TRANSLATIONS).forEach(k => availableSet.add(k));
+        } catch (e) {}
+        // Ensure at least en and zh are present; also include es/fr/ja if metadata exists
+        ['en', 'zh', 'es', 'fr', 'ja'].forEach(k => availableSet.add(k));
+        const preferredOrder = ['zh', 'en'];
+        const available = Array.from(availableSet).sort((a, b) => {
+            const ia = preferredOrder.indexOf(a);
+            const ib = preferredOrder.indexOf(b);
+            if (ia !== -1 && ib !== -1) return ia - ib;
+            if (ia !== -1) return -1;
+            if (ib !== -1) return 1;
+            return a.localeCompare(b);
+        });
+        const langsMeta = (window.LANGUAGES || (typeof LANGUAGES !== 'undefined' ? LANGUAGES : null) ) || { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
         langMenuEl = document.createElement('div');
         langMenuEl.className = 'lang-menu';
         langMenuEl.setAttribute('role', 'menu');
-        langMenuEl.innerHTML = Object.entries(langs).map(([code, info]) => (
-            `<button class="lang-menu__item" data-lang="${code}" role="menuitem">${info.flag} ${info.name}</button>`
-        )).join('');
+        langMenuEl.innerHTML = available.map(code => {
+            const info = langsMeta[code] || { name: code, flag: '🏳️' };
+            return `<button class="lang-menu__item" data-lang="${code}" role="menuitem" tabindex="0">
+                        <span class="lang-flag">${info.flag}</span>
+                        <span class="lang-name">${info.name}</span>
+                    </button>`;
+        }).join('');
         document.body.appendChild(langMenuEl);
 
         // Click handler
@@ -65,12 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('.lang-menu__item');
             if (!btn) return;
             const lang = btn.getAttribute('data-lang');
-            if (typeof window.setLanguage === 'function') {
-                window.setLanguage(lang);
-            } else if (window.languageManager) {
-                window.languageManager.setLanguage(lang);
+            // ensure language manager exists before invoking
+            if (typeof window.ensureLanguageManagerInitialized === 'function') {
+                try { window.ensureLanguageManagerInitialized(); } catch (err) { /* ignore */ }
             }
-            hideMenu();
+            try {
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage(lang);
+                } else if (window.languageManager) {
+                    window.languageManager.setLanguage(lang);
+                }
+            } finally {
+                hideMenu();
+            }
         });
         return langMenuEl;
     }
@@ -83,6 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMenu(button) {
+        // Ensure i18n ready before building/showing menu
+        if (typeof window.ensureLanguageManagerInitialized === 'function') {
+            try { window.ensureLanguageManagerInitialized(); } catch (e) { /* ignore */ }
+        }
         buildLanguageMenu();
         positionMenu(button);
         langMenuEl.classList.add('is-open');
@@ -116,9 +180,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const langBtn = document.getElementById('language-switcher');
     if (langBtn) {
         langBtn.addEventListener('click', (e) => {
+            // prevent LanguageManager's global click handler from also toggling language
             e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             if (langMenuEl && langMenuEl.classList.contains('is-open')) hideMenu();
             else showMenu(langBtn);
+        });
+    }
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            const container = document.querySelector('.modern-header');
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', String(!expanded));
+            container?.classList.toggle('is-open');
         });
     }
 
@@ -126,10 +204,34 @@ document.addEventListener('DOMContentLoaded', () => {
     addNavigationHandlers();
     if (typeof initializeTheme === 'function') initializeTheme();
     if (typeof updateFavoritesCount === 'function') updateFavoritesCount();
-    if (typeof languageManager !== 'undefined') {
-        languageManager.translatePage();
-        updateLanguageSwitcherUI();
+    // If languageManager exists, translate now; otherwise subscribe to languageChanged to translate later
+    // Try to initialize or ensure languageManager is ready synchronously
+    try {
+        if (typeof window.ensureLanguageManagerInitialized === 'function') {
+            window.ensureLanguageManagerInitialized();
+        }
+        if (window.languageManager) {
+            try { window.languageManager.translatePage(); updateLanguageSwitcherUI(); } catch (err) { console.warn('LanguageManager exists but translation failed:', err); }
+        } else {
+            // fallback: subscribe to languageChanged once
+            document.addEventListener('languageChanged', function onReadyOnce() { try { if (window.languageManager) { window.languageManager.translatePage(); updateLanguageSwitcherUI(); } } catch (e) {} finally { document.removeEventListener('languageChanged', onReadyOnce); } });
+        }
+    } catch (err) {
+        console.warn('shared-header: failed ensuring languageManager ready', err);
     }
+
+    // Listen for global language change events to re-translate header
+    document.addEventListener('languageChanged', () => {
+        try {
+            // Prefer the global window.languageManager instance (assigned by languages.js)
+            if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+                window.languageManager.translatePage();
+            }
+            updateLanguageSwitcherUI();
+        } catch (err) {
+            console.warn('Failed to update header on languageChanged:', err);
+        }
+    });
 });
 
 function addNavigationHandlers() {
@@ -148,12 +250,17 @@ function addNavigationHandlers() {
 function updateLanguageSwitcherUI() {
     const langFlag = document.getElementById('lang-flag');
     const langName = document.getElementById('lang-name');
-    if (langFlag && langName && typeof languageManager !== 'undefined') {
-        const currentLangKey = languageManager.currentLanguage;
-        const currentLangData = LANGUAGES[currentLangKey];
+    // Use window.languageManager because some pages don't declare a global `languageManager` var
+    if (langFlag && langName && window.languageManager) {
+        const currentLangKey = window.languageManager.currentLanguage;
+        const currentLangData = (typeof LANGUAGES !== 'undefined' && LANGUAGES[currentLangKey]) ? LANGUAGES[currentLangKey] : null;
         if (currentLangData) {
-            langFlag.textContent = currentLangData.flag;
-            langName.textContent = currentLangData.name;
+            langFlag.textContent = currentLangData.flag || '';
+            langName.textContent = currentLangData.name || currentLangKey;
+        } else {
+            // Fallback: show code
+            langFlag.textContent = '';
+            langName.textContent = currentLangKey;
         }
     }
 }

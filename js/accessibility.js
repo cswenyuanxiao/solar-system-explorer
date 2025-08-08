@@ -125,8 +125,8 @@ class AccessibilityManager {
         // Add ARIA labels and roles
         this.addAriaLabels();
         
-        // Add skip links
-        this.addSkipLinks();
+        // Skip links disabled per UI request
+        // this.addSkipLinks();
         
         // Add live regions for dynamic content
         this.addLiveRegions();
