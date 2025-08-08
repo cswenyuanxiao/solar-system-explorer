@@ -49,6 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create language menu lazily on first open
     let langMenuEl = null;
+    // If language changes, remove any existing menu so it can be rebuilt with new data
+    document.addEventListener('languageChanged', () => {
+        try {
+            if (langMenuEl) {
+                langMenuEl.remove();
+                langMenuEl = null;
+            }
+            updateLanguageSwitcherUI();
+        } catch (e) { /* noop */ }
+    });
     function buildLanguageMenu() {
         if (langMenuEl) return langMenuEl;
         // Ensure i18n is initialized so window.LANGUAGES / TRANSLATIONS are available
