@@ -324,8 +324,13 @@ window.setLanguage = function(lang) {
 // Attach class to window to avoid TDZ issues when other scripts reference it
 window.LanguageManager = class LanguageManager {
     constructor() {
+        // Initialize basic properties but do NOT call init() here because
+        // init() dispatches events. We must ensure the global reference
+        // window.languageManager is assigned before init() runs to avoid
+        // other modules (e.g., shared-header) receiving events while the
+        // global is still null.
         this.currentLanguage = this.getStoredLanguage() || this.detectLanguage();
-        this.init();
+        // other setup done in init()
     }
     
     init() {
@@ -516,7 +521,14 @@ window.LanguageManager = class LanguageManager {
 function ensureLanguageManagerInitialized() {
     try {
         if (!window.languageManager) {
-            window.languageManager = new window.LanguageManager();
+            // create instance and assign to global BEFORE running init()
+            const instance = new window.LanguageManager();
+            window.languageManager = instance;
+            try {
+                if (typeof instance.init === 'function') instance.init();
+            } catch (innerErr) {
+                console.warn('i18n: LanguageManager.init() failed', innerErr);
+            }
             console.debug('i18n: LanguageManager initialized');
         }
     } catch (err) {
