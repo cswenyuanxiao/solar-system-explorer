@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
         items.sort((a, b) => new Date(b.data?.[0]?.date_created || 0) - new Date(a.data?.[0]?.date_created || 0));
         const top = items.slice(0, limit).map(it => ({
             title: it.data?.[0]?.title || 'NASA Media',
-            url: it.links?.[0]?.href || '#',
+            url: (it.data?.[0]?.nasa_id ? `https://images.nasa.gov/details-${encodeURIComponent(it.data[0].nasa_id)}` : (it.links?.[0]?.href || '#')),
             date: it.data?.[0]?.date_created || ''
         }));
         return top;
