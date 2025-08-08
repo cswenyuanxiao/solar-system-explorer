@@ -595,12 +595,17 @@ function initI18nMutationObserver() {
     const observer = new MutationObserver((mutations) => {
         let needsRun = false;
         for (const m of mutations) {
-            for (const node of m.addedNodes) {
-                if (node.nodeType !== 1) continue;
-                if (node.hasAttribute && node.hasAttribute('data-i18n')) {
-                    needsRun = true; break;
+            // If nodes were added/removed or text changed, run translation
+            if (m.type === 'childList' && (m.addedNodes.length || m.removedNodes.length)) {
+                for (const node of m.addedNodes) {
+                    if (node.nodeType !== 1) continue;
+                    if (node.hasAttribute && node.hasAttribute('data-i18n')) { needsRun = true; break; }
+                    if (node.querySelector && node.querySelector('[data-i18n]')) { needsRun = true; break; }
                 }
-                if (node.querySelector && node.querySelector('[data-i18n]')) { needsRun = true; break; }
+            }
+            if (m.type === 'characterData') {
+                // text content changed somewhere; re-run translate to catch overwrites
+                needsRun = true;
             }
             if (needsRun) break;
         }
@@ -612,7 +617,8 @@ function initI18nMutationObserver() {
             }, 40);
         }
     });
-    observer.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    // Observe childList, subtree and characterData (text changes) to catch scripts overwriting text nodes
+    observer.observe(document.documentElement || document.body, { childList: true, subtree: true, characterData: true });
 }
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
