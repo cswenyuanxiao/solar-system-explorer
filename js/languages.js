@@ -14,6 +14,10 @@ const LANGUAGES = {
     }
 };
 
+// Pre-declare LanguageManager to avoid temporal-dead-zone errors when other scripts
+// reference the symbol before the class expression is evaluated.
+var LanguageManager;
+
 // 翻译内容
 const TRANSLATIONS = {
     zh: {
@@ -314,8 +318,8 @@ window.setLanguage = function(lang) {
     }
 };
 
-// 语言管理类
-class LanguageManager {
+// 语言管理类 (assign to predeclared var to avoid TDZ when other scripts reference the symbol)
+LanguageManager = class {
     constructor() {
         this.currentLanguage = this.getStoredLanguage() || this.detectLanguage();
         this.init();
@@ -323,7 +327,6 @@ class LanguageManager {
     
     init() {
         this.translatePage();
-        this.setupLanguageSwitcher();
         this.updateDocumentLanguage();
         this.updateLanguageSwitcherUI(); // 确保初始化时更新UI
         this.notifyLanguageChange();
@@ -359,15 +362,8 @@ class LanguageManager {
     }
     
     setupLanguageSwitcher() {
-        document.addEventListener('click', (event) => {
-            const switcher = event.target.closest('#language-switcher');
-            if (switcher) {
-                event.preventDefault();
-                const newLang = this.currentLanguage === 'en' ? 'zh' : 'en';
-                console.debug('i18n: language switcher clicked, toggling ->', newLang);
-                this.setLanguage(newLang);
-            }
-        });
+        // Delegated listener removed to avoid conflicts with shared-header's menu handling.
+        // shared-header.js will call window.setLanguage(lang) when user selects a language.
     }
     
     translatePage() {
@@ -514,7 +510,8 @@ class LanguageManager {
 }
 
 // 全局语言管理器实例
-let languageManager;
+// global language manager instance (using var to avoid TDZ when other scripts reference it early)
+var languageManager;
 
 // 页面加载完成后初始化及样式注入
 // Initialize language manager immediately so other scripts (like shared-header)
