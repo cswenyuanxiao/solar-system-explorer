@@ -116,11 +116,20 @@ class GlobalSearch {
 
 // Header global search bootstrap
 (function initHeaderSearch(){
-  document.addEventListener('DOMContentLoaded', () => {
+  function boot(retry = 0){
     const input = document.getElementById('mainSearchInput');
     const results = document.getElementById('mainSearchResults');
-    if (input && results) new GlobalSearch(input, results);
-  });
+    if (!input || !results) {
+      if (retry < 40) setTimeout(() => boot(retry + 1), 50); // wait up to ~2s for header injection
+      return;
+    }
+    // Avoid double init
+    if (window.__globalSearchInited) return;
+    window.__globalSearchInited = true;
+    new GlobalSearch(input, results);
+  }
+  if (document.readyState === 'complete' || document.readyState === 'interactive') boot();
+  else document.addEventListener('DOMContentLoaded', () => boot());
 })();
 
 // Standalone search page (planet dataset experience)
