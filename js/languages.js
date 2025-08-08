@@ -340,6 +340,7 @@ class LanguageManager {
         if (LANGUAGES[lang] && lang !== this.currentLanguage) {
             this.currentLanguage = lang;
             localStorage.setItem('preferred_language', lang);
+            console.debug(`i18n: setLanguage -> ${lang}`);
             this.translatePage();
             this.updateDocumentLanguage();
             this.notifyLanguageChange();
@@ -359,6 +360,7 @@ class LanguageManager {
             if (switcher) {
                 event.preventDefault();
                 const newLang = this.currentLanguage === 'en' ? 'zh' : 'en';
+                console.debug('i18n: language switcher clicked, toggling ->', newLang);
                 this.setLanguage(newLang);
             }
         });
@@ -367,13 +369,19 @@ class LanguageManager {
     translatePage() {
         // translate text content
         const elements = document.querySelectorAll('[data-i18n]');
+        let translated = 0;
+        let missing = 0;
         elements.forEach(element => {
             const key = element.getAttribute('data-i18n');
             const translation = this.getText(key);
             if (translation && translation !== key) {
                 element.textContent = translation;
+                translated++;
+            } else {
+                missing++;
             }
         });
+        console.debug(`i18n: translatePage -> translated=${translated}, missing=${missing}`);
 
         // translate attributes
         const attrMap = [
