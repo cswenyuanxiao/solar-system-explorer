@@ -3,52 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar System Education</title>
+    <title data-i18n="education">Education</title>
     <link rel="stylesheet" href="../css/style.css?v=20250109">
 </head>
 <body>
-    <header class="header">
-    </header>
-    
-    <main>
-        <!-- Education Navigation -->
-        <div class="education-nav">
-            <button class="edu-nav-btn active" data-section="quiz">🧠 Quiz</button>
-            <button class="edu-nav-btn" data-section="lessons">📚 Lessons</button>
-            <button class="edu-nav-btn" data-section="progress">📊 Progress</button>
-        </div>
-        
-        <!-- Quiz Section -->
-        <div class="education-section active" id="quizSection">
-            <div id="quizContainer"></div>
-        </div>
-        
-        <!-- Lessons Section -->
-        <div class="education-section" id="lessonsSection">
-            <div id="astronomyModule"></div>
-        </div>
-        
-        <!-- Progress Section -->
-        <div class="education-section" id="progressSection">
-            <div id="progressTracker"></div>
-        </div>
+    <header class="header"></header>
+
+    <main class="main">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a class="breadcrumbs__link" href="../index.html" data-i18n="home">Home</a>
+            <span class="breadcrumbs__sep">/</span>
+            <span class="breadcrumbs__current" data-i18n="education">Education</span>
+        </nav>
+
+        <section class="hero" style="margin-bottom: var(--space-xl)">
+            <h1 class="hero__title" data-i18n="education">Education</h1>
+            <p class="hero__subtitle" data-i18n="mission_description">This Solar System Explorer provides an interactive journey...</p>
+        </section>
+
+        <h2 class="section__title" data-i18n="learn_more">Learn More</h2>
+
+        <section id="eduTracks" class="card-grid" aria-live="polite"></section>
+
+        <section id="eduContent" class="education-section" style="display:none" aria-live="polite"></section>
+
+        <noscript>
+            <p class="text-center">This page requires JavaScript to display interactive learning content.</p>
+        </noscript>
     </main>
-    
+
     <footer>
-        <p>&copy; 2024 Solar System Explorer. All educational content based on NASA data.</p>
+        <p data-i18n="footer_text">© 2024 Solar System Explorer. All images and data from NASA.</p>
     </footer>
-    
+
     <script src="../js/languages.js?v=20250109"></script>
-    <script src="../js/app.js"></script>
-    <script src="../js/lazy-loading.js"></script>
-    <script src="../js/quiz-system.js"></script>
-    <script src="../js/astronomy-module.js"></script>
-    <script src="../js/progress-tracker.js"></script>
-    <script src="../js/education-navigation.js"></script>
     <script src="../js/shared-header.js?v=20250109"></script>
     <script src="../js/theme-manager.js?v=20250109"></script>
-    <script src="../js/social-sharing.js?v=20250109"></script>
-    <script src="../js/favorites.js?v=20250109"></script>
     <script src="../js/breadcrumbs.js?v=20250109"></script>
+    <script src="../js/education.js?v=20250109"></script>
 </body>
-</html> 
+</html>
