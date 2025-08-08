@@ -74,6 +74,15 @@
       <button class="btn" ${current===total?'disabled':''} onclick="gotoPage(${current+1})">Next</button>`;
   }
   function gotoPage(p){ if(p<1) return; current=p; render(); }
+  // Basic runtime tests
+  window.__runUpcomingTests = async function(){
+    items = await fetchUpcoming(7);
+    if (!Array.isArray(items)) throw new Error('Upcoming: not array');
+    if (!items.length) return { ok:true, total:0, note:'No notifications in range' };
+    const hasLink = items.some(it=>/^https?:\/\//.test(it.link));
+    if (!hasLink) throw new Error('Upcoming: link missing');
+    return { ok:true, total: items.length };
+  }
   document.addEventListener('DOMContentLoaded', async ()=>{
     const sel = document.getElementById('range');
     sel.addEventListener('change', async ()=>{ current=1; items = await fetchUpcoming(sel.value); render(); });

@@ -65,6 +65,14 @@
       <button class="btn" ${current===total?'disabled':''} onclick="gotoPage(${current+1})">Next</button>`;
   }
   function gotoPage(p){ if(p<1) return; current=p; render(); }
+  // Basic runtime tests
+  window.__runEventsTests = async function(){
+    items = await fetchEvents();
+    if (!items.length) throw new Error('Events: empty list');
+    const good = items.find(it=>/^https?:\/\//.test(it.link));
+    if (!good) throw new Error('Events: link invalid');
+    return { ok:true, total: items.length, sample: good.link };
+  }
   document.addEventListener('DOMContentLoaded', async ()=>{ items = await fetchEvents(); render(); });
   </script>
 </body>

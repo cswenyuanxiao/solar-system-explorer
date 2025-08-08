@@ -91,15 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4 class="mega-title">News & Events</h4>
                         <div class="mega-columns">
                           <div class="mega-col">
-                            <a class="mega-col-title" href="news.html">Recently Published</a>
+                        <a class="mega-col-title" href="news.html" data-nav>Recently Published</a>
                             <ul id="mega-recent" class="mega-list"></ul>
                           </div>
                           <div class="mega-col">
-                            <a class="mega-col-title" href="events.html">Events</a>
+                            <a class="mega-col-title" href="events.html" data-nav>Events</a>
                             <ul id="mega-events" class="mega-list"></ul>
                           </div>
                           <div class="mega-col">
-                            <a class="mega-col-title" href="upcoming.html">Upcoming</a>
+                            <a class="mega-col-title" href="upcoming.html" data-nav>Upcoming</a>
                             <ul id="mega-upcoming" class="mega-list"></ul>
                           </div>
                         </div>
@@ -326,6 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 panel.hidden = false;
             }
         });
+        // prevent overlay from blocking immediate clicks on inner anchors
+        panelClickPassThrough(btn);
     });
     document.addEventListener('click', (e) => {
         if (e.target.closest('.mega-item') || e.target.closest('.menu-toggle')) return;
@@ -333,6 +335,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllMega();
+    });
+
+    // Ensure links inside mega panels navigate reliably (even if panel closes quickly)
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('.mega-panel a[href], .mega-col-title[href]');
+        if (!a) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return; // allow new-tab shortcuts
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        e.preventDefault();
+        closeAllMega();
+        // Defer a tick to let panel close then navigate
+        setTimeout(() => { window.location.href = href; }, 0);
     });
 
     // Lazy-load dynamic NASA lists once when About panel first opens
@@ -344,6 +359,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isOpening && !megaNewsLoaded) {
                 megaNewsLoaded = true;
                 populateMegaNews();
+            }
+        });
+    }
+
+    function panelClickPassThrough(toggleBtn){
+        const id = toggleBtn.getAttribute('aria-controls');
+        const panel = id ? document.getElementById(id) : null;
+        if (!panel) return;
+        panel.addEventListener('click', (e)=>{
+            const link = e.target.closest('a[href]');
+            if (link) {
+                // Close immediately and allow navigation
+                closeAllMega();
             }
         });
     }

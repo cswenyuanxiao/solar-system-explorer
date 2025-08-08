@@ -46,7 +46,7 @@
       desc: it.data?.[0]?.description||'',
       date: it.data?.[0]?.date_created||'',
       thumb: it.links?.[0]?.href||'',
-      link: it.href||''
+      nasaId: it.data?.[0]?.nasa_id||''
     }));
     arr.sort((a,b)=> new Date(b.date||0) - new Date(a.date||0));
     return arr;
@@ -58,8 +58,10 @@
     if(current>total) current=total;
     const start = (current-1)*pageSize;
     const slice = items.slice(start,start+pageSize);
-    root.innerHTML = slice.map(it=>`
-      <a class="search-result-card" href="${it.link}" target="_blank" rel="noopener">
+    root.innerHTML = slice.map(it=>{
+      const href = it.nasaId ? `https://images.nasa.gov/details-${encodeURIComponent(it.nasaId)}` : '#';
+      return `
+      <a class="search-result-card" href="${href}" target="_blank" rel="noopener">
         ${it.thumb?`<img class="result-image" src="${it.thumb}" alt="thumb"/>`:''}
         <div class="result-info">
           <div class="result-title">${it.title}</div>
@@ -67,13 +69,26 @@
           <div class="text-muted">${(it.desc||'').slice(0,120)}</div>
         </div>
       </a>
-    `).join('');
+    `;}).join('');
     pager.innerHTML = `
       <button class="btn" ${current===1?'disabled':''} onclick="gotoPage(${current-1})">Prev</button>
       <span class="text-muted">Page ${current} / ${total}</span>
       <button class="btn" ${current===total?'disabled':''} onclick="gotoPage(${current+1})">Next</button>`;
   }
   function gotoPage(p){ if(p<1) return; current=p; render(); }
+  // Basic runtime tests to validate functionality
+  window.__runNewsTests = async function(){
+    const yr = document.getElementById('yearRange');
+    const before = items.length;
+    yr.value = '1';
+    items = await fetchRecent(yr.value);
+    if (!Array.isArray(items) || items.length === 0) throw new Error('News: empty list');
+    render();
+    const first = items[0];
+    if (!first.nasaId) throw new Error('News: nasaId missing');
+    const href = `https://images.nasa.gov/details-${encodeURIComponent(first.nasaId)}`;
+    return { ok: true, sampleHref: href, total: items.length };
+  }
   document.addEventListener('DOMContentLoaded', async ()=>{
     const yr = document.getElementById('yearRange');
     yr.addEventListener('change', async ()=>{ current=1; items = await fetchRecent(yr.value); render(); });
