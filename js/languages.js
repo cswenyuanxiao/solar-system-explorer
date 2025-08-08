@@ -675,6 +675,10 @@ async function translateBatchAuto(texts, sourceLang, targetLang) {
 async function autoTranslatePageText(targetLang) {
     if (!window.I18N_AUTO_TRANSLATE) return;
     if (!targetLang || targetLang === 'en') return;
+    // Prevent re-entrant runs
+    if (window.__i18nTranslating) return;
+    window.__i18nTranslating = true;
+    const MAX_NODES = window.I18N_MAX_NODES || 400; // hard cap to avoid jank
     // Collect candidate nodes: visible text nodes within elements without data-i18n attributes
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) => {
@@ -692,7 +696,10 @@ async function autoTranslatePageText(targetLang) {
         }
     });
     const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
+    while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+        if (nodes.length >= MAX_NODES) break;
+    }
     if (nodes.length === 0) return;
     const originalTexts = nodes.map(n => {
         const t = normalizeTextContent(n.nodeValue);
@@ -748,12 +755,14 @@ async function autoTranslatePageText(targetLang) {
     } catch (e) {
         console.warn('i18n: autoTranslateAttributes failed', e);
     }
+    window.__i18nTranslating = false;
 }
 
 // Translate common attributes across the whole document using batch requests
 async function autoTranslateAttributes(targetLang) {
-    const ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
+    const ATTRS = ['placeholder', 'aria-label', 'alt']; // drop title to reduce volume
     const VALUE_TAGS = new Set(['BUTTON', 'INPUT']);
+    const MAX_ATTR = window.I18N_MAX_ATTR || 400;
 
     // Collect elements and texts
     const elements = [];
@@ -791,6 +800,7 @@ async function autoTranslateAttributes(targetLang) {
             texts.push(norm);
             keys.push(attr);
         }
+        if (texts.length >= MAX_ATTR) break;
     }
 
     if (texts.length === 0) return;
