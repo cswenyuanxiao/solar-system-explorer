@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="header__content modern-header">
             <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
             <a class="header__brand" href="index.html" aria-label="Home">
-                <span class="brand__logo">🛰️</span>
+                <img class="brand__logo-img" src="${rootPath}images/logo.svg" alt="Solar System Explorer logo" width="28" height="28" />
                 <div class="brand__text">
-                    <h1 class="brand__title" data-i18n="main_title">SOLAR SYSTEM</h1>
-                    <span class="brand__subtitle" data-i18n="subtitle">Explore with NASA data</span>
+                    <h1 class="brand__title" data-i18n="main_title">Solar System Explorer</h1>
+                    <span class="brand__subtitle" data-i18n="subtitle">NASA Data • Charts • Missions</span>
                 </div>
             </a>
 
