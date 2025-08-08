@@ -164,6 +164,18 @@ body {
 .mega-link { display: block; color: var(--text-secondary); text-decoration: none; padding: .35rem 0; border-radius: 6px; }
 .mega-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
 
+/* Mega menu dynamic lists */
+.mega-dynamic .mega-columns { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: var(--space-lg); }
+.mega-col-title { margin: 0 0 .35rem; color: var(--text-primary); font-weight: 700; font-size: .95rem; opacity: .9; }
+.mega-list { list-style: none; margin: 0; padding: 0; }
+.mega-list li { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.mega-list li:last-child { border-bottom: none; }
+.mega-item-link { color: var(--text-secondary); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 22rem; }
+.mega-item-link:hover { color: var(--text-primary); }
+.mega-item-date { color: var(--text-muted); font-size: .8rem; flex-shrink: 0; }
+.mega-loading { color: var(--text-muted); }
+.mega-empty { color: var(--text-muted); }
+
 /* Keep search at a pleasant width on very wide screens */
 .header__search { max-width: 640px; width: 100%; }
 
