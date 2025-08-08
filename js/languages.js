@@ -595,6 +595,109 @@ function runtimeTranslate(key, targetLang) {
 
 // (runtimeTranslate will be used by LanguageManager.getText implementation)
 
+// =====================
+// Optional Auto-Translate (external service)
+// =====================
+// Configurable endpoint (LibreTranslate-compatible). You can self-host or change this URL.
+window.I18N_AUTO_TRANSLATE = window.I18N_AUTO_TRANSLATE ?? true;
+window.I18N_TRANSLATE_ENDPOINT = window.I18N_TRANSLATE_ENDPOINT || 'https://libretranslate.de/translate';
+window.I18N_TRANSLATE_API_KEY = window.I18N_TRANSLATE_API_KEY || '';
+
+function normalizeTextContent(text) {
+    if (!text) return '';
+    return text.replace(/\s+/g, ' ').trim();
+}
+
+function getAutoCacheKey(text, targetLang) {
+    return `i18n.auto.${targetLang}.${normalizeTextContent(text)}`;
+}
+
+async function translateBatchAuto(texts, sourceLang, targetLang) {
+    // Filter empty and pull from cache first
+    const results = [];
+    const toTranslate = [];
+    const mapIndex = [];
+    for (let i = 0; i < texts.length; i++) {
+        const t = normalizeTextContent(texts[i]);
+        if (!t) { results[i] = ''; continue; }
+        const cached = localStorage.getItem(getAutoCacheKey(t, targetLang));
+        if (cached) { results[i] = cached; continue; }
+        mapIndex.push(i);
+        toTranslate.push(t);
+    }
+    if (toTranslate.length === 0) return results;
+    try {
+        const body = {
+            q: toTranslate,
+            source: sourceLang || 'en',
+            target: targetLang,
+            format: 'text'
+        };
+        if (window.I18N_TRANSLATE_API_KEY) body.api_key = window.I18N_TRANSLATE_API_KEY;
+        const resp = await fetch(window.I18N_TRANSLATE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await resp.json();
+        // LibreTranslate returns { translatedText } when single, or array when multiple (varies by instance)
+        const translatedArray = Array.isArray(data) ? data.map(x => x.translatedText) : (data.translatedText ? [data.translatedText] : []);
+        mapIndex.forEach((origIdx, j) => {
+            const translated = translatedArray[j] || '';
+            results[origIdx] = translated;
+            try { localStorage.setItem(getAutoCacheKey(toTranslate[j], targetLang), translated); } catch (_) {}
+        });
+    } catch (err) {
+        console.warn('i18n: auto-translate request failed', err);
+        // leave missing entries undefined; caller will ignore
+    }
+    return results;
+}
+
+async function autoTranslatePageText(targetLang) {
+    if (!window.I18N_AUTO_TRANSLATE) return;
+    if (!targetLang || targetLang === 'en') return;
+    // Collect candidate nodes: visible text nodes within elements without data-i18n attributes
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) => {
+            const text = normalizeTextContent(node.nodeValue);
+            if (!text) return NodeFilter.FILTER_REJECT;
+            const parent = node.parentElement;
+            if (!parent) return NodeFilter.FILTER_REJECT;
+            const tag = parent.tagName;
+            if (/(SCRIPT|STYLE|CODE|PRE|NOSCRIPT|IFRAME)/.test(tag)) return NodeFilter.FILTER_REJECT;
+            if (parent.closest('[data-i18n]')) return NodeFilter.FILTER_REJECT;
+            if (parent.hasAttribute('data-i18n-auto')) return NodeFilter.FILTER_ACCEPT;
+            // Only translate if the text contains ASCII letters (avoid numbers-only etc.)
+            if (!/[A-Za-z]/.test(text)) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+        }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    if (nodes.length === 0) return;
+    const originalTexts = nodes.map(n => {
+        const t = normalizeTextContent(n.nodeValue);
+        if (!n.parentElement.getAttribute('data-i18n-auto-en')) {
+            n.parentElement.setAttribute('data-i18n-auto-en', t);
+        }
+        n.parentElement.setAttribute('data-i18n-auto', '1');
+        return t;
+    });
+    // Batch in chunks to respect server limits
+    const chunkSize = 25;
+    for (let i = 0; i < originalTexts.length; i += chunkSize) {
+        const slice = originalTexts.slice(i, i + chunkSize);
+        const translated = await translateBatchAuto(slice, 'en', targetLang);
+        translated.forEach((tr, idx) => {
+            if (typeof tr === 'string' && tr.trim()) {
+                const node = nodes[i + idx];
+                if (node) node.nodeValue = tr;
+            }
+        });
+    }
+}
+
 // Expose global setter so header dropdown can invoke
 window.setLanguage = function(lang) {
     // Prefer the requested language; fall back to English only if unsupported
@@ -653,6 +756,8 @@ window.LanguageManager = class LanguageManager {
             this.updateDocumentLanguage();
             this.notifyLanguageChange();
             this.showNotification(this.getText('language_changed'));
+            // Auto-translate remaining page text nodes if enabled
+            try { autoTranslatePageText(target); } catch (e) { console.warn('i18n: autoTranslatePageText failed', e); }
         }
     }
     
@@ -724,6 +829,11 @@ window.LanguageManager = class LanguageManager {
 
         // update language switcher UI
         this.updateLanguageSwitcherUI();
+        // Also auto-translate on initial run when not English
+        try {
+            const lang = this.currentLanguage;
+            if (lang && lang !== 'en') autoTranslatePageText(lang);
+        } catch (e) { /* ignore */ }
     }
     
     updateLanguageSwitcherUI() {
