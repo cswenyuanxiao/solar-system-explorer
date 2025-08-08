@@ -239,15 +239,31 @@
   function getNasaKey(){ try { return localStorage.getItem('nasa_api_key') || 'DEMO_KEY'; } catch(_) { return 'DEMO_KEY'; } }
 
   const TITLE_MAP_ZH = { Sun:'太阳', Mercury:'水星', Venus:'金星', Earth:'地球', Mars:'火星', Jupiter:'木星', Saturn:'土星', Uranus:'天王星', Neptune:'海王星', Asteroid:'小行星', Comet:'彗星' };
+  const TITLE_MAP_EN = { Mercury:'Mercury (planet)', Sun:'Sun', Venus:'Venus', Earth:'Earth', Mars:'Mars', Jupiter:'Jupiter', Saturn:'Saturn', Uranus:'Uranus', Neptune:'Neptune' };
+  const LOCAL_THUMBS = {
+    Sun:'../images/optimized/sun.jpg', Mercury:'../images/optimized/mercury.jpg', Venus:'../images/optimized/venus.jpg',
+    Earth:'../images/optimized/earth.jpg', Mars:'../images/optimized/mars.jpg', Jupiter:'../images/optimized/jupiter.jpg',
+    Saturn:'../images/optimized/saturn.jpg', Uranus:'../images/optimized/uranus.jpg', Neptune:'../images/optimized/neptune.jpg'
+  };
 
   async function fetchWikiSummary(title){
     const lang = getLang().startsWith('zh') ? 'zh' : 'en';
-    const subject = lang==='zh' && TITLE_MAP_ZH[title] ? TITLE_MAP_ZH[title] : title;
-    const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(subject)}`;
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('wiki fail');
-    const data = await resp.json();
-    return { title: data.title || subject, extract: data.extract || '', url: data.content_urls?.desktop?.page || `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(subject)}`, thumb: data.thumbnail?.source || '' };
+    const primary = (lang==='zh') ? (TITLE_MAP_ZH[title] || title) : (TITLE_MAP_EN[title] || title);
+    const tryFetch = async (subject) => {
+      const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(subject)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('wiki fail');
+      return resp.json();
+    };
+    let data = await tryFetch(primary);
+    // If ambiguous/no image and English, retry with planet-qualified title
+    if ((data.type === 'disambiguation' || !data.thumbnail?.source) && lang==='en') {
+      const alt = TITLE_MAP_EN[title] || `${title} (planet)`;
+      try { data = await tryFetch(alt); } catch(_) {}
+    }
+    let thumb = data.thumbnail?.source || '';
+    if (!thumb && LOCAL_THUMBS[title]) thumb = LOCAL_THUMBS[title];
+    return { title: data.title || primary, extract: data.extract || '', url: data.content_urls?.desktop?.page || `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(primary)}`, thumb };
   }
 
   async function fetchNasaMedia(query, page=1){
@@ -291,7 +307,13 @@
     root.appendChild(grid);
     for(const t of topics){
       try{
-        const data = await fetchWikiSummary(t);
+        let data = await fetchWikiSummary(t);
+        if (!data.thumb) {
+          try {
+            const m = await fetchNasaMedia(t, 1);
+            if (m && m[0] && m[0].thumb) data = { ...data, thumb: m[0].thumb };
+          } catch(_) {}
+        }
         const card = el('a','card','');
         card.href = data.url; card.target = '_blank'; card.rel='noopener';
         card.innerHTML = `
