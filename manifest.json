@@ -1,0 +1,12 @@
+{
+  "name": "Solar System Explorer",
+  "short_name": "Solar Explorer",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0B3D91",
+  "icons": [
+    { "src": "images/optimized/sun.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "images/optimized/earth.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}
