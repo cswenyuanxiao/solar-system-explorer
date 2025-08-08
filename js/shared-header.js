@@ -68,6 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Build a union of available language codes from global sources
         const availableSet = new Set();
         try {
+            if (window.languageManager && typeof window.languageManager.getAvailableLanguages === 'function') {
+                const fromManager = window.languageManager.getAvailableLanguages() || [];
+                fromManager.forEach(item => {
+                    const code = typeof item === 'string' ? item : item.code;
+                    if (code) availableSet.add(code);
+                });
+            }
+        } catch (e) {}
+        try {
             if (window.LANGUAGES) Object.keys(window.LANGUAGES).forEach(k => availableSet.add(k));
         } catch (e) {}
         try {
@@ -75,7 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
         // Ensure at least en and zh are present
         ['en', 'zh'].forEach(k => availableSet.add(k));
-        const available = Array.from(availableSet);
+        const preferredOrder = ['zh', 'en'];
+        const available = Array.from(availableSet).sort((a, b) => {
+            const ia = preferredOrder.indexOf(a);
+            const ib = preferredOrder.indexOf(b);
+            if (ia !== -1 && ib !== -1) return ia - ib;
+            if (ia !== -1) return -1;
+            if (ib !== -1) return 1;
+            return a.localeCompare(b);
+        });
         const langsMeta = (window.LANGUAGES || (typeof LANGUAGES !== 'undefined' ? LANGUAGES : null) ) || { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
         langMenuEl = document.createElement('div');
         langMenuEl.className = 'lang-menu';
