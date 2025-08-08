@@ -16,7 +16,11 @@ const planetData = {
             distance: 0, // AU
             temperature: 5778, // K
             moons: 0,
-            type: 'star'
+            type: 'star',
+            gravity: 274.0, // m/s^2
+            escapeVelocity: 617.5, // km/s
+            rotationPeriod: 609.12, // hours (~25.38 days at equator)
+            orbitalPeriod: 0 // N/A
         },
         {
             name: 'Mercury',
@@ -31,7 +35,11 @@ const planetData = {
             distance: 0.39, // AU
             temperature: 167, // K
             moons: 0,
-            type: 'terrestrial'
+            type: 'terrestrial',
+            gravity: 3.7,
+            escapeVelocity: 4.25,
+            rotationPeriod: 1407.6, // hours (58.6 Earth days)
+            orbitalPeriod: 88 // days
         },
         {
             name: 'Venus',
@@ -46,7 +54,11 @@ const planetData = {
             distance: 0.72, // AU
             temperature: 462, // K
             moons: 0,
-            type: 'terrestrial'
+            type: 'terrestrial',
+            gravity: 8.87,
+            escapeVelocity: 10.36,
+            rotationPeriod: 5832.5, // hours (retrograde ~243 days)
+            orbitalPeriod: 225 // days
         },
         {
             name: 'Earth',
@@ -61,7 +73,11 @@ const planetData = {
             distance: 1, // AU
             temperature: 288, // K
             moons: 1,
-            type: 'terrestrial'
+            type: 'terrestrial',
+            gravity: 9.81,
+            escapeVelocity: 11.186,
+            rotationPeriod: 23.93, // hours
+            orbitalPeriod: 365.25 // days
         },
         {
             name: 'Mars',
@@ -76,7 +92,11 @@ const planetData = {
             distance: 1.52, // AU
             temperature: 210, // K
             moons: 2,
-            type: 'terrestrial'
+            type: 'terrestrial',
+            gravity: 3.711,
+            escapeVelocity: 5.03,
+            rotationPeriod: 24.62, // hours
+            orbitalPeriod: 687 // days
         },
         {
             name: 'Jupiter',
@@ -91,7 +111,11 @@ const planetData = {
             distance: 5.2, // AU
             temperature: 165, // K
             moons: 95,
-            type: 'gas_giant'
+            type: 'gas_giant',
+            gravity: 24.79,
+            escapeVelocity: 59.5,
+            rotationPeriod: 9.93, // hours
+            orbitalPeriod: 4331 // days
         },
         {
             name: 'Saturn',
@@ -106,7 +130,11 @@ const planetData = {
             distance: 9.58, // AU
             temperature: 134, // K
             moons: 146,
-            type: 'gas_giant'
+            type: 'gas_giant',
+            gravity: 10.44,
+            escapeVelocity: 35.5,
+            rotationPeriod: 10.7, // hours
+            orbitalPeriod: 10747 // days
         },
         {
             name: 'Uranus',
@@ -121,7 +149,11 @@ const planetData = {
             distance: 19.18, // AU
             temperature: 76, // K
             moons: 27,
-            type: 'ice_giant'
+            type: 'ice_giant',
+            gravity: 8.69,
+            escapeVelocity: 21.3,
+            rotationPeriod: 17.24, // hours (retrograde)
+            orbitalPeriod: 30687 // days
         },
         {
             name: 'Neptune',
@@ -136,7 +168,11 @@ const planetData = {
             distance: 30.07, // AU
             temperature: 72, // K
             moons: 16,
-            type: 'ice_giant'
+            type: 'ice_giant',
+            gravity: 11.15,
+            escapeVelocity: 23.5,
+            rotationPeriod: 16.11, // hours
+            orbitalPeriod: 60190 // days
         }
     ],
 
