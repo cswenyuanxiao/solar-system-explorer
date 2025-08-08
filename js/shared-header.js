@@ -284,11 +284,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
     if (menuToggle) {
+        const container = document.querySelector('.modern-header');
+        const closeMenu = () => {
+            if (!container) return;
+            container.classList.remove('is-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            document.documentElement.classList.remove('nav-open');
+        };
+        const openMenu = () => {
+            if (!container) return;
+            container.classList.add('is-open');
+            menuToggle.setAttribute('aria-expanded', 'true');
+            document.documentElement.classList.add('nav-open');
+        };
         menuToggle.addEventListener('click', () => {
-            const container = document.querySelector('.modern-header');
             const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', String(!expanded));
-            container?.classList.toggle('is-open');
+            if (expanded) closeMenu(); else openMenu();
+        });
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!container?.classList.contains('is-open')) return;
+            if (e.target.closest('.modern-header')) return;
+            closeMenu();
+        });
+        // Close on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMenu();
+        });
+        // Auto-close on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) closeMenu();
         });
     }
 
