@@ -515,6 +515,32 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.head.appendChild(style);
     }
+    // Ensure translation runs after DOM is ready (in case LanguageManager initialized earlier)
+    try {
+        if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+            // small delay to ensure other dynamic content has been injected
+            setTimeout(() => {
+                console.debug('i18n: DOMContentLoaded -> running translatePage');
+                window.languageManager.translatePage();
+                window.languageManager.updateLanguageSwitcherUI();
+            }, 50);
+        }
+    } catch (err) {
+        console.warn('i18n: failed to run translatePage on DOMContentLoaded', err);
+    }
+});
+
+// Also ensure translation runs on full load
+window.addEventListener('load', () => {
+    try {
+        if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+            console.debug('i18n: window.load -> running translatePage');
+            window.languageManager.translatePage();
+            window.languageManager.updateLanguageSwitcherUI();
+        }
+    } catch (err) {
+        console.warn('i18n: failed to run translatePage on load', err);
+    }
 });
 
 // 导出模块（如果使用模块系统）
