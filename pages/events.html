@@ -32,12 +32,17 @@
     const url = `https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=200`;
     const resp = await fetch(url);
     const data = await resp.json();
-    return (data?.events||[]).map(ev=>({
-      title: ev.title,
-      date: ev.geometry?.[0]?.date||'',
-      cat: ev.categories?.[0]?.title||'',
-      link: ev.sources?.[0]?.url||'https://eonet.gsfc.nasa.gov'
-    }));
+    return (data?.events||[]).map(ev=>{
+      const id = ev.id || '';
+      const idNum = id.replace('EONET_','');
+      const detailUrl = `https://eonet.gsfc.nasa.gov/event/${idNum}`;
+      return {
+        title: ev.title,
+        date: ev.geometry?.[0]?.date||'',
+        cat: ev.categories?.[0]?.title||'',
+        link: detailUrl
+      };
+    });
   }
   function render(){
     const root = document.getElementById('eventsList');
