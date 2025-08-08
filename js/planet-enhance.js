@@ -36,18 +36,34 @@
   // ========== 3D Viewer ==========
   async function init3DViewer(planet){
     try {
-      await loadScript('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js');
+      // Respect user preference: allow disabling WebGL heavy viewer
+      const disable = localStorage.getItem('disable_webgl') === '1';
+      const webglSupported = (()=>{ try{ const c=document.createElement('canvas'); return !!(window.WebGLRenderingContext && (c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(_){return false;} })();
+      const useWebgl = !disable && webglSupported;
+
+      if (useWebgl) await loadScript('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js');
       if (!window.PlanetTextures) {
         await loadScript('../js/planet-textures.js?v=20250109');
       }
       const container = document.createElement('section');
       container.className = 'info-card planet-3d';
-      container.innerHTML = `
+      container.innerHTML = useWebgl ? `
         <h3>3D Viewer</h3>
         <div class="planet-3d__canvas" style="height:360px"></div>
-        <div class="text-muted" style="margin-top:.5rem">Drag to rotate · Scroll to zoom</div>
+        <div class="text-muted" style="margin-top:.5rem">Drag to rotate · Scroll to zoom · <button id="toggleWebgl" class="btn btn--ghost" style="margin-left:.5rem">Disable WebGL</button></div>
+      ` : `
+        <h3>3D Viewer (Disabled)</h3>
+        <div class="text-muted">WebGL is turned off or unsupported. <button id="toggleWebgl" class="btn btn--outline" style="margin-left:.5rem">Enable WebGL</button></div>
       `;
       $('.planet-detail')?.appendChild(container);
+      const toggleBtn = container.querySelector('#toggleWebgl');
+      if (toggleBtn) toggleBtn.addEventListener('click', ()=>{
+        const cur = localStorage.getItem('disable_webgl') === '1';
+        localStorage.setItem('disable_webgl', cur ? '0' : '1');
+        location.reload();
+      });
+
+      if (!useWebgl) return;
       const mount = container.querySelector('.planet-3d__canvas');
       const { THREE } = window;
       const scene = new THREE.Scene();
@@ -99,6 +115,9 @@
           <div class="mini-chart"><canvas id="chartSize" height="140"></canvas></div>
           <div class="mini-chart"><canvas id="chartDistance" height="140"></canvas></div>
           <div class="mini-chart"><canvas id="chartTemp" height="140"></canvas></div>
+          <div class="mini-chart"><canvas id="chartGravity" height="140"></canvas></div>
+          <div class="mini-chart"><canvas id="chartEscape" height="140"></canvas></div>
+          <div class="mini-chart"><canvas id="chartPeriods" height="140"></canvas></div>
         </div>
       `;
       $('.planet-detail')?.appendChild(section);
@@ -107,12 +126,15 @@
 
       const pd = window.planetData || (window.parent && window.parent.planetData);
       const p = pd && pd.getPlanetByName ? pd.getPlanetByName(planet) : null;
-      const earth = pd && pd.getPlanetByName ? pd.getPlanetByName('Earth') : { diameter:12742, distance:1, temperature:288 };
+      const earth = pd && pd.getPlanetByName ? pd.getPlanetByName('Earth') : { diameter:12742, distance:1, temperature:288, gravity:9.81, escapeVelocity:11.186, rotationPeriod:23.93, orbitalPeriod:365.25 };
       if (!p) return;
 
       const SIZE = new Chart($('#chartSize'), { type:'bar', data:{ labels:['Earth',''+p.name], datasets:[{ label:'Diameter (km)', data:[earth.diameter, p.diameter], backgroundColor:['#4CAF50','#FF4444'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
       const DIST = new Chart($('#chartDistance'), { type:'bar', data:{ labels:['Earth',''+p.name], datasets:[{ label:'Distance (AU)', data:[earth.distance, p.distance], backgroundColor:['#4CAF50','#FFB347'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
       const TEMP = new Chart($('#chartTemp'), { type:'bar', data:{ labels:['Earth',''+p.name], datasets:[{ label:'Mean Temp (K)', data:[earth.temperature, p.temperature], backgroundColor:['#4CAF50','#4169E1'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
+      if (p.gravity != null) new Chart($('#chartGravity'), { type:'bar', data:{ labels:['Earth',''+p.name], datasets:[{ label:'Gravity (m/s²)', data:[earth.gravity, p.gravity], backgroundColor:['#4CAF50','#0ea5e9'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
+      if (p.escapeVelocity != null) new Chart($('#chartEscape'), { type:'bar', data:{ labels:['Earth',''+p.name], datasets:[{ label:'Escape Velocity (km/s)', data:[earth.escapeVelocity, p.escapeVelocity], backgroundColor:['#4CAF50','#14b8a6'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
+      if (p.rotationPeriod != null && p.orbitalPeriod != null) new Chart($('#chartPeriods'), { type:'bar', data:{ labels:['Rotation (h)','Orbit (d)'], datasets:[{ label:p.name, data:[p.rotationPeriod, p.orbitalPeriod], backgroundColor:['#a78bfa','#f59e0b'] }] }, options:{ plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#cbd5e1'}}, y:{ticks:{color:'#cbd5e1'}}} } });
     } catch (err) { console.warn('insights init failed', err); }
   }
 
@@ -132,6 +154,7 @@
     const section = createSection('Media Gallery');
     section.innerHTML = `
       <h3>Media Gallery</h3>
+      <div class="text-muted" style="margin:.25rem 0 .5rem">360° videos and audio where available. Try opening items on images.nasa.gov for immersive players.</div>
       <div id="galleryGrid" class="search-results"></div>
       <div style="text-align:center;margin-top:.75rem"><button id="galleryMore" class="btn btn--outline">Load more</button></div>
     `;
@@ -167,14 +190,14 @@
       ['2012','Curiosity rover'],
       ['2021','Perseverance rover'],
     ],
-    earth: [['1998','International Space Station'],['2015','DSCOVR EPIC images']],
-    jupiter: [['1979','Voyager flybys'],['1995','Galileo orbiter'],['2016','Juno mission']],
-    saturn: [['2004','Cassini–Huygens arrival'],['2005','Huygens lands on Titan'],['2017','Grand Finale']],
-    mercury: [['1974','Mariner 10 flybys'],['2011','MESSENGER orbit'],['2025','BepiColombo arrival (planned)']],
-    venus: [['1967','Venera 4'],['1990','Magellan radar mapping']],
+    earth: [['1957','Sputnik 1'],['1969','Apollo 11 Moon landing'],['1998','International Space Station'],['2015','DSCOVR EPIC images']],
+    jupiter: [['1973','Pioneer 10'],['1979','Voyager flybys'],['1995','Galileo orbiter'],['2016','Juno mission']],
+    saturn: [['1979','Pioneer 11'],['1981','Voyager flybys'],['2004','Cassini–Huygens arrival'],['2005','Huygens lands on Titan'],['2017','Grand Finale']],
+    mercury: [['1974','Mariner 10 flybys'],['2008','MESSENGER flybys'],['2011','MESSENGER orbit'],['2025','BepiColombo arrival (planned)']],
+    venus: [['1962','Mariner 2'],['1967','Venera 4'],['1990','Magellan radar mapping'],['2006','Venus Express']],
     uranus: [['1986','Voyager 2 flyby']],
     neptune: [['1989','Voyager 2 flyby']],
-    sun: [['1995','SOHO'],['2018','Parker Solar Probe']]
+    sun: [['1995','SOHO'],['2006','STEREO'],['2010','SDO'],['2018','Parker Solar Probe']]
   };
 
   function initTimeline(planet){
@@ -186,10 +209,39 @@
 
   // ========== Mini Quiz ==========
   const QUIZ = {
+    mercury: [
+      {q:'Mercury has how many natural moons?', options:['0','1','2'], a:0},
+      {q:'Mercury’s rotation period is about?', options:['24 h','1408 h','72 h'], a:1},
+      {q:'Closest planet to the Sun?', options:['Mercury','Venus','Earth'], a:0}
+    ],
+    venus: [
+      {q:'Venus rotates in which direction?', options:['Prograde','Retrograde','No rotation'], a:1},
+      {q:'Main cause of extreme heat on Venus?', options:['Distance to Sun','Greenhouse effect','Volcanic heat'], a:1}
+    ],
+    earth: [
+      {q:'Earth’s average surface temperature (K) ~', options:['150','288','400'], a:1},
+      {q:'Earth’s natural satellite count?', options:['1','2','3'], a:0}
+    ],
     mars: [
       {q:'Which is the tallest volcano in the solar system?', options:['Olympus Mons','Mauna Kea','Mount Everest'], a:0},
       {q:'What gives Mars its red color?', options:['Iron oxide','Sulfur','Copper'], a:0},
       {q:'How many moons does Mars have?', options:['1','2','4'], a:1},
+    ],
+    jupiter: [
+      {q:'Great Red Spot is a?', options:['Ocean','Storm','Mountain'], a:1},
+      {q:'Jupiter is a?', options:['Terrestrial','Gas giant','Ice giant'], a:1}
+    ],
+    saturn: [
+      {q:'Saturn is famous for?', options:['Rings','Life','Oceans'], a:0}
+    ],
+    uranus: [
+      {q:'Uranus rotates?', options:['On its side','Very fast','Not at all'], a:0}
+    ],
+    neptune: [
+      {q:'Neptune’s winds are?', options:['Slow','Fastest','Calm'], a:1}
+    ],
+    sun: [
+      {q:'Sun’s energy comes from?', options:['Fission','Fusion','Combustion'], a:1}
     ]
   };
 
