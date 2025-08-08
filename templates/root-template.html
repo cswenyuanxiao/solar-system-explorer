@@ -26,6 +26,18 @@
             padding: 2rem;
         }
     </style>
+
+    <!-- i18n: ensure a preferred_language is set early and load languages module before header injection -->
+    <script>
+        try {
+            if (!localStorage.getItem('preferred_language')) {
+                const browserLang = (navigator.language || navigator.userLanguage || '').split('-')[0];
+                if (browserLang === 'zh') localStorage.setItem('preferred_language', 'zh');
+                // otherwise leave unset so LanguageManager can detect/choose default (en)
+            }
+        } catch (e) { /* ignore */ }
+    </script>
+    <script src="js/languages.js"></script>
 </head>
 <body>
     <header>
