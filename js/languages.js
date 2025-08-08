@@ -306,10 +306,11 @@ function runtimeTranslate(key, targetLang) {
 
 // Expose global setter so header dropdown can invoke
 window.setLanguage = function(lang) {
-    // If translations for the requested language are not present, pick a fallback
-    const available = Object.keys(TRANSLATIONS || {});
-    const target = available.includes(lang) ? lang : (available.includes('zh') ? 'zh' : (available.includes('en') ? 'en' : available[0]));
-    console.debug('i18n: window.setLanguage requested', lang, '-> using', target);
+    // Prefer the requested language; fall back to English only if unsupported
+    const isSupportedInMeta = !!(window.LANGUAGES && window.LANGUAGES[lang]);
+    const isSupportedInTranslations = !!(TRANSLATIONS && TRANSLATIONS[lang]);
+    const target = (isSupportedInMeta || isSupportedInTranslations) ? lang : 'en';
+    console.debug('i18n: window.setLanguage requested', lang, '-> applying', target);
     if (window.languageManager) {
         window.languageManager.setLanguage(target);
     } else {
@@ -352,10 +353,11 @@ window.LanguageManager = class LanguageManager {
     }
     
     setLanguage(lang) {
-        if (LANGUAGES[lang] && lang !== this.currentLanguage) {
-            this.currentLanguage = lang;
-            localStorage.setItem('preferred_language', lang);
-            console.debug(`i18n: setLanguage -> ${lang}`);
+        const target = LANGUAGES[lang] ? lang : 'en';
+        if (target !== this.currentLanguage) {
+            this.currentLanguage = target;
+            try { localStorage.setItem('preferred_language', target); } catch (_) {}
+            console.debug(`i18n: setLanguage -> ${target}`);
             this.translatePage();
             this.updateDocumentLanguage();
             this.notifyLanguageChange();
