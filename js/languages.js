@@ -551,6 +551,51 @@ window.addEventListener('load', () => {
     }
 });
 
+// Re-run translation when languageChanged event fires (safety)
+document.addEventListener('languageChanged', (e) => {
+    try {
+        console.debug('i18n: languageChanged event -> running translatePage', e && e.detail);
+        if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+            window.languageManager.translatePage();
+            window.languageManager.updateLanguageSwitcherUI();
+        }
+    } catch (err) {
+        console.warn('i18n: failed to run translatePage on languageChanged', err);
+    }
+});
+
+// Observe DOM changes and translate newly inserted nodes that contain data-i18n attributes.
+function initI18nMutationObserver() {
+    if (!('MutationObserver' in window)) return;
+    const observer = new MutationObserver((mutations) => {
+        let needsRun = false;
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
+                if (node.nodeType !== 1) continue;
+                if (node.hasAttribute && node.hasAttribute('data-i18n')) {
+                    needsRun = true; break;
+                }
+                if (node.querySelector && node.querySelector('[data-i18n]')) { needsRun = true; break; }
+            }
+            if (needsRun) break;
+        }
+        if (needsRun && window.languageManager && typeof window.languageManager.translatePage === 'function') {
+            // small debounce
+            clearTimeout(window.__i18nObserverTimer);
+            window.__i18nObserverTimer = setTimeout(() => {
+                try { window.languageManager.translatePage(); } catch (err) { console.warn('i18n: mutation observer translate failed', err); }
+            }, 40);
+        }
+    });
+    observer.observe(document.documentElement || document.body, { childList: true, subtree: true });
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initI18nMutationObserver();
+} else {
+    document.addEventListener('DOMContentLoaded', initI18nMutationObserver);
+}
+
 // 导出模块（如果使用模块系统）
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { LanguageManager, TRANSLATIONS, LANGUAGES };
