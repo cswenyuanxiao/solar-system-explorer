@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="header__search modern-search">
                 <div class="search-box">
-                    <input type="text" id="mainSearchInput" class="search-box__input" placeholder="Search planets and missions..." autocomplete="off" data-i18n-placeholder="search_placeholder">
+                    <input type="text" id="mainSearchInput" class="search-box__input" placeholder="Search everything..." autocomplete="off" data-i18n-placeholder="search_placeholder">
                     <button id="mainSearchButton" class="search-box__button" title="Search" aria-label="Search">🔍</button>
                 </div>
                 <div class="search-results" id="mainSearchResults" style="display: none;"></div>
