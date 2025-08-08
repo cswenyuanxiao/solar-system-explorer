@@ -29,6 +29,17 @@
         
         <!-- Daily Astronomy Picture -->
         <div id="dailyAstronomy"></div>
+
+        <!-- NASA Search & NEO/Earth Imagery Controls -->
+        <section class="api-key-section" style="margin-top: var(--space-xl);">
+            <h3>🛰️ NASA Data Explorer</h3>
+            <div class="api-key-form" style="grid-template-columns: 1fr auto auto;">
+                <input type="text" id="nasaSearchInput" class="api-key-input" placeholder="Search NASA media (e.g., Mars, Hubble)">
+                <button id="nasaSearchBtn" class="api-key-btn">Search</button>
+                <button id="loadNEO" class="api-key-btn">Load NEO (today)</button>
+            </div>
+            <div id="nasaSearchResults" class="search-results" style="margin-top: var(--space-md);"></div>
+        </section>
         
         <!-- Space Weather Widget -->
         <div class="space-weather">
@@ -213,6 +224,54 @@
             } else {
                 console.error('NASA API not available');
                 document.getElementById('dailySpaceFact').textContent = "The Sun contains 99.86% of the solar system's mass.";
+            }
+        }
+
+        // Extra NASA endpoints UI
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('nasaSearchBtn')?.addEventListener('click', handleNasaSearch);
+            document.getElementById('loadNEO')?.addEventListener('click', handleNEO);
+        });
+
+        async function handleNasaSearch(){
+            const q = document.getElementById('nasaSearchInput').value.trim();
+            if (!q) return;
+            const el = document.getElementById('nasaSearchResults');
+            el.innerHTML = '<div class="loading"></div>';
+            try {
+                const items = await window.nasaAPI.searchNASA(q, 'image');
+                if (!items || items.length === 0) { el.innerHTML = '<p class="no-activity">No results.</p>'; return; }
+                el.innerHTML = items.slice(0, 12).map(it => `
+                    <a class="search-result-card" href="${it.url}" target="_blank" rel="noopener">
+                        <img class="result-image" src="${it.url}" alt="${it.title || 'NASA image'}">
+                        <div class="result-info">
+                            <div class="result-title">${it.title || 'Untitled'}</div>
+                            <div class="result-desc" style="color:var(--text-secondary);font-size:.9rem;">${(it.description||'').slice(0,120)}...</div>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (e) {
+                el.innerHTML = '<p class="no-activity">Failed to load NASA search.</p>';
+            }
+        }
+
+        async function handleNEO(){
+            const el = document.getElementById('nasaSearchResults');
+            el.innerHTML = '<div class="loading"></div>';
+            try {
+                const today = new Date().toISOString().slice(0,10);
+                const items = await window.nasaAPI.getNEOs(today, today);
+                if (!items || items.length === 0) { el.innerHTML = '<p class="no-activity">No NEOs.</p>'; return; }
+                el.innerHTML = items.slice(0, 8).map(it => `
+                    <div class="search-result-card">
+                        <div class="result-info">
+                            <div class="result-title">${it.name}</div>
+                            <div class="result-desc" style="color:var(--text-secondary);font-size:.9rem;">Date: ${it.date} • Hazardous: ${it.hazardous ? 'Yes' : 'No'}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                el.innerHTML = '<p class="no-activity">Failed to load NEO data.</p>';
             }
         }
     </script>
