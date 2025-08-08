@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Solar System Explorer</title>
+  <link rel="stylesheet" href="../css/style.css?v=20250109">
+</head>
+<body>
+  <header class="header"></header>
+
+  <main class="main" id="contactRoot">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a class="breadcrumbs__link" href="../index.html">Home</a>
+      <span class="breadcrumbs__sep">/</span>
+      <span class="breadcrumbs__current">Contact</span>
+    </nav>
+
+    <section class="education-section" style="display:block">
+      <h2 class="section__title">Contact Us</h2>
+      <p>We welcome feedback and collaboration. Reach us via GitHub issues or email.</p>
+      <div class="info-card" style="max-width:720px">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required data-i18n-placeholder="name_placeholder" placeholder="Your name">
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required data-i18n-placeholder="email_placeholder" placeholder="you@example.com">
+          </div>
+          <div class="form-row">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required data-i18n-placeholder="message_placeholder" placeholder="How can we help?"></textarea>
+          </div>
+          <div class="form-row" style="display:flex; gap: var(--space-sm); align-items:center">
+            <button type="submit" class="btn btn--primary">Send</button>
+            <a class="btn btn--outline" target="_blank" rel="noopener" href="https://github.com/cswenyuanxiao/solar-system-explorer/issues">Open GitHub Issue</a>
+          </div>
+          <p id="contactStatus" class="text-muted" role="status" aria-live="polite" style="margin-top:.5rem"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Solar System Explorer. All images and data from NASA.</p>
+  </footer>
+
+  <script src="../js/languages.js?v=20250109"></script>
+  <script src="../js/shared-header.js?v=20250109"></script>
+  <script src="../js/theme-manager.js?v=20250109"></script>
+  <script>
+  // Client-side validate only; no backend submit. Keeps PWA-friendly and static.
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const status = document.getElementById('contactStatus');
+    if (!name || !email || !message) {
+      status.textContent = 'Please complete all fields.';
+      return;
+    }
+    const emailOk = /.+@.+\..+/.test(email);
+    if (!emailOk) {
+      status.textContent = 'Please enter a valid email address.';
+      return;
+    }
+    // Provide mailto as a fallback action
+    const subject = encodeURIComponent('[Solar System Explorer] Contact from ' + name);
+    const body = encodeURIComponent(message + '\n\nFrom: ' + name + ' <' + email + '>');
+    window.location.href = 'mailto:example@example.com?subject=' + subject + '&body=' + body;
+    status.textContent = 'Opening your email client...';
+  });
+  </script>
+</body>
+</html>
+
+
