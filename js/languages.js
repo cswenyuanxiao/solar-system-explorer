@@ -14,9 +14,11 @@ const LANGUAGES = {
     }
 };
 
-// Pre-declare LanguageManager to avoid temporal-dead-zone errors when other scripts
-// reference the symbol before the class expression is evaluated.
-var LanguageManager;
+// Ensure global placeholders exist so other scripts can safely reference them
+if (typeof window !== 'undefined') {
+    window.LanguageManager = window.LanguageManager || null;
+    window.languageManager = window.languageManager || null;
+}
 
 // 翻译内容
 const TRANSLATIONS = {
@@ -319,7 +321,8 @@ window.setLanguage = function(lang) {
 };
 
 // 语言管理类 (assign to predeclared var to avoid TDZ when other scripts reference the symbol)
-LanguageManager = class {
+// Attach class to window to avoid TDZ issues when other scripts reference it
+window.LanguageManager = class LanguageManager {
     constructor() {
         this.currentLanguage = this.getStoredLanguage() || this.detectLanguage();
         this.init();
@@ -509,23 +512,24 @@ LanguageManager = class {
     }
 }
 
-// 全局语言管理器实例
-// initialize to null; will be created on DOMContentLoaded to avoid early-reference errors
-var languageManager = null;
-
 // 页面加载完成后初始化及样式注入
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize languageManager here (after DOM ready) to avoid race/TDZ issues
+function ensureLanguageManagerInitialized() {
     try {
         if (!window.languageManager) {
-            languageManager = new LanguageManager();
-            window.languageManager = languageManager;
-        } else {
-            languageManager = window.languageManager;
+            window.languageManager = new window.LanguageManager();
+            console.debug('i18n: LanguageManager initialized');
         }
     } catch (err) {
-        console.warn('i18n: failed to initialize LanguageManager on DOMContentLoaded', err);
+        console.warn('i18n: failed to initialize LanguageManager', err);
     }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureLanguageManagerInitialized);
+} else {
+    // DOM already ready — initialize immediately
+    ensureLanguageManagerInitialized();
+}
     // 添加CSS动画（仅在 DOM 就绪后插入样式）
     // 添加CSS动画（仅在 DOM 就绪后插入样式）
     if (!document.querySelector('#language-animations')) {
@@ -662,5 +666,6 @@ function updateI18nDebug(translated = 0, missing = 0, lang = 'en') {
 
 // 导出模块（如果使用模块系统）
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { LanguageManager, TRANSLATIONS, LANGUAGES };
-} 
+    // Export the runtime-attached class to avoid TDZ issues in bundlers
+    module.exports = { LanguageManager: window.LanguageManager, TRANSLATIONS, LANGUAGES };
+}
