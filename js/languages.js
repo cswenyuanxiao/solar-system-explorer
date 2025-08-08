@@ -382,6 +382,10 @@ class LanguageManager {
             }
         });
         console.debug(`i18n: translatePage -> translated=${translated}, missing=${missing}`);
+        // Update on-page debug overlay (if present)
+        try {
+            if (typeof updateI18nDebug === 'function') updateI18nDebug(translated, missing, this.currentLanguage);
+        } catch (err) { /* noop */ }
 
         // translate attributes
         const attrMap = [
@@ -594,6 +598,23 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     initI18nMutationObserver();
 } else {
     document.addEventListener('DOMContentLoaded', initI18nMutationObserver);
+}
+
+// On-page debug overlay to help diagnose translation issues (only in dev)
+function updateI18nDebug(translated = 0, missing = 0, lang = 'en') {
+    try {
+        let el = document.getElementById('i18n-debug');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'i18n-debug';
+            el.style.cssText = 'position:fixed;right:12px;bottom:12px;background:rgba(11,61,145,0.95);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;z-index:99999;box-shadow:0 6px 18px rgba(0,0,0,0.4)';
+            document.body.appendChild(el);
+        }
+        el.textContent = `i18n: lang=${lang} translated=${translated} missing=${missing} @${new Date().toLocaleTimeString()}`;
+        // auto-hide after 4s
+        clearTimeout(window.__i18nDebugTimer);
+        window.__i18nDebugTimer = setTimeout(() => { try { el.style.display = 'none'; } catch (e) {} }, 4000);
+    } catch (err) { console.warn('i18n: updateI18nDebug failed', err); }
 }
 
 // 导出模块（如果使用模块系统）
