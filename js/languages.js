@@ -375,17 +375,25 @@ class LanguageManager {
         const elements = document.querySelectorAll('[data-i18n]');
         let translated = 0;
         let missing = 0;
+        const missingKeys = new Map();
         elements.forEach(element => {
             const key = element.getAttribute('data-i18n');
             const translation = this.getText(key);
             if (translation && translation !== key) {
-                element.textContent = translation;
+                // support elements that need HTML insertion
+                if (element.hasAttribute('data-i18n-html')) element.innerHTML = translation;
+                else element.textContent = translation;
                 translated++;
             } else {
                 missing++;
+                missingKeys.set(key, (missingKeys.get(key) || 0) + 1);
             }
         });
         console.debug(`i18n: translatePage -> translated=${translated}, missing=${missing}`);
+        if (missing > 0) {
+            const sample = Array.from(missingKeys.keys()).slice(0, 20);
+            console.warn('i18n: missing translations for keys (sample up to 20):', sample);
+        }
         // Update on-page debug overlay (if present)
         try {
             if (typeof updateI18nDebug === 'function') updateI18nDebug(translated, missing, this.currentLanguage);
