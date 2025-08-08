@@ -17,12 +17,21 @@
     <section class="education-section" style="display:block">
       <h2 class="section__title">Upcoming (DONKI Notifications)</h2>
       <div class="info-card" style="margin-bottom:1rem">
-        <label for="range">Range:</label>
-        <select id="range">
-          <option value="7">±7 days</option>
-          <option value="14">±14 days</option>
-          <option value="30">±30 days</option>
-        </select>
+        <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap">
+          <label for="range">Range:</label>
+          <select id="range">
+            <option value="7">±7 days</option>
+            <option value="14">±14 days</option>
+            <option value="30">±30 days</option>
+          </select>
+          <div style="margin-left:auto; display:flex; gap:.5rem">
+            <button class="btn btn--ghost" data-type="all">All</button>
+            <button class="btn btn--ghost" data-type="CME">CME</button>
+            <button class="btn btn--ghost" data-type="FLR">Flares</button>
+            <button class="btn btn--ghost" data-type="SEP">SEP</button>
+            <button class="btn btn--ghost" data-type="GST">Geomag</button>
+          </div>
+        </div>
       </div>
       <div id="upcomingList" class="search-results"></div>
       <div id="upcomingPager" class="pager" style="display:flex; gap:.5rem; align-items:center; justify-content:center; margin-top:1rem"></div>
@@ -36,6 +45,7 @@
   const pageSize = 12;
   let items = [];
   let current = 1;
+  let filterType = 'all';
   function getApiKey(){ try { return localStorage.getItem('nasa_api_key') || 'DEMO_KEY'; } catch(_) { return 'DEMO_KEY'; } }
   async function fetchUpcoming(days=7){
     const now = new Date();
@@ -56,10 +66,11 @@
   function render(){
     const root = document.getElementById('upcomingList');
     const pager = document.getElementById('upcomingPager');
-    const total = Math.ceil(items.length / pageSize) || 1;
+    const filtered = filterType==='all' ? items : items.filter(it=> (it.title||'').startsWith(filterType));
+    const total = Math.ceil(filtered.length / pageSize) || 1;
     if(current>total) current=total;
     const start = (current-1)*pageSize;
-    const slice = items.slice(start,start+pageSize);
+    const slice = filtered.slice(start,start+pageSize);
     root.innerHTML = slice.map(it=>`
       <a class="search-result-card" href="${it.link}" target="_blank" rel="noopener">
         <div class="result-info">
@@ -86,6 +97,9 @@
   document.addEventListener('DOMContentLoaded', async ()=>{
     const sel = document.getElementById('range');
     sel.addEventListener('change', async ()=>{ current=1; items = await fetchUpcoming(sel.value); render(); });
+    document.querySelectorAll('[data-type]').forEach(btn=>{
+      btn.addEventListener('click',()=>{ filterType = btn.getAttribute('data-type'); current=1; render(); });
+    });
     items = await fetchUpcoming(sel.value); render();
   });
   </script>

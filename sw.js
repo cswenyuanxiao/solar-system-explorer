@@ -1,25 +1,25 @@
 // Service Worker for Solar System Explorer PWA
-// 缓存策略和离线支持
+// Cache strategy and offline support
 
 const CACHE_NAME = 'solar-system-explorer-v1.0.0';
 const STATIC_CACHE = `${CACHE_NAME}-static`;
 const DYNAMIC_CACHE = `${CACHE_NAME}-dynamic`;
 const API_CACHE = `${CACHE_NAME}-api`;
 
-// 需要缓存的静态资源
+// Resources to cache (static assets)
 const STATIC_ASSETS = [
-  // 核心页面
+  // Core pages
   '/pages/index.html',
   '/pages/3d-simulator.html',
   '/pages/charts.html',
   '/pages/education.html',
   '/pages/api.html',
   '/pages/search.html',
-  '/pages/favorites.html',
+  
   '/pages/accessibility.html',
   '/pages/advanced-charts.html',
   
-  // 行星页面
+  // Planet pages
   '/pages/sun.html',
   '/pages/mercury.html',
   '/pages/venus.html', 
@@ -30,7 +30,7 @@ const STATIC_ASSETS = [
   '/pages/uranus.html',
   '/pages/neptune.html',
   
-  // CSS 文件
+  // CSS files
   '/css/style.css',
   '/css/shared-header.css',
   '/css/accessibility.css',
@@ -41,20 +41,20 @@ const STATIC_ASSETS = [
   '/css/3d-simulator.css',
   '/css/planet-detail.css',
   '/css/search.css',
-  '/css/favorites.css',
+  
   '/css/user-system.css',
   '/css/advanced-charts.css',
   '/css/download-manager.css',
   '/css/loading-animations.css',
   
-  // JavaScript 文件
+  // JavaScript files
   '/js/app.js',
   '/js/languages.js',
   '/js/shared-header.js',
   '/js/lazy-loading.js',
   '/js/loading-manager.js',
   '/js/planet-data.js',
-  '/js/favorites.js',
+  
   '/js/accessibility.js',
   '/js/main-integration.js',
   '/js/charts.js',
@@ -65,7 +65,7 @@ const STATIC_ASSETS = [
   '/js/theme-manager.js',
   '/js/social-sharing.js',
   
-  // 图片资源
+  // Image resources
   '/images/sun.jpg',
   '/images/mercury.jpg',
   '/images/venus.jpg',
@@ -77,22 +77,22 @@ const STATIC_ASSETS = [
   '/images/neptune.jpg',
   '/images/background.jpg',
   
-  // PWA图标（如果存在）
+  // PWA icons (if present)
   '/images/icon-192x192.png',
   '/images/icon-512x512.png',
   
-  // 其他资源
+  // Other resources
   '/manifest.json'
 ];
 
-// 需要网络优先的资源
+// Resources to fetch with network-first strategy
 const NETWORK_FIRST_URLS = [
   'https://api.nasa.gov/',
   '/api/',
   '/pages/api.html'
 ];
 
-// 安装 Service Worker
+// Install Service Worker
 self.addEventListener('install', (event) => {
   console.log('[SW] Installing Service Worker');
   
@@ -113,7 +113,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// 激活 Service Worker
+// Activate Service Worker
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activating Service Worker');
   
@@ -141,7 +141,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 拦截网络请求
+// Intercept network requests
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -156,47 +156,47 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // API 请求 - 网络优先策略
+// API requests - network-first strategy
   if (isApiRequest(url)) {
     event.respondWith(networkFirstStrategy(request));
     return;
   }
   
-  // 静态资源 - 缓存优先策略
+// Static assets - cache-first strategy
   if (isStaticAsset(url)) {
     event.respondWith(cacheFirstStrategy(request));
     return;
   }
   
-  // HTML 页面 - 网络优先，缓存降级
+// HTML pages - network-first with fallback
   if (isHtmlPage(request)) {
     event.respondWith(networkFirstWithFallback(request));
     return;
   }
   
-  // 其他请求 - 网络优先策略
+// Other requests - network-first strategy
   event.respondWith(networkFirstStrategy(request));
 });
 
-// 判断是否为 API 请求
+// Determine if API request
 function isApiRequest(url) {
   return NETWORK_FIRST_URLS.some(pattern => url.href.includes(pattern)) ||
          url.hostname === 'api.nasa.gov';
 }
 
-// 判断是否为静态资源
+// Determine if static asset
 function isStaticAsset(url) {
   const staticExtensions = ['.css', '.js', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'];
   return staticExtensions.some(ext => url.pathname.endsWith(ext));
 }
 
-// 判断是否为 HTML 页面
+// Determine if HTML page
 function isHtmlPage(request) {
   return request.destination === 'document' || 
          request.headers.get('Accept')?.includes('text/html');
 }
 
-// 缓存优先策略
+// Cache-first strategy
 async function cacheFirstStrategy(request) {
   try {
     const cachedResponse = await caches.match(request);
@@ -221,7 +221,7 @@ async function cacheFirstStrategy(request) {
   }
 }
 
-// 网络优先策略
+// Network-first strategy
 async function networkFirstStrategy(request) {
   try {
     const networkResponse = await fetch(request);
@@ -245,7 +245,7 @@ async function networkFirstStrategy(request) {
   }
 }
 
-// 网络优先，带降级策略
+// Network-first with fallback
 async function networkFirstWithFallback(request) {
   try {
     const networkResponse = await fetch(request);
@@ -274,7 +274,7 @@ async function networkFirstWithFallback(request) {
   return createOfflineResponse(request);
 }
 
-// 创建离线响应
+// Create offline response
 function createOfflineResponse(request) {
   const url = new URL(request.url);
   
@@ -362,7 +362,7 @@ function createOfflineResponse(request) {
   });
 }
 
-// 消息处理
+// Message handling
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -374,7 +374,7 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// 更新缓存
+// Update cache
 async function updateCache(urls) {
   try {
     const cache = await caches.open(DYNAMIC_CACHE);
@@ -397,7 +397,7 @@ async function updateCache(urls) {
   }
 }
 
-// 推送通知处理
+// Push notification handling
 self.addEventListener('push', (event) => {
   if (!event.data) return;
   
@@ -437,7 +437,7 @@ self.addEventListener('push', (event) => {
   }
 });
 
-// 通知点击处理
+// Notification click handling
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   

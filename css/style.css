@@ -195,9 +195,7 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Favorite pill accent */
-.header__actions .btn--favorites { border-color: var(--border-accent); color: var(--border-accent); }
-.header__actions .btn--favorites:hover { background: rgba(255, 107, 107, 0.12); }
+/* Favorite pill removed */
 
 /* Language pill keeps width compact */
 .btn--language { min-width: auto; }
@@ -253,17 +251,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Favorites Button */
-.btn--favorites {
-  border-color: var(--border-accent);
-  color: var(--border-accent);
-}
-
-.btn--favorites:hover {
-  background: var(--border-accent);
-  border-color: var(--border-accent);
-  color: white;
-}
+/* Favorites Button removed */
 
 .btn__icon {
   font-size: var(--font-size-lg);
@@ -522,9 +510,7 @@ body {
     text-align: center;
   }
   
-  .btn--favorites {
-    flex: 1 1 calc(50% - var(--space-xs));
-  }
+  /* favorites button removed */
   
   .hero__title {
     font-size: var(--font-size-2xl);
@@ -1049,28 +1035,7 @@ body {
 /* Footer polish */
 footer { border-top: 1px solid var(--border-primary); background: var(--bg-secondary); padding: var(--space-lg) var(--space-xl); color: var(--text-secondary); }
 
-/* ==========================================================================
-   15. FAVORITES PAGE
-   ========================================================================== */
-
-.favorites-container { max-width: 1100px; margin: 0 auto; padding: var(--space-xl); }
-.favorites-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-lg); }
-.clear-btn { border: 1px solid var(--border-secondary); background: transparent; color: var(--text-primary); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); }
-.favorites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-lg); }
-.favorite-card { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); overflow: hidden; transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast); }
-.favorite-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--color-primary); }
-.favorite-header { position: relative; }
-.favorite-image { width: 100%; height: 160px; object-fit: cover; }
-.remove-favorite { position: absolute; top: 8px; right: 8px; border: none; background: rgba(0,0,0,.5); color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
-.favorite-content { padding: var(--space-md); }
-.favorite-content h3 { margin: 0 0 var(--space-sm); }
-.favorite-meta { color: var(--text-muted); font-size: var(--font-size-xs); }
-.visit-btn { display: inline-block; margin-top: var(--space-sm); padding: var(--space-sm) var(--space-md); background: var(--color-primary); color: #fff; border-radius: var(--radius-sm); text-decoration: none; }
-.empty-state { text-align: center; padding: var(--space-2xl) 0; color: var(--text-secondary); }
-.empty-icon { font-size: 48px; margin-bottom: var(--space-md); }
-.explore-btn { display: inline-block; margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); border: 1px solid var(--border-secondary); color: var(--text-primary); border-radius: var(--radius-sm); text-decoration: none; }
-
-@media (max-width: 768px) { .favorites-header { flex-direction: column; gap: var(--space-sm); align-items: stretch; } }
+/* Favorites page styles removed */
 
 /* ==========================================================================
    16. MOBILE REFINEMENTS (critical)

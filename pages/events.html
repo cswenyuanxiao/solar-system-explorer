@@ -16,6 +16,16 @@
     </nav>
     <section class="education-section" style="display:block">
       <h2 class="section__title">Open Events (EONET)</h2>
+      <div class="info-card" style="margin-bottom:1rem">
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap">
+          <button class="btn btn--ghost" data-filter="all">All</button>
+          <button class="btn btn--ghost" data-filter="Wildfires">Wildfires</button>
+          <button class="btn btn--ghost" data-filter="Volcanoes">Volcanoes</button>
+          <button class="btn btn--ghost" data-filter="Severe Storms">Severe Storms</button>
+          <button class="btn btn--ghost" data-filter="Sea and Lake Ice">Sea & Ice</button>
+          <button class="btn btn--ghost" data-filter="Earthquakes">Earthquakes</button>
+        </div>
+      </div>
       <div id="eventsList" class="search-results"></div>
       <div id="eventsPager" class="pager" style="display:flex; gap:.5rem; align-items:center; justify-content:center; margin-top:1rem"></div>
     </section>
@@ -28,29 +38,32 @@
   const pageSize = 12;
   let items = [];
   let current = 1;
+  let activeFilter = 'all';
+
   async function fetchEvents(){
     const url = `https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=200`;
     const resp = await fetch(url);
     const data = await resp.json();
     return (data?.events||[]).map(ev=>{
-      const id = ev.id || '';
-      const idNum = id.replace('EONET_','');
-      const detailUrl = `https://eonet.gsfc.nasa.gov/event/${idNum}`;
+      const sourceUrl = (ev.sources && ev.sources[0] && ev.sources[0].url) ? ev.sources[0].url : 'https://eonet.gsfc.nasa.gov';
       return {
+        id: ev.id || '',
         title: ev.title,
         date: ev.geometry?.[0]?.date||'',
         cat: ev.categories?.[0]?.title||'',
-        link: detailUrl
+        link: sourceUrl
       };
     });
   }
+
   function render(){
     const root = document.getElementById('eventsList');
     const pager = document.getElementById('eventsPager');
-    const total = Math.ceil(items.length / pageSize) || 1;
+    const filtered = activeFilter==='all' ? items : items.filter(it=>it.cat===activeFilter);
+    const total = Math.ceil(filtered.length / pageSize) || 1;
     if(current>total) current=total;
     const start = (current-1)*pageSize;
-    const slice = items.slice(start,start+pageSize);
+    const slice = filtered.slice(start,start+pageSize);
     root.innerHTML = slice.map(it=>`
       <a class="search-result-card" href="${it.link}" target="_blank" rel="noopener">
         <div class="result-info">
@@ -73,7 +86,12 @@
     if (!good) throw new Error('Events: link invalid');
     return { ok:true, total: items.length, sample: good.link };
   }
-  document.addEventListener('DOMContentLoaded', async ()=>{ items = await fetchEvents(); render(); });
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    items = await fetchEvents(); render();
+    document.querySelectorAll('[data-filter]').forEach(btn=>{
+      btn.addEventListener('click',()=>{ activeFilter = btn.getAttribute('data-filter'); current = 1; render(); });
+    });
+  });
   </script>
 </body>
 </html>
