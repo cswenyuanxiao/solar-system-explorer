@@ -64,7 +64,80 @@ class SearchEngine {
 
     // Fallback local planet data (for backward compatibility)
     getLocalPlanets() {
-        return (window.planetData ? window.planetData.getAllPlanets() : []);
+        return [
+            {
+                name: 'Sun',
+                displayName: 'SUN',
+                description: 'The center of our solar system',
+                image: '../images/sun.jpg',
+                url: 'sun.html',
+                keywords: ['star', 'center', 'hot', 'fusion']
+            },
+            {
+                name: 'Mercury',
+                displayName: 'MERCURY',
+                description: 'The smallest and innermost planet',
+                image: '../images/mercury.jpg',
+                url: 'mercury.html',
+                keywords: ['smallest', 'closest', 'hot', 'fastest']
+            },
+            {
+                name: 'Venus',
+                displayName: 'VENUS',
+                description: 'The hottest planet with thick atmosphere',
+                image: '../images/venus.jpg',
+                url: 'venus.html',
+                keywords: ['hottest', 'thick', 'atmosphere', 'greenhouse']
+            },
+            {
+                name: 'Earth',
+                displayName: 'EARTH',
+                description: 'Our home planet with life',
+                image: '../images/earth.jpg',
+                url: 'earth.html',
+                keywords: ['home', 'life', 'water', 'blue', 'habitable']
+            },
+            {
+                name: 'Mars',
+                displayName: 'MARS',
+                description: 'The red planet with polar ice caps',
+                image: '../images/mars.jpg',
+                url: 'mars.html',
+                keywords: ['red', 'iron', 'oxide', 'polar', 'ice', 'rover']
+            },
+            {
+                name: 'Jupiter',
+                displayName: 'JUPITER',
+                description: 'The largest planet, gas giant',
+                image: '../images/jupiter.jpg',
+                url: 'jupiter.html',
+                keywords: ['largest', 'gas', 'giant', 'great', 'red', 'spot']
+            },
+            {
+                name: 'Saturn',
+                displayName: 'SATURN',
+                description: 'The ringed planet, most beautiful',
+                image: '../images/saturn.jpg',
+                url: 'saturn.html',
+                keywords: ['rings', 'beautiful', 'gas', 'giant']
+            },
+            {
+                name: 'Uranus',
+                displayName: 'URANUS',
+                description: 'The ice giant, tilted on its side',
+                image: '../images/uranus.jpg',
+                url: 'uranus.html',
+                keywords: ['ice', 'giant', 'tilted', 'sideways']
+            },
+            {
+                name: 'Neptune',
+                displayName: 'NEPTUNE',
+                description: 'The windiest planet, deep blue',
+                image: '../images/neptune.jpg',
+                url: 'neptune.html',
+                keywords: ['windy', 'blue', 'ice', 'giant', 'storms']
+            }
+        ];
     }
 
     displayResults(results, query = '') {
@@ -82,7 +155,7 @@ class SearchEngine {
 
         this.searchResults.innerHTML = results.map(planet => `
             <a href="${planet.url}" class="search-result-card">
-                <img src="${planet.image}" alt="${planet.name}" class="result-image" onerror="this.src='images/placeholder.jpg'">
+                <img src="${planet.image}" alt="${planet.name}" class="result-image" onerror="this.src='../images/icon-192x192.png'">
                 <div class="result-info">
                     <h3 class="result-title">${this.highlightText(planet.name, query)}</h3>
                     <p class="result-description">${this.highlightText(planet.description, query)}</p>

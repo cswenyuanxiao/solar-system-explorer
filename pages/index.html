@@ -16,7 +16,11 @@
         <!-- Hero Section -->
         <section class="hero">
             <h2 class="hero__title" data-i18n="hero_title">EXPLORE OUR SOLAR SYSTEM</h2>
-            <p class="hero__subtitle" data-i18n="hero_subtitle">Journey through the planets, moons, and celestial bodies that make up our cosmic neighborhood. Discover the latest NASA missions and scientific discoveries.</p>
+            <p class="hero__subtitle" data-i18n="hero_subtitle">Journey through planets, missions, and discoveries powered by NASA data.</p>
+            <div style="margin-top: 1.25rem; display:flex; gap:.75rem; justify-content:center; flex-wrap: wrap;">
+                <a href="search.html" class="btn" style="border-radius: 999px; padding: .7rem 1.2rem; border:1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.04);">🔍 Start Searching</a>
+                <a href="#planets" class="btn" style="border-radius: 999px; padding: .7rem 1.2rem; border:1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.04);">🪐 Explore Planets</a>
+            </div>
         </section>
 
         <!-- Featured Missions -->
@@ -135,10 +139,11 @@
         <p data-i18n="footer_text">&copy; 2024 Solar System Explorer. All images and data from NASA. Exploring the universe through science and discovery.</p>
     </footer>
 
-    <!-- ✅ 添加：必要的JavaScript文件 -->
+    <!-- ✅ 添加：必要的JavaScript文件（确保 header 注入先于主集成初始化） -->
     <script src="../js/planet-data.js?v=20250109"></script>
     <script src="../js/languages.js?v=20250109"></script>
     <script src="../js/accessibility.js?v=20250109"></script>
+    <script src="../js/shared-header.js?v=20250109"></script>
     <script src="../js/main-integration.js?v=20250109"></script>
     <script src="../js/app.js?v=20250109"></script>
     <script src="../js/lazy-loading.js?v=20250109"></script>
@@ -197,7 +202,6 @@
             }
         }
     </script>
-    <script src="../js/shared-header.js?v=20250109"></script>
     <script src="../js/theme-manager.js?v=20250109"></script>
     <script src="../js/social-sharing.js?v=20250109"></script>
     <script src="../js/favorites.js?v=20250109"></script>

@@ -130,6 +130,15 @@ const TRANSLATIONS = {
         'share_page': '分享页面',
         'install_app': '安装应用',
 
+        // APOD (Astronomy Picture of the Day)
+        'apod_title': '每日天文图片',
+        'apod_prev': '上一张',
+        'apod_next': '下一张',
+        'apod_refresh': '刷新',
+        'apod_download': '下载',
+        'apod_share': '分享',
+        'apod_fullscreen': '全屏',
+
         // 语言测试页面
         'language_test_title': '语言测试 - 太阳系探索器',
         'language_test_hero': '语言测试页面',
@@ -258,6 +267,15 @@ const TRANSLATIONS = {
         'print_page': 'Print Page',
         'share_page': 'Share Page',
         'install_app': 'Install App',
+
+        // APOD (Astronomy Picture of the Day)
+        'apod_title': 'Astronomy Picture of the Day',
+        'apod_prev': 'Previous',
+        'apod_next': 'Next',
+        'apod_refresh': 'Refresh',
+        'apod_download': 'Download',
+        'apod_share': 'Share',
+        'apod_fullscreen': 'Fullscreen',
 
         // Language test page
         'language_test_title': 'Language Test - Solar System Explorer',
@@ -697,7 +715,8 @@ async function autoTranslatePageText(targetLang) {
         });
     }
 
-    // Special handling: translate values after labels in info cards (e.g., <li><strong>Label:</strong> Value)</n+    try {
+    // Special handling: translate values after labels in info cards (e.g., <li><strong>Label:</strong> Value>)
+    try {
         const valueTextNodes = [];
         const valueOriginals = [];
         document.querySelectorAll('.info-card li').forEach(li => {

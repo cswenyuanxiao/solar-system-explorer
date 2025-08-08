@@ -186,3 +186,54 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('loaded');
 });
+
+// Globalize header search for all pages: attach lightweight binder if header search exists
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const input = document.getElementById('mainSearchInput');
+        const button = document.getElementById('mainSearchButton');
+        const results = document.getElementById('mainSearchResults');
+        if (!input || !results) return;
+
+        const planets = (window.planetData && window.planetData.getAllPlanets && window.planetData.getAllPlanets()) || [
+            { name:'Sun', description:'The center of our solar system', url:'sun.html', keywords:['star'], image:'../images/sun.jpg' },
+            { name:'Mercury', description:'The smallest and innermost planet', url:'mercury.html', keywords:['smallest'], image:'../images/mercury.jpg' },
+            { name:'Venus', description:'The hottest planet with thick atmosphere', url:'venus.html', keywords:['hottest'], image:'../images/venus.jpg' },
+            { name:'Earth', description:'Our home planet with life', url:'earth.html', keywords:['life'], image:'../images/earth.jpg' },
+            { name:'Mars', description:'The red planet', url:'mars.html', keywords:['red'], image:'../images/mars.jpg' },
+            { name:'Jupiter', description:'The largest planet', url:'jupiter.html', keywords:['largest'], image:'../images/jupiter.jpg' },
+            { name:'Saturn', description:'The ringed planet', url:'saturn.html', keywords:['rings'], image:'../images/saturn.jpg' },
+            { name:'Uranus', description:'The ice giant', url:'uranus.html', keywords:['ice'], image:'../images/uranus.jpg' },
+            { name:'Neptune', description:'The windiest planet', url:'neptune.html', keywords:['windy'], image:'../images/neptune.jpg' }
+        ];
+
+        const highlight = (text, q) => {
+            if (!q || !q.trim()) return text;
+            return text.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>');
+        };
+
+        const search = (q) => {
+            const term = (q||'').toLowerCase().trim();
+            return planets.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term) || (p.keywords||[]).some(k => (k+'').toLowerCase().includes(term)));
+        };
+
+        const render = (items, q) => {
+            if (!items.length) {
+                results.innerHTML = `<div class="search-result-item"><div class="search-result-title">No results found</div><div class="search-result-description">Try: sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune</div></div>`;
+            } else {
+                results.innerHTML = items.map(p => `<a href="${p.url}" class="search-result-item"><div class=\"search-result-title\">${highlight(p.name,q)}</div><div class=\"search-result-description\">${highlight(p.description,q)}</div></a>`).join('');
+            }
+            results.style.display = 'block';
+        };
+
+        const perform = (q) => {
+            if (!q.trim()) { results.style.display = 'none'; return; }
+            render(search(q), q);
+        };
+
+        input.addEventListener('input', e => perform(e.target.value));
+        button && button.addEventListener('click', () => perform(input.value));
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') perform(input.value); });
+        document.addEventListener('click', (e) => { if (!input.contains(e.target) && !results.contains(e.target)) results.style.display = 'none'; });
+    } catch (err) { console.warn('global header search bind failed', err); }
+});

@@ -21,11 +21,11 @@ class DailyAstronomy {
         apodContainer.innerHTML = `
             <div class="apod-container">
                 <div class="apod-header">
-                    <h2>🌌 Astronomy Picture of the Day</h2>
+                    <h2 data-i18n="apod_title">🌌 Astronomy Picture of the Day</h2>
                     <div class="apod-controls">
-                        <button id="prevAPOD" class="apod-btn" disabled>◀ Previous</button>
-                        <button id="nextAPOD" class="apod-btn" disabled>Next ▶</button>
-                        <button id="refreshAPOD" class="apod-btn">🔄 Refresh</button>
+                        <button id="prevAPOD" class="apod-btn" data-i18n="apod_prev" disabled>◀ Previous</button>
+                        <button id="nextAPOD" class="apod-btn" data-i18n="apod_next" disabled>Next ▶</button>
+                        <button id="refreshAPOD" class="apod-btn" data-i18n="apod_refresh">🔄 Refresh</button>
                     </div>
                 </div>
                 
@@ -39,23 +39,20 @@ class DailyAstronomy {
                     </div>
                     
                     <div class="apod-info">
-                        <div class="apod-title" id="apodTitle"></div>
+                        <div class="apod-title" id="apodTitle" data-i18n-html="apod_title"></div>
                         <div class="apod-date" id="apodDate"></div>
-                        <div class="apod-explanation" id="apodExplanation"></div>
+                        <div class="apod-explanation" id="apodExplanation" data-i18n-html=""></div>
                         <div class="apod-copyright" id="apodCopyright"></div>
                         
                         <div class="apod-actions">
-                            <button id="downloadAPOD" class="apod-action-btn">📥 Download</button>
-                            <button id="shareAPOD" class="apod-action-btn">📤 Share</button>
-                            <button id="fullscreenAPOD" class="apod-action-btn">🔍 Fullscreen</button>
+                            <button id="downloadAPOD" class="apod-action-btn" data-i18n="apod_download">📥 Download</button>
+                            <button id="shareAPOD" class="apod-action-btn" data-i18n="apod_share">📤 Share</button>
+                            <button id="fullscreenAPOD" class="apod-action-btn" data-i18n="apod_fullscreen">🔍 Fullscreen</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="apod-gallery">
-                    <h3>Recent Images</h3>
-                    <div id="apodGallery" class="gallery-grid"></div>
-                </div>
+                
             </div>
         `;
     }
@@ -114,6 +111,7 @@ class DailyAstronomy {
         image.style.display = 'block';
 
         // Set text content
+        // APOD 标题与说明直接来自 NASA，不进行字典翻译；保留原文
         title.textContent = apod.title;
         date.textContent = this.formatDate(apod.date);
         explanation.textContent = apod.explanation;

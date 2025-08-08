@@ -10,36 +10,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const rootPath = isPagesDirectory ? '../' : './';
 
     const headerHTML = `
-        <div class="header__content">
-            <div class="header__logo">
-                <h1 class="header__title" data-i18n="main_title">SOLAR SYSTEM EXPLORER</h1>
-                <p class="header__subtitle" data-i18n="subtitle">Exploring the cosmos through NASA's lens</p>
-            </div>
-            
-            <div class="header__search">
+        <div class="header__content modern-header">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+            <a class="header__brand" href="index.html" aria-label="Home">
+                <span class="brand__logo">🛰️</span>
+                <div class="brand__text">
+                    <h1 class="brand__title" data-i18n="main_title">SOLAR SYSTEM</h1>
+                    <span class="brand__subtitle" data-i18n="subtitle">Explore with NASA data</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" aria-label="Primary">
+                <a href="charts.html" class="nav-link" data-i18n="charts">Charts</a>
+                <a href="education.html" class="nav-link" data-i18n="education">Education</a>
+                <a href="api.html" class="nav-link" data-i18n="api">NASA API</a>
+            </nav>
+
+            <div class="header__search modern-search">
                 <div class="search-box">
                     <input type="text" id="mainSearchInput" class="search-box__input" placeholder="Search planets and missions..." autocomplete="off" data-i18n-placeholder="search_placeholder">
-                    <button id="mainSearchButton" class="search-box__button" data-i18n="search_button">SEARCH</button>
+                    <button id="mainSearchButton" class="search-box__button" title="Search" aria-label="Search">🔍</button>
                 </div>
                 <div class="search-results" id="mainSearchResults" style="display: none;"></div>
             </div>
-            
+
             <div class="header__actions">
-                <a href="charts.html" class="btn" data-i18n="charts">DATA VISUALIZATION</a>
-                <a href="education.html" class="btn" data-i18n="education">LEARNING RESOURCES</a>
-                <a href="api.html" class="btn" data-i18n="api">NASA API</a>
-                <button id="favoritesButton" class="btn btn--favorites">
+                <button id="favoritesButton" class="btn btn--pill btn--favorites" aria-label="Favorites">
                     <span class="btn__icon">❤️</span>
                     <span class="btn__text" data-i18n="favorites">Favorites</span>
                     <span id="favoritesCount" class="btn__count">(0)</span>
                 </button>
-                <button id="language-switcher" class="btn btn--language" aria-haspopup="true" aria-expanded="false">
+                <button id="language-switcher" class="btn btn--pill btn--language" aria-haspopup="true" aria-expanded="false">
                     <span id="lang-flag" class="btn__flag">🇺🇸</span>
                     <span id="lang-name" class="btn__text">English</span>
                 </button>
-                <button id="theme-toggle" class="btn btn--theme">
-                    <span class="btn__icon">🌙</span>
-                    <span class="btn__text" data-i18n="dark_mode">Dark Mode</span>
+                <button id="theme-toggle" class="btn btn--pill btn--theme theme-toggle" aria-label="Toggle theme">
+                    <span class="btn__icon theme-icon">🌙</span>
+                    <span class="btn__text theme-text" data-i18n="dark_mode">Dark</span>
                 </button>
             </div>
         </div>
@@ -99,7 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
         langMenuEl.setAttribute('role', 'menu');
         langMenuEl.innerHTML = available.map(code => {
             const info = langsMeta[code] || { name: code, flag: '🏳️' };
-            return `<button class="lang-menu__item" data-lang="${code}" role="menuitem">${info.flag} ${info.name}</button>`;
+            return `<button class="lang-menu__item" data-lang="${code}" role="menuitem" tabindex="0">
+                        <span class="lang-flag">${info.flag}</span>
+                        <span class="lang-name">${info.name}</span>
+                    </button>`;
         }).join('');
         document.body.appendChild(langMenuEl);
 
@@ -112,12 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof window.ensureLanguageManagerInitialized === 'function') {
                 try { window.ensureLanguageManagerInitialized(); } catch (err) { /* ignore */ }
             }
-            if (typeof window.setLanguage === 'function') {
-                window.setLanguage(lang);
-            } else if (window.languageManager) {
-                window.languageManager.setLanguage(lang);
+            try {
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage(lang);
+                } else if (window.languageManager) {
+                    window.languageManager.setLanguage(lang);
+                }
+            } finally {
+                hideMenu();
             }
-            hideMenu();
         });
         return langMenuEl;
     }
@@ -173,6 +186,17 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopImmediatePropagation();
             if (langMenuEl && langMenuEl.classList.contains('is-open')) hideMenu();
             else showMenu(langBtn);
+        });
+    }
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            const container = document.querySelector('.modern-header');
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', String(!expanded));
+            container?.classList.toggle('is-open');
         });
     }
 
