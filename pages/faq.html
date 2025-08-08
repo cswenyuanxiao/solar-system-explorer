@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ - Solar System Explorer</title>
+  <link rel="stylesheet" href="../css/style.css?v=20250109">
+</head>
+<body>
+  <header class="header"></header>
+
+  <main class="main" id="faqRoot">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a class="breadcrumbs__link" href="index.html">Home</a>
+      <span class="breadcrumbs__sep">/</span>
+      <span class="breadcrumbs__current">FAQ</span>
+    </nav>
+
+    <section class="education-section" style="display:block">
+      <h2 class="section__title">Frequently Asked Questions</h2>
+
+      <div id="faqList" class="content-grid" style="grid-template-columns: 1fr; gap: var(--space-md)"></div>
+
+      <div style="margin-top: var(--space-xl)">
+        <h3>Still have questions?</h3>
+        <p>Contact us via GitHub issues on the project repository.</p>
+        <a class="btn btn--outline" href="https://github.com/cswenyuanxiao/solar-system-explorer/issues" target="_blank" rel="noopener">Open an Issue</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Solar System Explorer. All images and data from NASA.</p>
+  </footer>
+
+  <script src="../js/languages.js?v=20250109"></script>
+  <script src="../js/shared-header.js?v=20250109"></script>
+  <script src="../js/theme-manager.js?v=20250109"></script>
+  <script>
+  // Minimal, accessible accordion for FAQ, supports global auto-translate
+  const FAQ_DATA = [
+    { q: 'What data sources are used?', a: 'NASA public APIs and curated educational content.' },
+    { q: 'How do I change language?', a: 'Use the language button in the header. Automatic translation will enhance the page.' },
+    { q: 'How do I switch dark/light themes?', a: 'Click the moon/sun button in the header to toggle themes.' },
+    { q: 'Why is APOD sometimes unavailable?', a: 'The demo API key has rate limits. Add your own API key on the NASA API page.' },
+    { q: 'How can I search the whole site?', a: 'Use the header search; it scans visible text on the current page.' }
+  ];
+
+  function createItem(item, index){
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    const id = 'faq-'+index;
+    wrapper.innerHTML = `
+      <button class="btn btn--ghost" aria-expanded="false" aria-controls="${id}" style="width:100%; display:flex; justify-content: space-between; align-items:center">
+        <span>${item.q}</span>
+        <span>▾</span>
+      </button>
+      <div id="${id}" hidden style="margin-top:.5rem; color: var(--text-secondary)">${item.a}</div>
+    `;
+    const btn = wrapper.querySelector('button');
+    const panel = wrapper.querySelector('#'+id);
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+    return wrapper;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const list = document.getElementById('faqList');
+    FAQ_DATA.forEach((item, i) => list.appendChild(createItem(item, i)));
+  });
+  </script>
+</body>
+</html>
+
+

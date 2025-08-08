@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="charts.html" class="nav-link" data-i18n="charts">Charts</a>
                 <a href="education.html" class="nav-link" data-i18n="education">Education</a>
                 <a href="api.html" class="nav-link" data-i18n="api">NASA API</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
             </nav>
 
             <div class="header__search modern-search">
