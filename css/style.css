@@ -158,14 +158,14 @@ body {
 .mega-toggle { background: transparent; color: var(--text-primary); border: 1px solid transparent; border-radius: 10px; padding: .5rem .8rem; cursor: pointer; }
 .mega-toggle:hover, .mega-toggle[aria-expanded="true"] { background: rgba(255,255,255,0.06); border-color: var(--border-secondary); }
 .mega-panel { position: absolute; left: 0; top: calc(100% + 10px); min-width: 520px; background: var(--bg-overlay); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: var(--space-lg); z-index: var(--z-dropdown); }
-.mega-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: var(--space-xl); }
+.mega-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-xl); }
 .mega-section { min-width: 220px; }
 .mega-title { margin: 0 0 var(--space-sm); color: var(--text-primary); font-weight: 700; }
 .mega-link { display: block; color: var(--text-secondary); text-decoration: none; padding: .35rem 0; border-radius: 6px; }
 .mega-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
 
 /* Mega menu dynamic lists */
-.mega-dynamic .mega-columns { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: var(--space-lg); }
+.mega-dynamic .mega-columns { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
 .mega-col-title { margin: 0 0 .35rem; color: var(--text-primary); font-weight: 700; font-size: .95rem; opacity: .9; }
 .mega-list { list-style: none; margin: 0; padding: 0; }
 .mega-list li { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -1034,6 +1034,24 @@ body {
 
 /* Footer polish */
 footer { border-top: 1px solid var(--border-primary); background: var(--bg-secondary); padding: var(--space-lg) var(--space-xl); color: var(--text-secondary); }
+
+/* ==========================================================================
+   20.1 EDUCATION HUB POLISH
+   ========================================================================= */
+
+#eduHub { margin-top: var(--space-2xl); }
+#eduHub .info-card { background: linear-gradient(180deg, rgba(31,41,55,.95), rgba(31,41,55,.92)); }
+#eduHub .card-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-lg); }
+#eduHub .card { display: flex; flex-direction: column; border-color: rgba(255,255,255,.08); }
+#eduHub .card__image { height: 180px; object-fit: cover; }
+#eduHub .card__content { display: flex; flex-direction: column; gap: .5rem; }
+#eduHub .card__title { font-size: 1rem; letter-spacing: .3px; }
+#eduHub .card__description { flex: 1; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+#eduHub .card__link { align-self: flex-start; padding: .4rem .75rem; }
+
+@media (max-width: 768px) {
+  #eduHub .card__image { height: 150px; }
+}
 
 /* Favorites page styles removed */
 
