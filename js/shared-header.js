@@ -86,6 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         <a class="mega-link" href="faq.html">FAQ</a>
                         <a class="mega-link" href="contact.html">Contact</a>
                       </section>
+
+                      <section class="mega-section mega-dynamic" id="mega-dynamic-news">
+                        <h4 class="mega-title">News & Events</h4>
+                        <div class="mega-columns">
+                          <div class="mega-col">
+                            <h5 class="mega-col-title">Recently Published</h5>
+                            <ul id="mega-recent" class="mega-list"></ul>
+                          </div>
+                          <div class="mega-col">
+                            <h5 class="mega-col-title">Events</h5>
+                            <ul id="mega-events" class="mega-list"></ul>
+                          </div>
+                          <div class="mega-col">
+                            <h5 class="mega-col-title">Upcoming</h5>
+                            <ul id="mega-upcoming" class="mega-list"></ul>
+                          </div>
+                        </div>
+                      </section>
                     </div>
                   </div>
                 </div>
@@ -316,6 +334,100 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllMega();
     });
+
+    // Lazy-load dynamic NASA lists once when About panel first opens
+    let megaNewsLoaded = false;
+    const aboutToggle = document.querySelector('[aria-controls="mega-about"]');
+    if (aboutToggle) {
+        aboutToggle.addEventListener('click', () => {
+            const isOpening = aboutToggle.getAttribute('aria-expanded') !== 'true';
+            if (isOpening && !megaNewsLoaded) {
+                megaNewsLoaded = true;
+                populateMegaNews();
+            }
+        });
+    }
+
+    async function populateMegaNews() {
+        const recentEl = document.getElementById('mega-recent');
+        const eventsEl = document.getElementById('mega-events');
+        const upcomingEl = document.getElementById('mega-upcoming');
+        if (!recentEl || !eventsEl || !upcomingEl) return;
+        try {
+            recentEl.innerHTML = '<li class="mega-loading">Loading…</li>';
+            eventsEl.innerHTML = '<li class="mega-loading">Loading…</li>';
+            upcomingEl.innerHTML = '<li class="mega-loading">Loading…</li>';
+
+            const results = await Promise.allSettled([
+                fetchMediaLibraryRecent(),
+                fetchEONETEvents(),
+                fetchDONKIUpcoming()
+            ]);
+            const [recent, events, upcoming] = results.map(r => r.status === 'fulfilled' ? r.value : []);
+            renderList(recentEl, recent);
+            renderList(eventsEl, events);
+            renderList(upcomingEl, upcoming);
+        } catch (err) {
+            console.warn('mega news failed', err);
+        }
+    }
+
+    function getNasaApiKey() {
+        try { return localStorage.getItem('nasa_api_key') || 'DEMO_KEY'; } catch (_) { return 'DEMO_KEY'; }
+    }
+
+    async function fetchMediaLibraryRecent(limit = 5) {
+        const year = new Date().getFullYear() - 1; // last 1 year
+        const url = `https://images-api.nasa.gov/search?q=NASA&media_type=image&year_start=${year}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const items = (data?.collection?.items || []).slice(0, 25);
+        // Sort by date_created desc and take top N
+        items.sort((a, b) => new Date(b.data?.[0]?.date_created || 0) - new Date(a.data?.[0]?.date_created || 0));
+        const top = items.slice(0, limit).map(it => ({
+            title: it.data?.[0]?.title || 'NASA Media',
+            url: it.links?.[0]?.href || '#',
+            date: it.data?.[0]?.date_created || ''
+        }));
+        return top;
+    }
+
+    async function fetchEONETEvents(limit = 5) {
+        const url = `https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=${limit}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const events = (data?.events || []).map(ev => ({
+            title: ev.title,
+            url: ev.sources?.[0]?.url || 'https://eonet.gsfc.nasa.gov',
+            date: ev.geometry?.[0]?.date || ''
+        }));
+        return events;
+    }
+
+    async function fetchDONKIUpcoming(limit = 5) {
+        const now = new Date();
+        const start = new Date(now.getTime() - 3 * 24 * 3600 * 1000);
+        const end = new Date(now.getTime() + 7 * 24 * 3600 * 1000);
+        const fmt = (d) => d.toISOString().slice(0,10);
+        const url = `https://api.nasa.gov/DONKI/notifications?startDate=${fmt(start)}&endDate=${fmt(end)}&type=all&api_key=${encodeURIComponent(getNasaApiKey())}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const items = Array.isArray(data) ? data : [];
+        items.sort((a, b) => new Date(b.messageIssueTime || 0) - new Date(a.messageIssueTime || 0));
+        return items.slice(0, limit).map(n => ({
+            title: (n.messageType ? (n.messageType + ': ') : '') + (n.messageSummary || 'Notification'),
+            url: n.messageURL || 'https://api.nasa.gov/',
+            date: n.messageIssueTime || ''
+        }));
+    }
+
+    function renderList(root, items) {
+        if (!items || items.length === 0) { root.innerHTML = '<li class="mega-empty">No data</li>'; return; }
+        root.innerHTML = items.map(it => {
+            const date = it.date ? new Date(it.date).toLocaleDateString() : '';
+            return `<li><a class="mega-item-link" href="${it.url}" target="_blank" rel="noopener">${it.title}</a><span class="mega-item-date">${date}</span></li>`;
+        }).join('');
+    }
 
     // Re-init dependencies
     addNavigationHandlers();
