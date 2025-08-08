@@ -91,15 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4 class="mega-title">News & Events</h4>
                         <div class="mega-columns">
                           <div class="mega-col">
-                            <h5 class="mega-col-title">Recently Published</h5>
+                            <a class="mega-col-title" href="news.html">Recently Published</a>
                             <ul id="mega-recent" class="mega-list"></ul>
                           </div>
                           <div class="mega-col">
-                            <h5 class="mega-col-title">Events</h5>
+                            <a class="mega-col-title" href="events.html">Events</a>
                             <ul id="mega-events" class="mega-list"></ul>
                           </div>
                           <div class="mega-col">
-                            <h5 class="mega-col-title">Upcoming</h5>
+                            <a class="mega-col-title" href="upcoming.html">Upcoming</a>
                             <ul id="mega-upcoming" class="mega-list"></ul>
                           </div>
                         </div>

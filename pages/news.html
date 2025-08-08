@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recently Published - Solar System Explorer</title>
+  <link rel="stylesheet" href="../css/style.css?v=20250109" />
+</head>
+<body>
+  <header class="header"></header>
+  <main class="main">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a class="breadcrumbs__link" href="index.html">Home</a>
+      <span class="breadcrumbs__sep">/</span>
+      <span class="breadcrumbs__current">Recently Published</span>
+    </nav>
+    <section class="education-section" style="display:block">
+      <h2 class="section__title">Recently Published</h2>
+      <div style="display:flex; gap:.5rem; align-items:center; margin-bottom:.75rem">
+        <label for="yearRange">Year range:</label>
+        <select id="yearRange">
+          <option value="1">Last 1 year</option>
+          <option value="2">Last 2 years</option>
+          <option value="3">Last 3 years</option>
+        </select>
+      </div>
+      <div id="newsList" class="search-results"></div>
+      <div id="newsPager" class="pager" style="display:flex; gap:.5rem; align-items:center; justify-content:center; margin-top:1rem"></div>
+    </section>
+  </main>
+  <footer><p>&copy; 2024 Solar System Explorer.</p></footer>
+  <script src="../js/languages.js?v=20250109"></script>
+  <script src="../js/shared-header.js?v=20250109"></script>
+  <script src="../js/theme-manager.js?v=20250109"></script>
+  <script>
+  const pageSize = 12;
+  let items = [];
+  let current = 1;
+  async function fetchRecent(years=1){
+    const year = new Date().getFullYear() - Number(years);
+    const url = `https://images-api.nasa.gov/search?q=NASA&media_type=image&year_start=${year}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const arr = (data?.collection?.items||[]).map(it=>({
+      title: it.data?.[0]?.title||'NASA Media',
+      desc: it.data?.[0]?.description||'',
+      date: it.data?.[0]?.date_created||'',
+      thumb: it.links?.[0]?.href||'',
+      link: it.href||''
+    }));
+    arr.sort((a,b)=> new Date(b.date||0) - new Date(a.date||0));
+    return arr;
+  }
+  function render(){
+    const root = document.getElementById('newsList');
+    const pager = document.getElementById('newsPager');
+    const total = Math.ceil(items.length / pageSize) || 1;
+    if(current>total) current=total;
+    const start = (current-1)*pageSize;
+    const slice = items.slice(start,start+pageSize);
+    root.innerHTML = slice.map(it=>`
+      <a class="search-result-card" href="${it.link}" target="_blank" rel="noopener">
+        ${it.thumb?`<img class="result-image" src="${it.thumb}" alt="thumb"/>`:''}
+        <div class="result-info">
+          <div class="result-title">${it.title}</div>
+          <div class="text-muted">${new Date(it.date).toLocaleDateString()}</div>
+          <div class="text-muted">${(it.desc||'').slice(0,120)}</div>
+        </div>
+      </a>
+    `).join('');
+    pager.innerHTML = `
+      <button class="btn" ${current===1?'disabled':''} onclick="gotoPage(${current-1})">Prev</button>
+      <span class="text-muted">Page ${current} / ${total}</span>
+      <button class="btn" ${current===total?'disabled':''} onclick="gotoPage(${current+1})">Next</button>`;
+  }
+  function gotoPage(p){ if(p<1) return; current=p; render(); }
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    const yr = document.getElementById('yearRange');
+    yr.addEventListener('change', async ()=>{ current=1; items = await fetchRecent(yr.value); render(); });
+    items = await fetchRecent(yr.value); render();
+  });
+  </script>
+</body>
+</html>
+
+
