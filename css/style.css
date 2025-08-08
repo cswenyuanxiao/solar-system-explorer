@@ -16,28 +16,28 @@
    ========================================================================== */
 
 :root {
-  /* Color Palette */
-  --color-primary: #0B3D91;
+  /* Brand & Accents (can be overridden by theme-manager) */
+  --color-primary: #0B3D91; /* NASA blue default */
   --color-primary-dark: #102A43;
-  --color-secondary: #FC3D21;
+  --color-secondary: #FC3D21; /* NASA red */
   --color-accent: #FFD700;
-  
-  /* Background Colors */
-  --bg-primary: #000000;
-  --bg-secondary: #1a1a1a;
-  --bg-card: #2d2d2d;
+
+  /* Background Colors (dark as safe default; theme-manager can override) */
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-card: #1f2937;
   --bg-overlay: rgba(0, 0, 0, 0.8);
-  
+
   /* Text Colors */
-  --text-primary: #ffffff;
-  --text-secondary: #e0e0e0;
-  --text-muted: #999999;
-  
-  /* Border Colors */
-  --border-primary: #333333;
-  --border-secondary: #555555;
+  --text-primary: #e5e7eb;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  /* Borders */
+  --border-primary: #2a3340;
+  --border-secondary: #3a4552;
   --border-accent: #ff6b6b;
-  
+
   /* Spacing Scale */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -64,9 +64,9 @@
   --radius-lg: 12px;
   
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 14px 28px rgba(0, 0, 0, 0.35);
   
   /* Transitions */
   --transition-fast: 0.15s ease;
