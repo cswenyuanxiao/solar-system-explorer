@@ -296,11 +296,7 @@ function runtimeTranslate(key, targetLang) {
     return key;
 }
 
-// Patch LanguageManager.getText to use runtime fallback
-LanguageManager.prototype.getText = function(key) {
-    const lang = this.currentLanguage || 'en';
-    return runtimeTranslate(key, lang);
-};
+// (runtimeTranslate will be used by LanguageManager.getText implementation)
 
 // Expose global setter so header dropdown can invoke
 window.setLanguage = function(lang) {
@@ -352,7 +348,9 @@ class LanguageManager {
     }
     
     getText(key) {
-        return TRANSLATIONS[this.currentLanguage][key] || key;
+        // use runtimeTranslate which falls back to English when necessary
+        const lang = this.currentLanguage || 'en';
+        return runtimeTranslate(key, lang);
     }
     
     setupLanguageSwitcher() {
@@ -494,15 +492,14 @@ class LanguageManager {
 // 全局语言管理器实例
 let languageManager;
 
-// 页面加载完成后初始化
+// 页面加载完成后初始化及样式注入
+// Initialize language manager immediately so other scripts (like shared-header)
+// can rely on it being available. translatePage() is safe to call early.
+languageManager = new LanguageManager();
+window.languageManager = languageManager;
+
 document.addEventListener('DOMContentLoaded', () => {
-    // 延迟初始化，确保header已经被shared-header.js创建
-    setTimeout(() => {
-        languageManager = new LanguageManager();
-        window.languageManager = languageManager;
-    }, 100);
-    
-    // 添加CSS动画
+    // 添加CSS动画（仅在 DOM 就绪后插入样式）
     if (!document.querySelector('#language-animations')) {
         const style = document.createElement('style');
         style.id = 'language-animations';

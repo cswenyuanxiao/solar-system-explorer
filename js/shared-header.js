@@ -127,9 +127,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof initializeTheme === 'function') initializeTheme();
     if (typeof updateFavoritesCount === 'function') updateFavoritesCount();
     if (typeof languageManager !== 'undefined') {
-        languageManager.translatePage();
-        updateLanguageSwitcherUI();
+        // If languageManager already exists, ensure header is translated
+        try {
+            languageManager.translatePage();
+            updateLanguageSwitcherUI();
+        } catch (err) {
+            console.warn('LanguageManager exists but translation failed:', err);
+        }
     }
+
+    // Listen for global language change events to re-translate header
+    document.addEventListener('languageChanged', () => {
+        try {
+            if (typeof languageManager !== 'undefined') {
+                languageManager.translatePage();
+            }
+            updateLanguageSwitcherUI();
+        } catch (err) {
+            console.warn('Failed to update header on languageChanged:', err);
+        }
+    });
 });
 
 function addNavigationHandlers() {
