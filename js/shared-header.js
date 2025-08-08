@@ -51,13 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let langMenuEl = null;
     function buildLanguageMenu() {
         if (langMenuEl) return langMenuEl;
-        const langs = (typeof LANGUAGES !== 'undefined') ? LANGUAGES : { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
+        // Only show languages for which we have TRANSLATIONS (avoid showing incomplete languages)
+        const available = (typeof TRANSLATIONS !== 'undefined') ? Object.keys(TRANSLATIONS) : ['en', 'zh'];
+        const langsMeta = (typeof LANGUAGES !== 'undefined') ? LANGUAGES : { en: { name: 'English', flag: '🇺🇸' }, zh: { name: '中文', flag: '🇨🇳' } };
         langMenuEl = document.createElement('div');
         langMenuEl.className = 'lang-menu';
         langMenuEl.setAttribute('role', 'menu');
-        langMenuEl.innerHTML = Object.entries(langs).map(([code, info]) => (
-            `<button class="lang-menu__item" data-lang="${code}" role="menuitem">${info.flag} ${info.name}</button>`
-        )).join('');
+        langMenuEl.innerHTML = available.map(code => {
+            const info = langsMeta[code] || { name: code, flag: '🏳️' };
+            return `<button class="lang-menu__item" data-lang="${code}" role="menuitem">${info.flag} ${info.name}</button>`;
+        }).join('');
         document.body.appendChild(langMenuEl);
 
         // Click handler
@@ -116,7 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const langBtn = document.getElementById('language-switcher');
     if (langBtn) {
         langBtn.addEventListener('click', (e) => {
+            // prevent LanguageManager's global click handler from also toggling language
             e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             if (langMenuEl && langMenuEl.classList.contains('is-open')) hideMenu();
             else showMenu(langBtn);
         });
