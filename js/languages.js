@@ -555,6 +555,27 @@ window.addEventListener('load', () => {
     }
 });
 
+// Schedule a few retries after load in case other scripts overwrite text later
+function scheduleTranslateRetries() {
+    const times = [100, 500, 1000, 2000];
+    times.forEach((t) => {
+        setTimeout(() => {
+            try {
+                if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+                    console.debug(`i18n: retry translatePage at ${t}ms`);
+                    window.languageManager.translatePage();
+                    window.languageManager.updateLanguageSwitcherUI();
+                }
+            } catch (err) {
+                console.warn('i18n: retry translate failed', err);
+            }
+        }, t);
+    });
+}
+
+if (document.readyState === 'complete') scheduleTranslateRetries();
+else window.addEventListener('load', scheduleTranslateRetries);
+
 // Re-run translation when languageChanged event fires (safety)
 document.addEventListener('languageChanged', (e) => {
     try {
