@@ -59,7 +59,7 @@ async function build() {
         console.log(`   ✨ Processed and copied ${file} to ${path.relative(process.cwd(), destPath)}`);
     }
     
-    // 4. Process main index.html
+    // 4. Process main index.html (or synthesize a redirect when missing)
     const mainIndexPath = path.join(__dirname, '..', 'index.html');
     if (await fs.pathExists(mainIndexPath)) {
         let content = await fs.readFile(mainIndexPath, 'utf8');
@@ -83,6 +83,11 @@ async function build() {
         
         await fs.writeFile(path.join(outputDir, 'index.html'), content);
         console.log(`   ✨ Processed and copied index.html to ${outputDir}/index.html`);
+    } else {
+        // If there is no root index.html in repo, create a lightweight redirect to pages/index.html
+        const redirect = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./pages/index.html"><title>Redirecting…</title><link rel="canonical" href="./pages/index.html"></head><body><p>If you are not redirected automatically, <a href="./pages/index.html">click here</a>.</p></body></html>`;
+        await fs.writeFile(path.join(outputDir, 'index.html'), redirect);
+        console.log(`   ✨ Created redirect index.html -> pages/index.html`);
     }
     
     const rootFiles = ['robots.txt', 'sitemap.xml'];
@@ -92,6 +97,20 @@ async function build() {
             await fs.copy(sourcePath, path.join(outputDir, file));
             console.log(`📄 Copied ${file} to root`);
         }
+    }
+
+    // Ensure a root 404.html exists for GitHub Pages
+    try {
+        const pages404 = path.join(__dirname, '..', 'pages', '404.html');
+        if (await fs.pathExists(pages404)) {
+            let content404 = await fs.readFile(pages404, 'utf8');
+            // Adjust relative asset paths from ../ to ./ for root usage
+            content404 = content404.replace(/(href|src|data-src)="\.+\/(css|js|images)\//g, '$1="./$2/');
+            await fs.writeFile(path.join(outputDir, '404.html'), content404);
+            console.log('   ✨ Created root 404.html');
+        }
+    } catch (e) {
+        console.warn('   ⚠️ Could not create root 404.html', e);
     }
 
     console.log('✅ Build completed successfully!');
