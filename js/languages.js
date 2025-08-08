@@ -530,6 +530,9 @@ if (document.readyState === 'loading') {
     // DOM already ready — initialize immediately
     ensureLanguageManagerInitialized();
 }
+
+// expose ensure function for other scripts (shared-header) to call synchronously
+if (typeof window !== 'undefined') window.ensureLanguageManagerInitialized = ensureLanguageManagerInitialized;
     // 添加CSS动画（仅在 DOM 就绪后插入样式）
     // 添加CSS动画（仅在 DOM 就绪后插入样式）
     if (!document.querySelector('#language-animations')) {
