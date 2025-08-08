@@ -54,6 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     headerElement.innerHTML = headerHTML;
 
+    // Ensure global search is loaded on every page
+    try {
+        const alreadyLoaded = Array.from(document.scripts).some(s => (s.src || '').includes('/js/search.js'));
+        if (!alreadyLoaded) {
+            const s = document.createElement('script');
+            s.src = rootPath + 'js/search.js?v=20250109';
+            s.defer = true;
+            document.body.appendChild(s);
+        }
+    } catch (e) { /* noop */ }
+
     // Create language menu lazily on first open
     let langMenuEl = null;
     // If language changes, remove any existing menu so it can be rebuilt with new data
