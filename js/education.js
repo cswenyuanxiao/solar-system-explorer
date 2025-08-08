@@ -375,6 +375,10 @@
     await renderMediaShelf(media);
 
     const daily = el('div','info-card','');
+    daily.style.display = 'grid';
+    daily.style.gridTemplateColumns = '2fr 1fr';
+    daily.style.gap = '.75rem';
+    daily.innerHTML = '<h3 style="grid-column:1/-1">Daily Quiz</h3>';
     hub.appendChild(daily);
     renderDailyQuiz(daily);
 

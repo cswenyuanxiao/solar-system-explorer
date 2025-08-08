@@ -1035,6 +1035,24 @@ body {
 /* Footer polish */
 footer { border-top: 1px solid var(--border-primary); background: var(--bg-secondary); padding: var(--space-lg) var(--space-xl); color: var(--text-secondary); }
 
+/* ==========================================================================
+   20.1 EDUCATION HUB POLISH
+   ========================================================================= */
+
+#eduHub { margin-top: var(--space-2xl); }
+#eduHub .info-card { background: linear-gradient(180deg, rgba(31,41,55,.95), rgba(31,41,55,.92)); }
+#eduHub .card-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-lg); }
+#eduHub .card { display: flex; flex-direction: column; border-color: rgba(255,255,255,.08); }
+#eduHub .card__image { height: 180px; object-fit: cover; }
+#eduHub .card__content { display: flex; flex-direction: column; gap: .5rem; }
+#eduHub .card__title { font-size: 1rem; letter-spacing: .3px; }
+#eduHub .card__description { flex: 1; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+#eduHub .card__link { align-self: flex-start; padding: .4rem .75rem; }
+
+@media (max-width: 768px) {
+  #eduHub .card__image { height: 150px; }
+}
+
 /* Favorites page styles removed */
 
 /* ==========================================================================
