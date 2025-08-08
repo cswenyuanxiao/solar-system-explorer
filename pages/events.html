@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events - Solar System Explorer</title>
+  <link rel="stylesheet" href="../css/style.css?v=20250109" />
+</head>
+<body>
+  <header class="header"></header>
+  <main class="main">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a class="breadcrumbs__link" href="../index.html">Home</a>
+      <span class="breadcrumbs__sep">/</span>
+      <span class="breadcrumbs__current">Events</span>
+    </nav>
+    <section class="education-section" style="display:block">
+      <h2 class="section__title">Open Events (EONET)</h2>
+      <div id="eventsList" class="search-results"></div>
+      <div id="eventsPager" class="pager" style="display:flex; gap:.5rem; align-items:center; justify-content:center; margin-top:1rem"></div>
+    </section>
+  </main>
+  <footer><p>&copy; 2024 Solar System Explorer.</p></footer>
+  <script src="../js/languages.js?v=20250109"></script>
+  <script src="../js/shared-header.js?v=20250109"></script>
+  <script src="../js/theme-manager.js?v=20250109"></script>
+  <script>
+  const pageSize = 12;
+  let items = [];
+  let current = 1;
+  async function fetchEvents(){
+    const url = `https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=200`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    return (data?.events||[]).map(ev=>({
+      title: ev.title,
+      date: ev.geometry?.[0]?.date||'',
+      cat: ev.categories?.[0]?.title||'',
+      link: ev.sources?.[0]?.url||'https://eonet.gsfc.nasa.gov'
+    }));
+  }
+  function render(){
+    const root = document.getElementById('eventsList');
+    const pager = document.getElementById('eventsPager');
+    const total = Math.ceil(items.length / pageSize) || 1;
+    if(current>total) current=total;
+    const start = (current-1)*pageSize;
+    const slice = items.slice(start,start+pageSize);
+    root.innerHTML = slice.map(it=>`
+      <a class="search-result-card" href="${it.link}" target="_blank" rel="noopener">
+        <div class="result-info">
+          <div class="result-title">${it.title}</div>
+          <div class="text-muted">${new Date(it.date).toLocaleDateString()} · ${it.cat}</div>
+        </div>
+      </a>
+    `).join('');
+    pager.innerHTML = `
+      <button class="btn" ${current===1?'disabled':''} onclick="gotoPage(${current-1})">Prev</button>
+      <span class="text-muted">Page ${current} / ${total}</span>
+      <button class="btn" ${current===total?'disabled':''} onclick="gotoPage(${current+1})">Next</button>`;
+  }
+  function gotoPage(p){ if(p<1) return; current=p; render(); }
+  document.addEventListener('DOMContentLoaded', async ()=>{ items = await fetchEvents(); render(); });
+  </script>
+</body>
+</html>
+
+
