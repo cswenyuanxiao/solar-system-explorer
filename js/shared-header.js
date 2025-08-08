@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS) Object.keys(TRANSLATIONS).forEach(k => availableSet.add(k));
         } catch (e) {}
-        // Ensure at least en and zh are present
-        ['en', 'zh'].forEach(k => availableSet.add(k));
+        // Ensure at least en and zh are present; also include es/fr/ja if metadata exists
+        ['en', 'zh', 'es', 'fr', 'ja'].forEach(k => availableSet.add(k));
         const preferredOrder = ['zh', 'en'];
         const available = Array.from(availableSet).sort((a, b) => {
             const ia = preferredOrder.indexOf(a);
