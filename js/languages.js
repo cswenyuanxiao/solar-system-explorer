@@ -279,6 +279,52 @@ const TRANSLATIONS = {
         'language_code': 'Language Code',
         'language_name': 'Language Name',
         'language_flag': 'Flag'
+    },
+    // Minimal additional languages; missing keys will fallback to English
+    es: {
+        'home': 'Inicio',
+        'search': 'Buscar',
+        'charts': 'Gráficos',
+        'education': 'Educación',
+        'api': 'API',
+        'language': 'Idioma',
+        'dark_mode': 'Modo oscuro',
+        'favorites': 'Favoritos',
+        'main_title': 'Visualización de Datos del Sistema Solar',
+        'subtitle': 'Gráficos interactivos y comparaciones',
+        'hero_title': 'EXPLORA NUESTRO SISTEMA SOLAR',
+        'hero_subtitle': 'Viaja por los planetas, lunas y cuerpos celestes de nuestro vecindario cósmico. Descubre las últimas misiones de la NASA y hallazgos científicos.',
+        'featured_title': 'MISIONES DESTACADAS'
+    },
+    fr: {
+        'home': 'Accueil',
+        'search': 'Recherche',
+        'charts': 'Graphiques',
+        'education': 'Éducation',
+        'api': 'API',
+        'language': 'Langue',
+        'dark_mode': 'Mode sombre',
+        'favorites': 'Favoris',
+        'main_title': 'Visualisation des Données du Système Solaire',
+        'subtitle': 'Graphiques et comparaisons interactifs',
+        'hero_title': 'EXPLOREZ NOTRE SYSTÈME SOLAIRE',
+        'hero_subtitle': 'Parcourez les planètes, les lunes et les corps célestes de notre voisinage cosmique. Découvrez les dernières missions de la NASA et découvertes scientifiques.',
+        'featured_title': 'MISSIONS À LA UNE'
+    },
+    ja: {
+        'home': 'ホーム',
+        'search': '検索',
+        'charts': 'グラフ',
+        'education': '教育',
+        'api': 'API',
+        'language': '言語',
+        'dark_mode': 'ダークモード',
+        'favorites': 'お気に入り',
+        'main_title': '太陽系データの可視化',
+        'subtitle': 'インタラクティブなグラフと比較',
+        'hero_title': '太陽系を探検しよう',
+        'hero_subtitle': '惑星や月などの天体を旅し、最新のNASAミッションと科学的発見を見つけましょう。',
+        'featured_title': '注目のミッション'
     }
 };
 
