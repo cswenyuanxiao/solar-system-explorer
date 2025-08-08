@@ -132,14 +132,11 @@ document.addEventListener('DOMContentLoaded', () => {
     addNavigationHandlers();
     if (typeof initializeTheme === 'function') initializeTheme();
     if (typeof updateFavoritesCount === 'function') updateFavoritesCount();
-    if (typeof languageManager !== 'undefined') {
-        // If languageManager already exists, ensure header is translated
-        try {
-            languageManager.translatePage();
-            updateLanguageSwitcherUI();
-        } catch (err) {
-            console.warn('LanguageManager exists but translation failed:', err);
-        }
+    // If languageManager exists, translate now; otherwise subscribe to languageChanged to translate later
+    if (window.languageManager) {
+        try { window.languageManager.translatePage(); updateLanguageSwitcherUI(); } catch (err) { console.warn('LanguageManager exists but translation failed:', err); }
+    } else {
+        document.addEventListener('languageChanged', function onReadyOnce() { try { if (window.languageManager) { window.languageManager.translatePage(); updateLanguageSwitcherUI(); } } catch (e) {} finally { document.removeEventListener('languageChanged', onReadyOnce); } });
     }
 
     // Listen for global language change events to re-translate header

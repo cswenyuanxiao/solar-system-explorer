@@ -510,16 +510,23 @@ LanguageManager = class {
 }
 
 // 全局语言管理器实例
-// global language manager instance (using var to avoid TDZ when other scripts reference it early)
-var languageManager;
+// initialize to null; will be created on DOMContentLoaded to avoid early-reference errors
+var languageManager = null;
 
 // 页面加载完成后初始化及样式注入
-// Initialize language manager immediately so other scripts (like shared-header)
-// can rely on it being available. translatePage() is safe to call early.
-languageManager = new LanguageManager();
-window.languageManager = languageManager;
-
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize languageManager here (after DOM ready) to avoid race/TDZ issues
+    try {
+        if (!window.languageManager) {
+            languageManager = new LanguageManager();
+            window.languageManager = languageManager;
+        } else {
+            languageManager = window.languageManager;
+        }
+    } catch (err) {
+        console.warn('i18n: failed to initialize LanguageManager on DOMContentLoaded', err);
+    }
+    // 添加CSS动画（仅在 DOM 就绪后插入样式）
     // 添加CSS动画（仅在 DOM 就绪后插入样式）
     if (!document.querySelector('#language-animations')) {
         const style = document.createElement('style');
