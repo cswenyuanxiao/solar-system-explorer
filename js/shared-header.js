@@ -151,8 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for global language change events to re-translate header
     document.addEventListener('languageChanged', () => {
         try {
-            if (typeof languageManager !== 'undefined') {
-                languageManager.translatePage();
+            // Prefer the global window.languageManager instance (assigned by languages.js)
+            if (window.languageManager && typeof window.languageManager.translatePage === 'function') {
+                window.languageManager.translatePage();
             }
             updateLanguageSwitcherUI();
         } catch (err) {
@@ -177,12 +178,17 @@ function addNavigationHandlers() {
 function updateLanguageSwitcherUI() {
     const langFlag = document.getElementById('lang-flag');
     const langName = document.getElementById('lang-name');
-    if (langFlag && langName && typeof languageManager !== 'undefined') {
-        const currentLangKey = languageManager.currentLanguage;
-        const currentLangData = LANGUAGES[currentLangKey];
+    // Use window.languageManager because some pages don't declare a global `languageManager` var
+    if (langFlag && langName && window.languageManager) {
+        const currentLangKey = window.languageManager.currentLanguage;
+        const currentLangData = (typeof LANGUAGES !== 'undefined' && LANGUAGES[currentLangKey]) ? LANGUAGES[currentLangKey] : null;
         if (currentLangData) {
-            langFlag.textContent = currentLangData.flag;
-            langName.textContent = currentLangData.name;
+            langFlag.textContent = currentLangData.flag || '';
+            langName.textContent = currentLangData.name || currentLangKey;
+        } else {
+            // Fallback: show code
+            langFlag.textContent = '';
+            langName.textContent = currentLangKey;
         }
     }
 }
