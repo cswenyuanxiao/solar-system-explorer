@@ -361,7 +361,7 @@
   window.renderEduHub = async function(){
     const mount = document.getElementById('eduTracks')?.parentElement || document.querySelector('.main');
     if (!mount) return;
-    const hub = el('section','education-section','');
+    const hub = el('section','education-section active','');
     hub.id = 'eduHub';
     hub.innerHTML = '<h2 class="section__title">Knowledge & Practice Hub</h2>';
     mount.appendChild(hub);
